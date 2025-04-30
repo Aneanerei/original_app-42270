@@ -70,3 +70,5 @@ group :production do
   gem 'pg'
 end
 gem 'devise'
+gem 'simple_calendar'
+gem 'rails-i18n'
