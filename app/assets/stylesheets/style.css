@@ -31,7 +31,7 @@ img {
 
 a {
   text-decoration: none;
-  color: #ffffff;
+  color: #4E6DB3;
 }
 
 /* ヘッダー */
@@ -94,8 +94,8 @@ a {
   height: 500px; 
   margin: 80px auto; 
   padding: 40px;
-  background-color: #CECAE6;
-  border: 2px solid #DBE7F2;
+  background-color: #DBE7F2;
+  border: 2px solid #CECAE6;
   border-radius: 24px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -111,8 +111,8 @@ a {
 .user {
   width: 100%; 
   height: 50px;
-  background-color: #CECAE6;
-  border: 2px solid #DBE7F2;
+  background-color: #DBE7F2;
+  border: 2px solid #CECAE6;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
@@ -141,7 +141,7 @@ a {
   max-width: 1200px;
   height: 800px;
   margin: 40px auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   overflow: visible; /* タブがはみ出ても見えるように */
   background: #fefcf7;
