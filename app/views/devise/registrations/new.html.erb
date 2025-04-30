@@ -1,0 +1,36 @@
+<div class="user-area">
+<h2>Sign up</h2><h6>新規登録</h6>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+ <div class="field">
+    <%= f.label :nickname,"ユーザー名" %><br />
+    <%= f.text_field :nickname, autofocus: true, id:"user_nickname", autocomplete: "nickname",class: "user-input" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, id:"user_email", autocomplete: "email",class: "user-input" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    (<%= @minimum_password_length %> 文字以上で入力してください)
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password", id:"user_password" ,class: "user-input" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", id:"user_password_confirmation",class: "user-input", placeholder: "確認用パスワード" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "登録", class: "user" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+</div>
