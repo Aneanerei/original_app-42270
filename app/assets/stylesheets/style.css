@@ -36,7 +36,7 @@ a {
 
 /* ヘッダー */
 .header {
-  background-color:#B6CFD9;
+  background-color:#DBE7F2;
   height: 100px;
   width: 100%;
   display: flex;
@@ -45,11 +45,11 @@ a {
 }
 
 .login-button {
-  background-color: #d4f1ff;
-  border: 1px solid #132277;
+  background-color: #CECAE6;
+  border: 1px solid #DBE7F2;
   border-radius: 5px;
   padding: 10px 20px;
-  color: #254875;
+  color: #4E6DB3;
   font-size: 16px;
   cursor: pointer;
   transition: 0.3s ease;
@@ -62,7 +62,7 @@ a {
 }
 
 .login-button:hover {
-  background-color: #254875;
+  background-color: #4E6DB3;
   color: #eff1e4;
 }
 
@@ -94,8 +94,8 @@ a {
   height: 500px; 
   margin: 80px auto; 
   padding: 40px;
-  background-color: #f9fcfd;
-  border: 2px solid #97BABC;
+  background-color: #CECAE6;
+  border: 2px solid #DBE7F2;
   border-radius: 24px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -111,8 +111,8 @@ a {
 .user {
   width: 100%; 
   height: 50px;
-  background-color: #254875;
-  border: 2px solid #132277;
+  background-color: #CECAE6;
+  border: 2px solid #DBE7F2;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
@@ -129,8 +129,8 @@ a {
 }
 
 .user:hover {
-  background-color: #e5f7f8;
-  color: #132277;
+  background-color: #4E6DB3;;
+  color: #DBE7F2;
 }
 
 /* メインページ */
@@ -205,6 +205,7 @@ a {
 .tab.active {
   background: #4E6DB3;
   transform: translateY(-2px);
+  color: #ffffff;
 }
 
 /* タブの中身が入る領域 */
