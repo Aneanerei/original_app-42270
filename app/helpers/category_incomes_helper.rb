@@ -1,0 +1,2 @@
+module CategoryIncomesHelper
+end

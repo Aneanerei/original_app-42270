@@ -2,7 +2,4 @@
 
 pin "application"
 pin "@hotwired/turbo-rails", to: "turbo.min.js"
-pin "@hotwired/stimulus", to: "stimulus.min.js"
-pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
-pin_all_from "app/javascript/controllers", under: "controllers"
-pin "calendar_controller", to: "controllers/calendar_controller.js"
+pin "show_category_form", to:"show_category_form.js"

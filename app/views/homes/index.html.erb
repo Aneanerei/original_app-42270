@@ -3,7 +3,7 @@
   <div class="page left-page">
     <div class="tabs">
       <button class="tab active"><p class="date white-text"><%= Date.today.strftime('%Y/%m/%d') %></p></button>
-      <button class="tab">収入入力</button>
+      <%= link_to new_income_path do %><button class="tab">収入入力</button><% end %>
       <button class="tab">支出入力</button>
       <button class="tab">アルバム</button>
       <button class="tab">分析</button>
@@ -11,23 +11,27 @@
     </div>
     <div class="tab-content">
     <div id="calendar-selects">
-       <%= form_with url: root_path, method: :get, local: true do %>
+         <%= form_with url: root_path, method: :get, local: true do %>
          <%= select_tag :year, options_for_select((2020..2100).to_a, @date.year) %>
          <%= select_tag :month, options_for_select((1..12).to_a, @date.month) %>
          <%= submit_tag "表示" %>
            <% end %>
-    </div>
+     </div>
       <ul>
         <li>
-  <%= month_calendar start_date: @date do |date| %>
-  <div>
-    <%= date.day %>
-  </div>
-  <% end %>
+         <%= month_calendar start_date: @date do |date| %>
+         <div>
+         <%= date.day %>
+         </div>
+         <% end %>
         </li>
+        <li>
+        </li>
+        </div>
       </ul>
-    </div>
   </div>
+
+
 
   <!-- 右ページ -->
   <div class="page">

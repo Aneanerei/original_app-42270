@@ -2,3 +2,8 @@ ja:
   simple_calendar:
     previous: "<<"
     next: ">>"
+
+  activerecord:
+    attributes:
+      category_income:
+        name: "カテゴリ名"
