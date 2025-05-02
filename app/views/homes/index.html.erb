@@ -11,33 +11,68 @@
     </div>
     <div class="tab-content">
     <div id="calendar-selects">
-         <%= form_with url: root_path, method: :get, local: true do %>
+     <h2><%= form_with url: root_path, method: :get, local: true do %>
          <%= select_tag :year, options_for_select((2020..2100).to_a, @date.year) %>
          <%= select_tag :month, options_for_select((1..12).to_a, @date.month) %>
          <%= submit_tag "表示" %>
-           <% end %>
+           <% end %></h2>
      </div>
-      <ul>
-        <li>
-         <%= month_calendar start_date: @date do |date| %>
-         <div>
-         <%= date.day %>
-         </div>
-         <% end %>
-        </li>
-        <li>
-        </li>
-        </div>
-      </ul>
-  </div>
+      <!-- カレンダー表示 -->
+  <div class="calendar-wrapper">
+    <%= month_calendar start_date: @date do |date| %>
+      <div>
+        <%= date.day %>
+        <% if @grouped_incomes[date] %>
+          <% total_income = @grouped_incomes[date].sum(&:amount) %>
+          <div class="income">+<%= number_with_delimiter(total_income) %>円</div>
 
+          <% total_minutes = @grouped_incomes[date].sum { |i| i.labor_time || 0 } %>
+          <% if total_minutes > 0 %>
+            <% hours = total_minutes / 60 %>
+            <% minutes = total_minutes % 60 %>
+            <% total_hours = hours + minutes / 60.0 %>
+            <div class="labor">🕒 <%= total_hours.round(2) %>h</div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  </div>
+  </div>
 
 
   <!-- 右ページ -->
   <div class="page">
-    <h2>aaa</h2>
-    <ul>
-      <li>aaa</li>
-    </ul>
+     <h2><%= @date.strftime("%Y年%m月") %>の家計簿</h2>
+  <!-- 今月の収支 -->
+  <div class="show-box ">
+  <div class="income-box">
+    <h3>収入</h3>
+    <% if @incomes.any? %>
+      <ul>
+        <% @incomes.each do |income| %>
+          <li><%= income.date.strftime("%m/%d") %>：<%= income.category_income&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(income.amount) %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>この月の収入はありません</p>
+    <% end %>
+  </div>
+
+  <div class="income-box">
+    <h3>支出</h3>
+    <% if @expenses && @expenses.any? %>
+      <ul>
+        <% @expenses.each do |expense| %>
+          <li><%= expense.date.strftime("%m/%d") %>：<%= expense.name || "カテゴリ" %> / ¥<%= number_with_delimiter(expense.amount) %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>この月の支出はありません</p>
+    <% end %>
+  </div>
+  </div>
+
+  
   </div>
 </div>

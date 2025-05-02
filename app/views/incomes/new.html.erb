@@ -1,6 +1,19 @@
-<div class="book">
+<!-- カテゴリ追加モーダル -->
+<div id="modal-overlay" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <%= form_with model: CategoryIncome.new, url: category_incomes_path, local: true, data: { turbo: false } do |f| %>
+      <%= f.text_field :name, placeholder: "カテゴリ名を入力", class: "form-control" %>
+      <%= f.submit "追加", class: "form-submit" %>
+    <% end %>
+    <button id="close-modal" class="form-button">閉じる</button>
+  </div>
+</div>
+    
+    <div class="book">
   <!-- 左ページ -->
-  <div class="page left-page">
+  <div class="page left-page"> 
+   
+  
     <div class="tabs">
       <button class="tab active"><p class="date white-text"><%= Date.today.strftime('%Y/%m/%d') %></p></button>
       <%= link_to "収入入力", new_income_path, class: "tab" %>
@@ -10,28 +23,16 @@
       <button class="tab">日記</button>
     </div>
 
-    <!-- モーダルカテゴリ追加フォーム -->
-  <div id="modal-overlay" style="display: none;">
-    <div class="modal-content">
-      <%= form_with model: CategoryIncome.new, url: category_incomes_path, local: true, data: { turbo: false } do |f| %>
-        <%= f.text_field :name, placeholder: "カテゴリ名を入力", class: "form-control" %>
-        <%= f.submit "追加", class: "form-submit" %>
-      <% end %>
-      <button id="close-modal" class="form-button">閉じる</button>
-    </div>
-    
-  </div>
 
-
-    <div class="tab-content">
-
-
+    <div class="tab-content"> 
+      <h2>収入登録</h2>
       <div class="income-main">
         <div class="income-input">
+          
           <%= form_with model: @income, local: true do |f| %>
             <div class="form-group">
               <%= f.label :date, "日付" %><br>
-              <%= f.date_field :date, value: Date.today , class: "form-control" %>
+              <%= f.date_field :date, value: Date.today, class: "form-control" %>
             </div>
 
             <div class="form-group">
@@ -41,18 +42,24 @@
 
             <div class="form-group category-wrapper">
               <%= f.label :category_income_id, "カテゴリ" %><br>
-              <%= f.select :category_income_id, current_user.category_incomes.map { |c| [c.name, c.id] }, prompt: "選択してください", class: "form-control" %><br>
-              <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
+              <%= f.select :category_income_id,
+             current_user.category_incomes.map { |c| [c.name, c.id] },
+             { prompt: "選択してください" },
+             { class: "category-select" } %><br>
+        <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
             </div>
 
             <div class="form-group">
-              <%= f.label :labor_time, "労働時間（任意）" %><br>
-              <%= f.number_field :labor_time, step: 0.1, class: "form-control" %>
+              労働時間
+              <div class="labor-time-selects">
+                <%= select_tag "labor_hour", options_for_select((0..24).to_a.map { |h| ["#{h}時間", h] }), class: "form-control-inline" %>
+                <%= select_tag "labor_minute", options_for_select([0, 15, 30, 45].map { |m| ["#{m}分", m] }), class: "form-control-inline" %>
+              </div>
             </div>
 
             <div class="form-group">
               <%= f.label :memo, "メモ（任意）" %><br>
-              <%= f.text_area :memo , class: "form-control" %>
+              <%= f.text_area :memo, class: "form-control" %>
             </div>
 
             <div class="form-group">
@@ -66,19 +73,28 @@
 
   <!-- 右ページ -->
   <div class="page">
- <h2>収入登録</h2>
-<% if @category_income && @category_income.errors.any? %>
-  <div class="error-messages">
+    <h2>Information</h2>
+
+   <% if @category_income && @category_income.errors.any? %>
+    <div class="error-messages">
+      <ul>
+        <% @category_income.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
     <ul>
-      <% @category_income.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
+     <li><span class="info-title">日付</span>収入のあった日を選択してください。</li>
+  <li><span class="info-title">金額</span>収入を入力してください。</li>
+  <li><span class="info-title">カテゴリ</span>収入のカテゴリを選択してください。</li>
+  <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
+  <li><span class="info-title">カテゴリ追加</span>5つまで自由にカテゴリを追加することができます。</li>
+  <li><span class="info-title">労働時間</span>収入のあった日を選択してください。</li>
     </ul>
   </div>
-<% end %>
-  </div>
 </div>
-
 
  
 

@@ -31,7 +31,7 @@ img {
 
 a {
   text-decoration: none;
-  color: #4E6DB3;
+  color: #000000;
 }
 
 /* ヘッダー */
@@ -143,7 +143,7 @@ a {
   margin: 40px auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
-  overflow: visible; /* タブがはみ出ても見えるように */
+  overflow: visible; 
   background: #fefcf7;
   font-family: "Noto Serif JP", "Georgia", serif;
 }
@@ -152,6 +152,7 @@ a {
 
 /* 各ページ共通 */
 .page {
+  width: 600px;
   flex: 1;
   padding: 30px;
   border-right: 1px solid #ddd;
@@ -173,14 +174,14 @@ a {
 .left-page {
   display: flex;
   padding-left: 30px;
-  position: relative; /* ← これが基準になる */
+  position: relative; 
   
 }
 
 /* 左ページ内：縦並びのタブ */
 .tabs {
   position: absolute;
-  left: -20px;  /* ← 本体より左に出す */
+  left: -20px; 
   top: 30px;
   display: flex;
   flex-direction: column;
@@ -238,7 +239,14 @@ a {
   font-size: 14px;
 }
 
-/* 収入入力画面 */
+.dotted-border {
+  border-bottom: 1px dotted #ccc;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* 入力画面 */
 .income-main {
   display: flex;
   justify-content: center; 
@@ -248,15 +256,33 @@ a {
   margin-top: 100px;
 }
 
-.income-input {
-  width: 100%;
-  max-width: 500px;  
-  padding: 20px;
-  background: #fff; 
+.income-box {
+  width: 270px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 2px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-  text-align: center;
 }
+
+.income-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.income-box li {
+  padding: 5px 0;
+  border-bottom: 1px dotted #ccc; 
+}
+
+.show-box {
+  width: 540px;
+  height: 300px;
+  display: flex;
+}
+
 .form-group {
   margin-bottom: 20px;
   font-family: 'Kiwi Maru', serif;
@@ -277,9 +303,45 @@ a {
 .form-submit:hover {
   background-color: #246d27;
 }
+
 .category-wrapper {
   margin-bottom: 24px; 
 }
+
+.info-title {
+  display: inline-block;
+  background-color: #CECAE6;
+  color: #4E6DB3;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-right: 8px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.info-sub {
+  font-size: 13px;
+  color: #555;
+}
+
+select.category-select {
+  width: 300px;
+  height: 40px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+select.form-control-inline {
+  width: 150px;   
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .form-control {
   width: 300px;
   height: 40px;
@@ -289,6 +351,7 @@ a {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
 select.form-control {
   width: 300px;      
   height: 40px;       
@@ -306,6 +369,7 @@ textarea.form-control {
   height: 120px;
   resize: none; 
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -314,10 +378,11 @@ textarea.form-control {
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; 
+  justify-content: center; 
   z-index: 9999;
 }
+
 .modal-content {
   background: white;
   padding: 20px;
@@ -325,4 +390,64 @@ textarea.form-control {
   width: 350px;
   height: 150px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+/* カレンダー表示部分 */
+.income {
+  color: #3370ff;
+  font-size: 0.8em;
+}
+
+.expense {
+  color: #ff1d1d;
+  font-size: 0.8em;
+}
+
+.day-label {
+  font-weight: bold;
+}
+
+.labor {
+  color: #333;
+  font-size: 0.75em;
+  margin-top: 2px;
+}
+.calendar-wrapper {
+  width: 100%;
+  display: block;
+  margin-bottom: 20px;
+}
+
+/* 本文設定 */
+.title-font{
+  font-family: 'Kiwi Maru', serif;
+}
+
+/* エラーメッセージ */
+.error-messages {
+  color: red;
+  background-color: #f8d7da;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.error-messages ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.error-messages li {
+  margin-bottom: 5px;
+}
+
+/* カレンダー */
+.calendar-navigation{
+  font-size: 20px;
+  text-align: center;
+}
+.calendar-title{
+  font-size: 20px;
 }
