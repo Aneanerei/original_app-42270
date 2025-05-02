@@ -33,12 +33,40 @@
         <% total_minutes = @grouped_work_times[date].sum(&:minutes) %>
         <% total_hours = (total_minutes / 60.0).round(2) %>
         <div class="labor">🕒 <%= total_hours %>h</div>
+        
       <% end %>
     </div>
   <% end %>
 </div>
 
+<div class="work-box">
+  <div class="small-heading">今月の労働時間一覧</div>
+  <% if @work_times.any? %>
+  <ul class="worktime-list">
+    <% @work_times.each do |work_time| %>
+      <li>
+        <%= work_time.date.strftime('%m月%d日') %> -
+        <%= (work_time.minutes / 60.0).round(2) %>h
+        <% if work_time.report.present? %>
+          （<%= work_time.report %>）
+        <% end %>
+        <%= button_to "削除", work_time_path(work_time),
+                      method: :delete,
+                      data: { confirm: "この労働時間を削除しますか？" },
+                      class: "delete-button" %>
+      </li>
+    <% end %>
+  </ul>
+  <% else %>
+  <p>今月の労働時間は登録されていません。</p>
+  <% end %>
+</div>
+
+
   </div>
+
+
+
   </div>
 
 

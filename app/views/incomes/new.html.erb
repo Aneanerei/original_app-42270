@@ -1,7 +1,7 @@
 <!-- カテゴリ追加モーダル -->
 <div id="modal-overlay" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <%= form_with model: CategoryIncome.new, url: category_incomes_path, local: true, data: { turbo: false } do |f| %>
+    <%= form_with model: @category_income, url: category_incomes_path, local: true, data: { turbo: false } do |f| %>
       <%= f.text_field :name, placeholder: "カテゴリ名を入力", class: "form-control" %>
       <%= f.submit "追加", class: "form-submit" %>
     <% end %>
@@ -144,8 +144,10 @@
   <li><span class="info-title">金額</span>収入を入力してください。</li>
   <li><span class="info-title">カテゴリ</span>収入のカテゴリを選択してください。</li>
   <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
-  <li><span class="info-title">カテゴリ追加</span>5つまで自由にカテゴリを追加することができます。</li>
-  <li><span class="info-title">労働時間</span>収入のあった日を選択してください。</li>
+  <li>5つまで自由にカテゴリを追加することができます。</li>
+  <li><span class="info-title">労働時間</span>労働時間を記録できます。</li>
+  <li>24時間以上の時間を入力したい場合は、左の労働時間入力タブから入力できます。</li>
+  <li><span class="info-title">入力方法</span>日付、金額、カテゴリは未入力だと登録できません。</li>
     </ul>
   </div>
 </div>

@@ -1,11 +1,14 @@
 class CategoryIncomesController < ApplicationController
+
   def create
-    @category_income = current_user.category_incomes.build(category_income_params)
+    @category_income = current_user.category_incomes.new(category_income_params)
+
     if @category_income.save
-      redirect_to new_income_path, notice: "カテゴリを追加しました"
+      redirect_to request.referer || root_path, notice: "カテゴリを追加しました"
     else
-      @income = Income.new # incomeフォーム用（必須）
-      render "incomes/new", status: :unprocessable_entity
+      @income = Income.new
+      @work_time = WorkTime.new
+      render 'incomes/new', status: :unprocessable_entity
     end
   end
 

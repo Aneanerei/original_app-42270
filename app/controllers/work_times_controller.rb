@@ -20,6 +20,12 @@ class WorkTimesController < ApplicationController
       render 'incomes/new', status: :unprocessable_entity
     end
   end
+
+  def destroy
+    work_time = current_user.work_times.find(params[:id])
+    work_time.destroy
+    redirect_to root_path, notice: "労働時間を削除しました"
+  end
   
   private
   

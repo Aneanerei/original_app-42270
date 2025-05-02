@@ -11,9 +11,8 @@ class HomesController < ApplicationController
     @grouped_incomes = @incomes.group_by(&:date)
     # @expenses = current_user.expenses.where(date: month_start..month_end).order(:date)
 
-    @work_times = current_user.work_times.where(date: month_start..month_end)
+    @work_times = current_user.work_times.where(date: month_start..month_end).order(date: :asc)
     @grouped_work_times = @work_times.group_by(&:date)
 
-    
   end
 end
