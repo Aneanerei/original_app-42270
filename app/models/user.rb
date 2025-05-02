@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
          has_many :incomes, dependent: :destroy
          has_many :category_incomes, dependent: :destroy
-
+         has_many :work_times, dependent: :destroy
          after_create :create_default_categories
 
 def create_default_categories

@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   resources :homes
   resources :incomes
   resources :category_incomes, only: [:new, :create, :index]
+  resources :work_times, only: [:new, :create]
 end

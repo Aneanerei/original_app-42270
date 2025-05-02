@@ -5,6 +5,7 @@
       <button class="tab active"><p class="date white-text"><%= Date.today.strftime('%Y/%m/%d') %></p></button>
       <%= link_to new_income_path do %><button class="tab">収入入力</button><% end %>
       <button class="tab">支出入力</button>
+      <%= link_to new_work_time_path do %><button class="tab">労働時間入力</button><% end %>
       <button class="tab">アルバム</button>
       <button class="tab">分析</button>
       <button class="tab">日記</button>
@@ -18,25 +19,25 @@
            <% end %></h2>
      </div>
       <!-- カレンダー表示 -->
-  <div class="calendar-wrapper">
-    <%= month_calendar start_date: @date do |date| %>
-      <div>
-        <%= date.day %>
-        <% if @grouped_incomes[date] %>
-          <% total_income = @grouped_incomes[date].sum(&:amount) %>
-          <div class="income">+<%= number_with_delimiter(total_income) %>円</div>
+<div class="calendar-wrapper">
+  <%= month_calendar start_date: @date do |date| %>
+    <div>
+      <%= date.day %>
 
-          <% total_minutes = @grouped_incomes[date].sum { |i| i.labor_time || 0 } %>
-          <% if total_minutes > 0 %>
-            <% hours = total_minutes / 60 %>
-            <% minutes = total_minutes % 60 %>
-            <% total_hours = hours + minutes / 60.0 %>
-            <div class="labor">🕒 <%= total_hours.round(2) %>h</div>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+      <% if @grouped_incomes[date] %>
+        <% total_income = @grouped_incomes[date].sum(&:amount) %>
+        <div class="income">+<%= number_with_delimiter(total_income) %>円</div>
+      <% end %>
+
+      <% if @grouped_work_times[date] %>
+        <% total_minutes = @grouped_work_times[date].sum(&:minutes) %>
+        <% total_hours = (total_minutes / 60.0).round(2) %>
+        <div class="labor">🕒 <%= total_hours %>h</div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
   </div>
   </div>
 

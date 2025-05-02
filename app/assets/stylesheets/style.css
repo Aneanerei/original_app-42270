@@ -300,6 +300,19 @@ a {
   font-family: 'Kiwi Maru', serif;
 }
 
+.form-button {
+  width: 300px;
+  height: 40px;
+  background-color: #4E6DB3;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Kiwi Maru', serif;
+}
+
 .form-submit:hover {
   background-color: #246d27;
 }
@@ -391,7 +404,14 @@ textarea.form-control {
   height: 150px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-
+.modal-content-work{
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 350px;
+  height: 550px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
 
 
 
@@ -424,6 +444,11 @@ textarea.form-control {
 /* 本文設定 */
 .title-font{
   font-family: 'Kiwi Maru', serif;
+}
+
+.title-font-income{
+  font-family: 'Kiwi Maru', serif;
+  text-align: center;
 }
 
 /* エラーメッセージ */
