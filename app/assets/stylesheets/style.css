@@ -302,6 +302,7 @@ a {
   font-family: 'Kiwi Maru', serif;
   text-align: center;
 }
+
 .form-submit {
   width: 300px;
   height: 40px;
@@ -312,6 +313,8 @@ a {
   border-radius: 4px;
   cursor: pointer;
   font-family: 'Kiwi Maru', serif;
+  display: block; 
+  margin: 0 auto;
 }
 
 .form-button {
@@ -326,6 +329,7 @@ a {
   cursor: pointer;
   font-family: 'Kiwi Maru', serif;
   display: block; 
+  margin: 0 auto;
 }
 
 .form-submit:hover {
@@ -417,7 +421,7 @@ textarea.form-control {
   padding: 20px;
   border-radius: 12px;
   width: 350px;
-  height: 150px;
+  height: 200px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 .modal-content-work{

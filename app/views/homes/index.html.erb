@@ -50,11 +50,9 @@
     <% @work_times.each do |work_time| %>
       <li>
         <%= work_time.date.strftime('%m/%d') %> :
-        <span class="category-label"><%= work_time.category_income.name %></span>
+        <span class="category-label"><%= work_time.category_work_time.name %></span>
         /<%= (work_time.minutes / 60.0).round(2) %>h
-        <% if work_time.report.present? %>
-          （<%= work_time.report %>）
-        <% end %>
+   
 
   <div class="tooltip-wrapper">
     <%= form_with url: work_time_path(work_time), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>

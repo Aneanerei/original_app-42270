@@ -2,8 +2,17 @@ ja:
   simple_calendar:
     previous: "<<"
     next: ">>"
-
+    
   activerecord:
+    models:
+      category_income: 収入カテゴリ
+      category_work_time: 労働カテゴリ
+
     attributes:
       category_income:
-        name: "カテゴリ名"
+        name: カテゴリ名
+        amount: 金額
+      category_work_time:
+        name: カテゴリ名
+        report: 日報
+        minute: 労働時間（分）

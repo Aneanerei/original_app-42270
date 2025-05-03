@@ -1,17 +1,26 @@
 <!-- カテゴリ追加モーダル -->
 <div id="modal-overlay" class="modal-overlay" style="display: none;">
   <div class="modal-content">
+
     <%= form_with model: @category_income, url: category_incomes_path, local: true, data: { turbo: false } do |f| %>
-      <%= f.text_field :name, placeholder: "カテゴリ名を入力", class: "form-control" %>
-      <%= f.submit "追加", class: "form-submit" %>
+    <%= hidden_field_tag :from_modal, true %>
+      <div class="form-group">
+        <%= f.text_field :name, placeholder: "カテゴリ名を入力", class: "form-control"%>
+      </div>
+      <div class="form-group">
+        <%= f.submit "追加", class: "form-submit" %>
+        <button type="button" id="close-modal" class="form-button">閉じる</button>
+      </div>
     <% end %>
-    <button id="close-modal" class="form-button">閉じる</button>
   </div>
 </div>
+
+
 
 <!-- 労働時間追加モーダル -->
 <div id="worktime-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content-work">
+    
     <%= form_with model: @work_time, url: work_times_path, local: true, data: { turbo: false } do |f| %>
       <%= hidden_field_tag :from_modal, true %>
 
@@ -20,13 +29,13 @@
         <%= f.date_field :date, value: Date.today, class: "form-control" %>
       </div>
 
-    <div class="form-group">
-      <%= f.label :category_income_id, "カテゴリ" %><br>
-      <%= f.select :category_income_id,
-      current_user.category_incomes.map { |c| [c.name, c.id] },
-      { prompt: "選択してください" },
-      class: "form-control" %>
-    </div>
+      <div class="form-group">
+        <%= f.label :category_work_time_id, "カテゴリ" %><br>
+        <%= f.select :category_work_time_id,
+        @category_work_times.map { |c| [c.name, c.id] },
+       { prompt: "選択してください" },
+       class: "form-control" %>
+   </div>
     
       <div class="form-group">
         <%= label_tag :labor_hour, "労働時間（時）" %>
@@ -86,15 +95,16 @@
 
             <div class="form-group category-wrapper">
               <%= f.label :category_income_id, "カテゴリ" %><br>
-              <%= f.select :category_income_id,
-             current_user.category_incomes.map { |c| [c.name, c.id] },
+             <%= f.select :category_income_id,
+             CategoryIncome.where(user_id: nil).or(CategoryIncome.where(user_id: current_user.id))
+              .map { |c| [c.name, c.id] },
              { prompt: "選択してください" },
-             { class: "category-select" } %><br>
-        <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
+               class: "form-control" %><br>
+            <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
             </div>
             <div class="title-font-income">労働時間(任意)</div>
             <div class="form-group">
-        <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button>
+            <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button>
             </div>
             <div class="form-group">
               <%= f.label :memo, "メモ（任意）" %><br>
@@ -120,15 +130,26 @@
   <div class="page">
     <h2>Information</h2>
 
-   <% if @category_income && @category_income.errors.any? %>
-    <div class="error-messages">
-      <ul>
-        <% @category_income.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<% if @category_income && @category_income.errors.any? %>
+  <div class="error-messages">
+    <ul>
+      <% @category_income.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @category_work_time && @category_work_time.errors.any? %>
+  <div class="error-messages">
+    <ul>
+      <% @category_work_time.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
  <% if @work_time && @work_time.errors.any? %>
     <div class="error-messages">
       <ul>

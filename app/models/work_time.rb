@@ -1,8 +1,8 @@
 class WorkTime < ApplicationRecord
   belongs_to :user
-  belongs_to :category_income
+  belongs_to :category_work_time
 
-  validates :category_income_id, presence: { message: "カテゴリを選択してください。" }
+  validates :category_work_time_id, presence: { message: "カテゴリを選択してください。" }
   validates :date, presence: { message: "日付を入力してください" }
   validates :minutes, presence: { message: "労働時間を入力してください" }
   validates :minutes, numericality: {
@@ -10,4 +10,6 @@ class WorkTime < ApplicationRecord
     greater_than: 0,
     message: "は1分以上の整数で入力してください"
   }
+
+  
 end
