@@ -55,21 +55,26 @@
         <% if work_time.report.present? %>
           （<%= work_time.report %>）
         <% end %>
-    <div class="tooltip-wrapper">
-  <%= form_with url: work_time_path(work_time), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
-    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
-      ×<span class="tooltip-text">削除</span>
-    </button>
-  <% end %>
-</div>
+
+  <div class="tooltip-wrapper">
+    <%= form_with url: work_time_path(work_time), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+      <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+        ×<span class="tooltip-text">削除</span>
+      </button>
     <% end %>
+  </div>
+
+  <div class="tooltip-wrapper">
+    <%= link_to edit_work_time_path(work_time), class: "edit-link-button" do %>
+      <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
+    <% end %>
+  </div>
+       <% end %>
   </ul>
   <% else %>
   <p>今月の労働時間は登録されていません。</p>
   <% end %>
-</div>
-
-
+  </div>
   </div>
 
 

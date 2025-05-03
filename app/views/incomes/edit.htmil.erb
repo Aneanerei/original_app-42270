@@ -1,3 +1,13 @@
+
+
+
+  <div class="book">
+ <div class="page left-page"> 
+   
+  
+  <%= render 'shared/book_style_layout' %>
+
+<div class="tab-content"> 
 <h2>収入の編集</h2>
 
 <%= form_with model: @income, local: true do |f| %>
@@ -25,3 +35,32 @@
     <%= f.submit "更新する", class: "form-submit" %>
   </div>
 <% end %>
+
+  </div>
+
+  <!-- 右ページ -->
+  <div class="page">
+    <h2>Information</h2>
+      <ul>
+        <li>
+  <% if @work_time.errors.any? %>
+    <div class="error-messages">
+      <ul>
+        <% @work_time.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+        </li>
+      </ul>
+      <ul>
+           <li><span class="info-title">労働時間</span>労働時間を記録できます。</li>
+           <li><span class="info-title">労働時間</span>24時間以上の時間も登録できます。</li>
+      </ul>
+  </div>
+</div>
+</div>
+ 
+
+

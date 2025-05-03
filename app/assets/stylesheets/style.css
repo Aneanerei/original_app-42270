@@ -325,6 +325,7 @@ a {
   border-radius: 4px;
   cursor: pointer;
   font-family: 'Kiwi Maru', serif;
+  display: block; 
 }
 
 .form-submit:hover {
@@ -377,6 +378,7 @@ select.form-control-inline {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 select.form-control {
@@ -388,8 +390,8 @@ select.form-control {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
-  appearance: none;
 }
+
 
 textarea.form-control {
   width: 300px;
@@ -423,7 +425,7 @@ textarea.form-control {
   padding: 20px;
   border-radius: 12px;
   width: 350px;
-  height: 550px;
+  height: 600px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -499,7 +501,7 @@ textarea.form-control {
 
 /* 労働時間一覧 */
 .work-box {
-  width: 35%;
+  width: 45%;
   margin-top: 20px;
   border: 2px solid #ccc;
   padding: 10px;
@@ -584,3 +586,28 @@ textarea.form-control {
   display: flex;
   justify-content: space-around;
 }
+
+/* 編集ボタン */
+.edit-link-button {
+  border: none;
+  background: none;
+  color: #555;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: none;
+}
+
+.edit-link-button:hover {
+  color: rgb(37, 218, 20);
+}
+
+.mirrored-icon {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+.center-button {
+  margin: 0 auto; 
+}
+
+

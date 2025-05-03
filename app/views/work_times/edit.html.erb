@@ -1,3 +1,5 @@
+
+
   <div class="book">
  <div class="page left-page"> 
    
@@ -5,9 +7,9 @@
   <%= render 'shared/book_style_layout' %>
 
 <div class="tab-content"> 
-  <h2>労働時間の登録</h2>
+<h2>労働時間の編集</h2>
 
-  <%= form_with model: @work_time, url: work_times_path, local: true do |f| %>
+<%= form_with model: @work_time, local: true do |f| %>
     <div class="form-group">
       <%= f.label :date, "日付" %><br>
       <%= f.date_field :date, value: Date.today, class: "form-control" %>
@@ -37,16 +39,16 @@
     </div>
 
     <div class="form-group">
-      <%= f.submit "登録する", class: "form-submit" %>
+      <%= f.submit "更新する", class: "form-submit" %>
     </div>
   <% end %>
+
   <div class="form-group">
     <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
   </div>
-
-  </div>
-  </div>
-
+ 
+ </div>
+ </div>
   <!-- 右ページ -->
   <div class="page">
     <h2>Information</h2>
@@ -71,5 +73,3 @@
 </div>
 </div>
  
-
-

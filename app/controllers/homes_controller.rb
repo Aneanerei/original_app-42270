@@ -7,11 +7,11 @@ class HomesController < ApplicationController
     month_end   = @date.end_of_month
   
     # その月の収入・支出を取得
-    @incomes = current_user.incomes.where(date: month_start..month_end).order(date: :desc)
+    @incomes = current_user.incomes.where(date: month_start..month_end).order(date: :desc, created_at: :desc)
     @grouped_incomes = @incomes.group_by(&:date)
     # @expenses = current_user.expenses.where(date: month_start..month_end).order(:date)
 
-    @work_times = current_user.work_times.where(date: month_start..month_end).order(date: :desc)
+    @work_times = current_user.work_times.where(date: month_start..month_end).order(date: :desc, created_at: :desc)
     @grouped_work_times = @work_times.group_by(&:date)
 
   end

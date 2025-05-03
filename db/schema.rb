@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_02_235607) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_03_065801) do
   create_table "category_incomes", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_category_incomes_on_user_id"
+  end
+
+  create_table "category_work_times", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.boolean "default"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_category_work_times_on_user_id"
   end
 
   create_table "incomes", charset: "utf8mb3", force: :cascade do |t|
@@ -57,6 +66,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_02_235607) do
   end
 
   add_foreign_key "category_incomes", "users"
+  add_foreign_key "category_work_times", "users"
   add_foreign_key "incomes", "category_incomes"
   add_foreign_key "incomes", "users"
   add_foreign_key "work_times", "users"

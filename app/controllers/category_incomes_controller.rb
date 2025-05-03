@@ -7,7 +7,6 @@ class CategoryIncomesController < ApplicationController
       redirect_to request.referer || root_path, notice: "カテゴリを追加しました"
     else
       @income = Income.new
-      @work_time = WorkTime.new
       render 'incomes/new', status: :unprocessable_entity
     end
   end
