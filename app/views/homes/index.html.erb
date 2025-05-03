@@ -1,15 +1,7 @@
 <div class="book">
   <!-- 左ページ -->
   <div class="page left-page">
-    <div class="tabs">
-      <button class="tab active"><p class="date white-text"><%= Date.today.strftime('%Y/%m/%d') %></p></button>
-      <%= link_to new_income_path do %><button class="tab">収入入力</button><% end %>
-      <button class="tab">支出入力</button>
-      <%= link_to new_work_time_path do %><button class="tab">労働時間入力</button><% end %>
-      <button class="tab">アルバム</button>
-      <button class="tab">分析</button>
-      <button class="tab">日記</button>
-    </div>
+<%= render 'shared/book_style_layout' %>
     <div class="tab-content">
     <div id="calendar-selects">
      <h2><%= form_with url: root_path, method: :get, local: true do %>
@@ -39,22 +31,37 @@
   <% end %>
 </div>
 
+<!-- カスタムモーダル -->
+<div id="customDeleteModal" class="custom-modal">
+  <div class="custom-modal-content">
+    <p>本当に削除しますか？</p>
+    <div class="modal-buttons">
+      <button type="button" onclick="closeDeleteModal()">キャンセル</button>
+      <button type="button" onclick="submitDeleteForm()">削除</button>
+    </div>
+  </div>
+</div>
+
+
 <div class="work-box">
   <div class="small-heading">今月の労働時間一覧</div>
   <% if @work_times.any? %>
   <ul class="worktime-list">
     <% @work_times.each do |work_time| %>
       <li>
-        <%= work_time.date.strftime('%m月%d日') %> -
-        <%= (work_time.minutes / 60.0).round(2) %>h
+        <%= work_time.date.strftime('%m/%d') %> :
+        <span class="category-label"><%= work_time.category_income.name %></span>
+        /<%= (work_time.minutes / 60.0).round(2) %>h
         <% if work_time.report.present? %>
           （<%= work_time.report %>）
         <% end %>
-        <%= button_to "削除", work_time_path(work_time),
-                      method: :delete,
-                      data: { confirm: "この労働時間を削除しますか？" },
-                      class: "delete-button" %>
-      </li>
+    <div class="tooltip-wrapper">
+  <%= form_with url: work_time_path(work_time), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+      ×<span class="tooltip-text">削除</span>
+    </button>
+  <% end %>
+</div>
     <% end %>
   </ul>
   <% else %>
@@ -80,7 +87,16 @@
     <% if @incomes.any? %>
       <ul>
         <% @incomes.each do |income| %>
-          <li><%= income.date.strftime("%m/%d") %>：<%= income.category_income&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(income.amount) %></li>
+          <li><%= income.date.strftime("%m/%d") %>：<%= income.category_income&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(income.amount) %>
+     <div class="tooltip-wrapper">
+ <!-- 削除ボタン -->
+  <%= form_with url: income_path(income), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+  <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+    ×<span class="tooltip-text">削除</span>
+  </button>
+<% end %>
+     </div>   
+      </li>
         <% end %>
       </ul>
     <% else %>

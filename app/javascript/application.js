@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails"
 import "show_category_form"
 import "work_time"
+import "delete"

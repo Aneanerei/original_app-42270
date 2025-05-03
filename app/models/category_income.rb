@@ -1,6 +1,7 @@
   class CategoryIncome < ApplicationRecord
     belongs_to :user
     has_many :incomes
+    has_many :work_times
     before_destroy :prevent_deletion_of_default_categories
 
     validates :name, presence: true, uniqueness: { scope: :user_id }

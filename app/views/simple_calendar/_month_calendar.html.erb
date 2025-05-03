@@ -7,7 +7,10 @@
   
   <div class="calendar-navigation">
   <%= link_to t('simple_calendar.previous', default: 'Previous'), homes_path(year: @date.prev_month.year, month: @date.prev_month.month) %>
-  <%= link_to t('simple_calendar.today', default: 'Today'), homes_path(year: Date.today.year, month: Date.today.month), title: '今月のカレンダーに戻る' %>
+<div class="tooltip-wrapper">
+  <%= link_to t('simple_calendar.today', default: 'Today'), homes_path(year: Date.today.year, month: Date.today.month), class: "today-link" %>
+  <span class="tooltip-text">今月のカレンダーに戻る</span>
+</div>
   <%= link_to t('simple_calendar.next', default: 'Next'), homes_path(year: @date.next_month.year, month: @date.next_month.month) %>
   </div>
 

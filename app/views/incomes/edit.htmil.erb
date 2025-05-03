@@ -1,0 +1,27 @@
+<h2>収入の編集</h2>
+
+<%= form_with model: @income, local: true do |f| %>
+  <div class="form-group">
+    <%= f.label :date, "日付" %><br>
+    <%= f.date_field :date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :amount, "金額（円）" %><br>
+    <%= f.number_field :amount, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :category_income_id, "カテゴリ" %><br>
+    <%= f.select :category_income_id, current_user.category_incomes.map { |c| [c.name, c.id] }, prompt: "選択してください", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :memo, "メモ（任意）" %><br>
+    <%= f.text_area :memo, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit "更新する", class: "form-submit" %>
+  </div>
+<% end %>

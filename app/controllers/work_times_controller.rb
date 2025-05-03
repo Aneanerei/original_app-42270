@@ -16,8 +16,13 @@ class WorkTimesController < ApplicationController
     if @work_time.save
       redirect_to root_path, notice: "労働時間を登録しました"
     else
-      @income = Income.new
-      render 'incomes/new', status: :unprocessable_entity
+      if params[:from_modal].present?
+        @income = current_user.incomes.new
+        @category_income = CategoryIncome.new
+        render 'incomes/new', status: :unprocessable_entity
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 
@@ -30,6 +35,6 @@ class WorkTimesController < ApplicationController
   private
   
   def work_time_params
-    params.require(:work_time).permit(:date, :report)
+    params.require(:work_time).permit(:date, :minutes, :report, :category_income_id)
   end
 end
