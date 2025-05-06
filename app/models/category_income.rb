@@ -11,6 +11,7 @@ class CategoryIncome < ApplicationRecord
   uniqueness: { scope: :user_id, message: "はすでに存在しています" }
   validate :category_limit, on: :create
 
+  
   private
 
   def prevent_deletion_of_default_categories
