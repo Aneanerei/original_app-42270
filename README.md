@@ -27,7 +27,6 @@ user_id: ユーザー情報（外部キー）
 | amount              | integer    | null: false | check: 'amount >= 0' |
 | category_expense_id | integer    | null: false | foreign_key: true    |
 | memo                | text       |             |                      |
-| image               | string     |             |                      |
 | user                | references | null: false | foreign_key: true    |
 | tag_list            | string     |             |                      |  <!-- タグのためのカラム -->
 

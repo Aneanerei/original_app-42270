@@ -1,4 +1,8 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
-import "controllers"
-import "calendar_controller"
+import "work_time"
+import "delete"
+import "category_work_time_modal"
+import "category_income_modal"
+import "category_modal_delete"
+import "work_category_modal_delete"

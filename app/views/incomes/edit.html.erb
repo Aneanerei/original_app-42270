@@ -1,0 +1,101 @@
+
+
+
+  <div class="book">
+ <div class="page left-page"> 
+   
+  
+  <%= render 'shared/book_style_layout' %>
+
+<div class="tab-content"> 
+<h2>収入の編集</h2>
+
+<%= form_with model: @income, local: true do |f| %>
+  <div class="form-group">
+    <%= f.label :date, "日付" %><br>
+    <%= f.date_field :date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :amount, "金額（円）" %><br>
+    <%= f.number_field :amount, class: "form-control" %>
+  </div>
+
+   <div class="form-group category-wrapper">
+    <%= f.label :category_income_id, "カテゴリ" %><br>
+    <%= f.select :category_income_id,
+        CategoryIncome.where(user_id: nil)
+        .or(CategoryIncome.where(user_id: current_user.id))
+        .map { |c| [c.name, c.id] },
+       { prompt: "選択してください" },
+       class: "form-control" %><br>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :memo, "メモ（任意）" %><br>
+    <%= f.text_area :memo, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit "更新する", class: "form-submit" %>
+  </div>
+<% end %>
+
+  </div>
+  </div>
+  <!-- 右ページ -->
+  <div class="page">
+    <h2>Information</h2>
+      <ul>
+        <li>
+<% if @category_income && @category_income.errors.any? %>
+  <div class="error-messages">
+    <ul>
+      <% @category_income.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @category_work_time && @category_work_time.errors.any? %>
+  <div class="error-messages">
+    <ul>
+      <% @category_work_time.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+ <% if @work_time && @work_time.errors.any? %>
+    <div class="error-messages">
+      <ul>
+        <% @work_time.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<% if @income && @income.errors.any? %>
+    <div class="error-messages">
+      <ul>
+        <% @income.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+        </li>
+      </ul>
+      <ul>
+           <li><span class="info-title">労働時間</span>労働時間を記録できます。</li>
+           <li><span class="info-title">労働時間</span>24時間以上の時間も登録できます。</li>
+      </ul>
+  </div>
+</div>
+</div>
+ 
+
+

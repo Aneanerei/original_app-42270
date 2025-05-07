@@ -1,0 +1,28 @@
+<%= form_with model: income, local: true do |f| %>
+  <div>
+    <%= f.label :date %>
+    <%= f.date_field :date %>
+  </div>
+
+  <div>
+    <%= f.label :amount %>
+    <%= f.number_field :amount %>
+  </div>
+
+  <div>
+    <%= f.label :category_income_id %>
+    <%= f.select :category_income_id, current_user.category_incomes.map { |c| [c.name, c.id] }, prompt: '選択してください' %>
+  </div>
+
+  <div>
+    <%= f.label :labor_time %>
+    <%= f.number_field :labor_time %>
+  </div>
+
+  <div>
+    <%= f.label :memo %>
+    <%= f.text_area :memo %>
+  </div>
+
+  <%= f.submit "登録" %>
+<% end %>

@@ -2,7 +2,9 @@
 
 pin "application"
 pin "@hotwired/turbo-rails", to: "turbo.min.js"
-pin "@hotwired/stimulus", to: "stimulus.min.js"
-pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
-pin_all_from "app/javascript/controllers", under: "controllers"
-pin "calendar_controller", to: "controllers/calendar_controller.js"
+pin "work_time", to:"work_time.js"
+pin "delete", to:"delete.js"
+pin "category_work_time_modal", to: "category_work_time_modal.js"
+pin "category_income_modal", to: "category_income_modal.js"
+pin "category_modal_delete", to: "category_modal_delete.js"
+pin "work_category_modal_delete", to: "work_category_modal_delete.js"

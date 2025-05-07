@@ -1,0 +1,77 @@
+<!-- 労働カテゴリ追加モーダル -->
+<div id="worktime-category-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <div class="form-toggle-buttons">
+      <button type="button" id="show-worktime-add-form" class="form-button">＋カテゴリ追加</button>
+      <button type="button" id="show-worktime-edit-form" class="form-button edit">✎ カテゴリ編集</button>
+      <button type="button" id="show-worktime-delete-form" class="form-button delete">− カテゴリ削除</button>
+    </div>
+
+    <!-- 追加フォーム -->
+    <div id="worktime-add-form" class="category-form-section">
+      <%= form_with model: @category_work_time, url: category_work_times_path, scope: :category_work_time, local: true, data: { turbo: false } do |f| %>
+        <%= hidden_field_tag :from_modal, true %>
+        <h4>カテゴリ名を追加</h4>
+        <div class="form-group">
+          <%= f.text_field :name, placeholder: "カテゴリ名を入力", class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= f.submit "追加", class: "form-submit" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 編集フォーム -->
+    <div id="worktime-edit-form" class="category-form-section" style="display: none;">
+      <h4>カテゴリ名を変更</h4>
+      <% system_categories = current_user.category_work_times.where(user_id: nil) %>
+      <% user_categories = current_user.category_work_times.where.not(user_id: nil) %>
+
+      <%= form_with url: update_selected_category_work_times_path, method: :patch, scope: :category_work_time, local: true do |f| %>
+        <div class="form-group">
+          <%= f.label :category_id, "編集するカテゴリ" %>
+          <%= f.select :category_id, grouped_options_for_select({
+              '初期カテゴリ（変更不可）' => system_categories.map { |c| [c.name, c.id] },
+              'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
+            }), { prompt: "カテゴリを選択" }, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :name, "新しいカテゴリ名" %>
+          <%= f.text_field :name, class: "form-control", placeholder: "新しい名前を入力" %>
+        </div>
+        <div class="form-group">
+          <%= f.submit "更新", class: "form-submit" %>
+        </div>
+      <% end %>
+    </div>
+
+<!-- 削除フォーム -->
+<div id="worktime-delete-form" class="category-form-section" style="display: none;">
+  <h4>カテゴリを選んで削除</h4>
+
+  <% system_categories = current_user.category_work_times.where(user_id: nil) %>
+  <% user_categories = current_user.category_work_times.where.not(user_id: nil) %>
+
+  <%= form_with url: delete_selected_category_work_times_path, method: :delete, scope: :category_work_time, local: true, html: { id: "delete-work-category-form" } do |f| %>
+    <div class="form-group">
+      <%= f.label :category_id, "削除したいカテゴリ" %>
+      <%= f.select :category_id,
+            grouped_options_for_select({
+              '初期カテゴリ（削除不可）' => system_categories.map { |c| [c.name, c.id] },
+              'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
+            }),
+            { prompt: "カテゴリを選択" },
+            class: "form-control", id: "selected-work-category" %>
+    </div>
+    <div class="form-group">
+      <button type="button" class="form-submit" onclick="confirmWorkCategoryDelete(this)">削除</button>
+    </div>
+  <% end %>
+</div>
+
+
+    <div class="form-close-button">
+      <button type="button" id="close-worktime-category-modal" class="form-button">閉じる</button>
+    </div>
+  </div>
+</div>

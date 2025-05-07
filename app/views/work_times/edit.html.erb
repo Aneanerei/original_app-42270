@@ -1,0 +1,79 @@
+
+
+  <div class="book">
+ <div class="page left-page"> 
+   
+  
+  <%= render 'shared/book_style_layout' %>
+
+<div class="tab-content"> 
+<h2>労働時間の編集</h2>
+
+   <%= form_with model: @work_time, local: true do |f| %>
+    <div class="form-group">
+      <%= f.label :date, "日付" %><br>
+      <%= f.date_field :date, value: Date.today, class: "form-control" %>
+    </div>
+    
+   <div class="form-group">
+        <%= f.label :category_work_time_id, "カテゴリ" %><br>
+        <%= f.select :category_work_time_id,
+        @category_work_times.map { |c| [c.name, c.id] },
+       { prompt: "選択してください" },
+       class: "form-control" %>
+   </div>
+
+   <div class="form-group">
+     <%= label_tag :labor_hour, "労働時間（時）" %>
+     <%= select_tag :labor_hour,
+      options_for_select((0..24).to_a.map { |h| ["#{h}時間", h] }, selected: @labor_hour),
+      class: "form-control-inline" %>
+    </div>
+
+    <div class="form-group">
+     <%= label_tag :labor_minute, "労働時間（分）" %>
+     <%= select_tag :labor_minute,
+      options_for_select([0, 15, 30, 45].map { |m| ["#{m}分", m] }, selected: @labor_minute),
+      class: "form-control-inline" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :report, "作業日報（任意）" %><br>
+      <%= f.text_area :report, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit "更新する", class: "form-submit" %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
+  </div>
+ 
+ </div>
+ </div>
+  <!-- 右ページ -->
+  <div class="page">
+    <h2>Information</h2>
+      <ul>
+        <li>
+  <% if @work_time.errors.any? %>
+    <div class="error-messages">
+      <ul>
+        <% @work_time.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+        </li>
+      </ul>
+      <ul>
+           <li><span class="info-title">労働時間</span>労働時間を記録できます。</li>
+           <li><span class="info-title">労働時間</span>24時間以上の時間も登録できます。</li>
+      </ul>
+  </div>
+</div>
+</div>
+ 

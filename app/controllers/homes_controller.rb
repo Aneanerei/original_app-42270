@@ -1,11 +1,18 @@
 class HomesController < ApplicationController
   def index
-    year_param = params[:year]
-    month_param = params[:month]
+    @date = params[:year] && params[:month] ? Date.new(params[:year].to_i, params[:month].to_i, 1) : Date.today.beginning_of_month
   
-    year = year_param.present? ? year_param.to_i : Date.today.year
-    month = month_param.present? ? month_param.to_i : Date.today.month
+    # 月初〜月末を定義
+    month_start = @date.beginning_of_month
+    month_end   = @date.end_of_month
   
-    @date = Date.new(year, month, 1)
+    # その月の収入・支出を取得
+    @incomes = current_user.incomes.where(date: month_start..month_end).order(date: :desc, created_at: :desc)
+    @grouped_incomes = @incomes.group_by(&:date)
+    # @expenses = current_user.expenses.where(date: month_start..month_end).order(:date)
+
+    @work_times = current_user.work_times.where(date: month_start..month_end).order(date: :desc, created_at: :desc)
+    @grouped_work_times = @work_times.group_by(&:date)
+
   end
 end
