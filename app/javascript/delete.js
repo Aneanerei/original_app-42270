@@ -15,3 +15,4 @@ document.addEventListener("turbo:load", () => {
     if (currentForm) currentForm.submit();
   };
 });
+

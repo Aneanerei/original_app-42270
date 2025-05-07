@@ -21,9 +21,14 @@
     <%= f.number_field :amount, class: "form-control" %>
   </div>
 
-  <div class="form-group">
+   <div class="form-group category-wrapper">
     <%= f.label :category_income_id, "カテゴリ" %><br>
-    <%= f.select :category_income_id, current_user.category_incomes.map { |c| [c.name, c.id] }, prompt: "選択してください", class: "form-control" %>
+    <%= f.select :category_income_id,
+        CategoryIncome.where(user_id: nil)
+        .or(CategoryIncome.where(user_id: current_user.id))
+        .map { |c| [c.name, c.id] },
+       { prompt: "選択してください" },
+       class: "form-control" %><br>
   </div>
 
   <div class="form-group">
@@ -37,17 +42,47 @@
 <% end %>
 
   </div>
-
+  </div>
   <!-- 右ページ -->
   <div class="page">
     <h2>Information</h2>
       <ul>
         <li>
-  <% if @work_time.errors.any? %>
+<% if @category_income && @category_income.errors.any? %>
+  <div class="error-messages">
+    <ul>
+      <% @category_income.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @category_work_time && @category_work_time.errors.any? %>
+  <div class="error-messages">
+    <ul>
+      <% @category_work_time.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+ <% if @work_time && @work_time.errors.any? %>
     <div class="error-messages">
       <ul>
         <% @work_time.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<% if @income && @income.errors.any? %>
+    <div class="error-messages">
+      <ul>
+        <% @income.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>

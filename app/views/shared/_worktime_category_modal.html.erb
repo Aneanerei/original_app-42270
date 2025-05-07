@@ -21,43 +21,50 @@
       <% end %>
     </div>
 
-<!-- 編集フォーム -->
-<div id="worktime-edit-form" class="category-form-section" style="display: none;">
-  <h4>カテゴリ名を変更</h4>
- <% system_categories = current_user.category_work_times.where(user_id: nil) %>
-<% user_categories = current_user.category_work_times.where.not(user_id: nil) %>
+    <!-- 編集フォーム -->
+    <div id="worktime-edit-form" class="category-form-section" style="display: none;">
+      <h4>カテゴリ名を変更</h4>
+      <% system_categories = current_user.category_work_times.where(user_id: nil) %>
+      <% user_categories = current_user.category_work_times.where.not(user_id: nil) %>
 
-<%= form_with url: update_selected_category_work_times_path, method: :patch, scope: :category_work_time, local: true do |f| %>
-  <div class="form-group">
-    <%= f.label :category_id, "編集するカテゴリ" %>
-    <%= f.select :category_id, grouped_options_for_select({
-          '初期カテゴリ（変更不可）' => system_categories.map { |c| [c.name, c.id] },
-          'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
-        }), { prompt: "カテゴリを選択" }, class: "form-control", disabled: false %>
-  </div>
-  <div class="form-group">
-    <%= f.label :name, "新しいカテゴリ名" %>
-    <%= f.text_field :name, class: "form-control", placeholder: "新しい名前を入力" %>
-  </div>
-  <div class="form-group">
-    <%= f.submit "更新", class: "form-submit" %>
-  </div>
-<% end %>
-</div>
+      <%= form_with url: update_selected_category_work_times_path, method: :patch, scope: :category_work_time, local: true do |f| %>
+        <div class="form-group">
+          <%= f.label :category_id, "編集するカテゴリ" %>
+          <%= f.select :category_id, grouped_options_for_select({
+              '初期カテゴリ（変更不可）' => system_categories.map { |c| [c.name, c.id] },
+              'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
+            }), { prompt: "カテゴリを選択" }, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :name, "新しいカテゴリ名" %>
+          <%= f.text_field :name, class: "form-control", placeholder: "新しい名前を入力" %>
+        </div>
+        <div class="form-group">
+          <%= f.submit "更新", class: "form-submit" %>
+        </div>
+      <% end %>
+    </div>
 
 <!-- 削除フォーム -->
 <div id="worktime-delete-form" class="category-form-section" style="display: none;">
   <h4>カテゴリを選んで削除</h4>
-  <%= form_with url: delete_selected_category_work_times_path, method: :delete, scope: :category_work_time, local: true do |f| %>
+
+  <% system_categories = current_user.category_work_times.where(user_id: nil) %>
+  <% user_categories = current_user.category_work_times.where.not(user_id: nil) %>
+
+  <%= form_with url: delete_selected_category_work_times_path, method: :delete, scope: :category_work_time, local: true, html: { id: "delete-work-category-form" } do |f| %>
     <div class="form-group">
-      <%= f.label :category_id, "削除するカテゴリ" %>
-      <%= f.select :category_id, grouped_options_for_select({
-            '初期カテゴリ（削除不可）' => system_categories.map { |c| [c.name, c.id] },
-            'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
-          }), { prompt: "カテゴリを選択" }, class: "form-control" %>
+      <%= f.label :category_id, "削除したいカテゴリ" %>
+      <%= f.select :category_id,
+            grouped_options_for_select({
+              '初期カテゴリ（削除不可）' => system_categories.map { |c| [c.name, c.id] },
+              'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
+            }),
+            { prompt: "カテゴリを選択" },
+            class: "form-control", id: "selected-work-category" %>
     </div>
     <div class="form-group">
-      <%= f.submit "削除", class: "form-submit", data: { confirm: "本当に削除しますか？" } %>
+      <button type="button" class="form-submit" onclick="confirmWorkCategoryDelete(this)">削除</button>
     </div>
   <% end %>
 </div>

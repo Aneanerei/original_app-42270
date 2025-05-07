@@ -6,8 +6,16 @@ ja:
   activerecord:
     attributes:
       income:
-        amount: 金額
         category_income: 収入カテゴリ名
+        amount: 金額
+        category_income_id: 収入カテゴリ名
         name: カテゴリ名
         amount: 金額
         category_work_time: 労働カテゴリ名
+      category_income:
+        name: カテゴリ名
+      category_work_time:
+        name: カテゴリ名
+      work_time:
+        minutes: 時間
+        :category_work_time_id: 労働カテゴリ名 

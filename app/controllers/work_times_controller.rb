@@ -42,9 +42,13 @@ class WorkTimesController < ApplicationController
   end
 
   def edit
+    @work_time = current_user.work_times.find(params[:id])
     @category_work_times = CategoryWorkTime.where(user_id: nil)
       .or(CategoryWorkTime.where(user_id: current_user.id))
       .order(:id)
+  
+    @labor_hour = @work_time.minutes / 60
+    @labor_minute = @work_time.minutes % 60
   end
 
   def update
@@ -70,6 +74,7 @@ class WorkTimesController < ApplicationController
   end
 
   private
+  
 
   def set_work_time
     @work_time = current_user.work_times.find(params[:id])

@@ -50,7 +50,9 @@
     <% @work_times.each do |work_time| %>
       <li>
         <%= work_time.date.strftime('%m/%d') %> :
-        <span class="category-label"><%= work_time.category_work_time.name %></span>
+       <span class="category-label">
+  <%= work_time.category_work_time&.name || '未設定' %>
+</span>
         /<%= (work_time.minutes / 60.0).round(2) %>h
    
 
@@ -91,14 +93,23 @@
       <ul>
         <% @incomes.each do |income| %>
           <li><%= income.date.strftime("%m/%d") %>：<%= income.category_income&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(income.amount) %>
-     <div class="tooltip-wrapper">
- <!-- 削除ボタン -->
-  <%= form_with url: income_path(income), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
-  <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
-    ×<span class="tooltip-text">削除</span>
-  </button>
-<% end %>
-     </div>   
+   
+   <div class="tooltip-wrapper">
+   <!-- 削除ボタン -->
+   <%= form_with url: income_path(income), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+      ×<span class="tooltip-text">削除</span>
+    </button>
+    <% end %>
+   </div>  
+  
+   <!-- 編集ボタン -->
+   <div class="tooltip-wrapper">
+   <%= link_to edit_income_path(income), class: "edit-link-button" do %> 
+  <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
+   <% end %>
+  </div>  
+
       </li>
         <% end %>
       </ul>

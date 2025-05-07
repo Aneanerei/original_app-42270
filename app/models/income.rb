@@ -5,9 +5,9 @@ class Income < ApplicationRecord
   validates :amount, numericality: {
     only_integer: true,
     greater_than_or_equal_to: 0,
-    message: "は0以上の整数で入力してください"
+    message: "は0以上の整数で入力してください。"
   }
 
   validates :date, presence: { message: "日付を入力してください。" }
-  validates :category_income_id, presence: { message: "カテゴリを選択してください。" }
+  validates :category_income_id, presence: { message: "を選択してください。" }
 end

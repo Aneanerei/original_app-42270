@@ -23,14 +23,18 @@
        class: "form-control" %>
    </div>
 
-    <div class="form-group">
-      <%= label_tag :labor_hour, "労働時間（時間）" %><br>
-      <%= number_field_tag :labor_hour, nil, class: "form-control", min: 0 %>
+   <div class="form-group">
+     <%= label_tag :labor_hour, "労働時間（時）" %>
+     <%= select_tag :labor_hour,
+      options_for_select((0..24).to_a.map { |h| ["#{h}時間", h] }, selected: @labor_hour),
+      class: "form-control-inline" %>
     </div>
 
     <div class="form-group">
-      <%= label_tag :labor_minute, "労働時間（分）" %><br>
-      <%= number_field_tag :labor_minute, nil, class: "form-control", min: 0, max: 59 %>
+     <%= label_tag :labor_minute, "労働時間（分）" %>
+     <%= select_tag :labor_minute,
+      options_for_select([0, 15, 30, 45].map { |m| ["#{m}分", m] }, selected: @labor_minute),
+      class: "form-control-inline" %>
     </div>
 
     <div class="form-group">
