@@ -364,9 +364,6 @@ a {
   background-color: #388e3c;
 }
 
-
-
-
 .form-submit:hover {
   background-color: #246d27;
 }
@@ -494,6 +491,11 @@ textarea.form-control {
   width: 100%;
   display: block;
   margin-bottom: 20px;
+}
+
+form h2, form h2 * {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* 本文設定 */

@@ -4,7 +4,8 @@
 <%= render 'shared/book_style_layout' %>
     <div class="tab-content">
     <div id="calendar-selects">
-     <h2><%= form_with url: root_path, method: :get, local: true do %>
+    <h2 class="form-inline">
+      <%= form_with url: root_path, method: :get, local: true do %>
          <%= select_tag :year, options_for_select((2020..2100).to_a, @date.year) %>
          <%= select_tag :month, options_for_select((1..12).to_a, @date.month) %>
          <%= submit_tag "表示" %>
@@ -76,9 +77,6 @@
   <% end %>
   </div>
   </div>
-
-
-
   </div>
 
 
