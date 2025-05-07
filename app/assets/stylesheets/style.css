@@ -266,6 +266,26 @@ a {
   margin-top: 10px;
   border-radius: 8px;
 }
+.income-input .form-group {
+  margin-bottom: 8px; /* 本番で大きく開く場合は8px以下に調整 */
+  line-height: 1.4; /* 高すぎる行間を抑える */
+}
+
+.income-input label,
+.income-input select,
+.income-input input,
+.income-input textarea,
+.income-input button {
+  line-height: 1.2;
+  margin: 0;
+  padding: 4px 6px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.income-input br {
+  display: none; /* <br>の強制改行が必要ない場合 */
+}
 
 .income-box::-webkit-scrollbar {
   width: 8px;
