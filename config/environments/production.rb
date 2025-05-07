@@ -94,4 +94,20 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  Rails.application.configure do
+    config.after_initialize do
+      unless File.exist?(Rails.root.join("tmp", "seeded"))
+        Rails.logger.info "Seeding database in production..."
+        Rake::Task.clear # これがないと2回目以降 rakeが動かない
+        Rails.application.load_tasks
+        Rake::Task["db:seed"].invoke
+        File.write(Rails.root.join("tmp", "seeded"), Time.now.to_s)
+      end
+    end
+  end
+
+
+
+
 end
