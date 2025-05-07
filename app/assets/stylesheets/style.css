@@ -298,10 +298,10 @@ a {
 }
 
 .form-group {
-  margin-bottom: 8px;
+  margin-bottom: 2px;
   font-family: 'Kiwi Maru', serif;
   text-align: center;
-  line-height: 1.3;}
+}
 
 .form-submit {
   width: 300px;
@@ -331,7 +331,16 @@ a {
   display: block; 
   margin: 0 auto;
 }
+.inline-form {
+  display: flex;
+  align-items: center;
+  gap: 22px; /* 要素の間にスペース */
+}
 
+.inline-form select,
+.inline-form input[type="submit"] {
+  margin: 0;
+}
 
 /* フォーム切り替えボタンのベース */
 .form-button {
