@@ -266,26 +266,27 @@ a {
   margin-top: 10px;
   border-radius: 8px;
 }
-.income-input .form-group {
-  margin-bottom: 8px; /* 本番で大きく開く場合は8px以下に調整 */
-  line-height: 1.4; /* 高すぎる行間を抑える */
-}
-
-.income-input label,
-.income-input select,
-.income-input input,
-.income-input textarea,
-.income-input button {
+/* タイトルとフォームの余白調整 */
+.tab-content h2 {
+  margin-bottom: 12px; /* 必要に応じて調整 */
+  padding: 0;
   line-height: 1.2;
-  margin: 0;
-  padding: 4px 6px;
-  display: inline-block;
-  vertical-align: middle;
 }
 
-.income-input br {
-  display: none; /* <br>の強制改行が必要ない場合 */
+/* フォームと要素の間隔を抑える */
+.income-main {
+  margin-top: 0;
 }
+
+.income-input {
+  margin-top: 0;
+}
+
+/* フォームの個々の項目の余白 */
+.income-input .form-group {
+  margin-bottom: 8px;
+}
+
 
 .income-box::-webkit-scrollbar {
   width: 8px;
