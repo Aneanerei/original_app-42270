@@ -254,7 +254,7 @@ a {
   align-items: flex-start;
   max-width: 600px;
   width: 100%;
-  padding: 20px;
+  padding: 5px;
   background-color: #fdfdfd; 
   margin: 0 auto;
   box-sizing: border-box;
@@ -297,11 +297,12 @@ a {
 .income-input {
   width: 100%;
   max-width: 500px;
-  padding: 10px;
+  padding: 5px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 5px;
+  text-align: center;
 }
 
 .show-box {
@@ -314,12 +315,10 @@ a {
   font-family: 'Kiwi Maru', serif;
   display: flex;
   flex-direction: column;
-  text-align: left;
 }
 
 .form-group label {
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 1px;
 }
 
 .form-submit {
@@ -353,7 +352,8 @@ a {
 
 .back-button {
   display: block;
-  width: fit-content;
+  width: 100px;
+  height: 40px;
   margin: 10px auto;
 }
 
