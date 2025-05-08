@@ -182,6 +182,7 @@
   <div class="income-main">
     <div class="income-input">
 
+ <div class="form-layout">
       <%= form_with model: @income, local: true, data: { turbo: false } do |f| %>
         
         <div class="form-group">
@@ -201,31 +202,31 @@
                   .or(CategoryIncome.where(user_id: current_user.id))
                   .map { |c| [c.name, c.id] },
                 { prompt: "選択してください" },
-                class: "form-control" %>
+
+                class: "form-control" %><br>
+          <div class="form-group ">
+
           <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
-        </div>
+        </div> </div>
+        <br>
+        <div class="form-group ">労働時間(任意)</div><div class="form-group ">
+          <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button></div>
 
-        <div class="title-font-income">労働時間(任意)</div>
-
-        <div class="form-group">
-          <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button>
-        </div>
 
         <div class="form-group">
           <%= f.label :memo, "メモ(任意)" %>
           <%= f.text_area :memo, class: "form-control" %>
         </div>
-
-        <div class="form-group">
+        <div class="form-line">
           <%= f.submit "登録する", class: "form-submit" %>
         </div>
 
       <% end %>
-
-      <div class="form-group">
+      <br>
+      <div class="form-line">
         <%= link_to "戻る", root_path, class: "back-button", role: "button" %>
       </div>
-      
+      </div>
     </div>
   </div>
 </div>
