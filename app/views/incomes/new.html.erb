@@ -186,15 +186,15 @@
       <%= form_with model: @income, local: true, data: { turbo: false } do |f| %>
         
         <div class="form-group">
-          <%= f.label :date, "日付" %>
+          <%= f.label :date, "日付" %><br>
           <%= f.date_field :date, value: Date.today, class: "form-control" %>
         </div>
         <div class="form-group">
-          <%= f.label :amount, "金額" %>
+          <%= f.label :amount, "金額" %><br>
           <%= f.number_field :amount, placeholder: "円", class: "form-control" %>
         </div>
         <div class="form-group category-wrapper">
-          <%= f.label :category_income_id, "カテゴリ" %>
+          <%= f.label :category_income_id, "カテゴリ" %><br>
           <%= f.select :category_income_id,
                 CategoryIncome.where(user_id: nil)
                   .or(CategoryIncome.where(user_id: current_user.id))
@@ -208,7 +208,7 @@
         
         <div class="form-group ">労働時間(任意)</div><div class="form-group ">
           <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button></div>
- <br>
+
         <div class="form-group">
           <%= f.label :memo, "メモ(任意)" %><br>
           <%= f.text_area :memo, class: "form-control" %>

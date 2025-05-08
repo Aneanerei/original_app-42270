@@ -163,6 +163,7 @@ a {
   );
   position: relative;
   box-sizing: border-box;
+  min-height: 800px;
 }
 
 /* 最後のページ（右側）は右線を消す */
