@@ -252,8 +252,9 @@ a {
   display: flex;
   justify-content: center; 
   align-items: flex-start;
-  padding: 20px;
-  max-width: 100%;
+  text-align: center;
+  max-width:600px;
+  height: 500px;
   background-color: #fdfdfd; 
   margin: 0 auto;
 }
@@ -294,12 +295,12 @@ a {
 
 .income-input {
   width: 100%;
-  max-width: 500px;
+  text-align: center;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
 .show-box {
