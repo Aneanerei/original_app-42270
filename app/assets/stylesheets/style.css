@@ -252,11 +252,12 @@ a {
   display: flex;
   justify-content: center; 
   align-items: flex-start;
-  text-align: center;
-  max-width:600px;
-  height: 500px;
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
   background-color: #fdfdfd; 
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .income-box {
@@ -295,12 +296,12 @@ a {
 
 .income-input {
   width: 100%;
-  text-align: center;
+  max-width: 500px;
+  padding: 10px;
   box-sizing: border-box;
-  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 15px;
 }
 
 .show-box {
@@ -311,14 +312,13 @@ a {
 
 .form-group {
   font-family: 'Kiwi Maru', serif;
-  text-align: center;
-  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
-.label {
-  margin-bottom: 1px;
+.form-group label {
+  margin-bottom: 5px;
   font-weight: bold;
 }
 
@@ -334,12 +334,6 @@ a {
   font-family: 'Kiwi Maru', serif;
   display: block; 
   margin: 0 auto;
-}
-
-br {
-  line-height: 1;
-  margin: 0;
-  padding: 0;
 }
 
 .form-button {
@@ -358,15 +352,9 @@ br {
 }
 
 .back-button {
-  display: inline-block;
-  padding: 6px 12px;
-  background-color: #eee;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  text-align: center;
-  text-decoration: none;
-  color: #333;
-  margin-top: 8px;
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
 }
 
 .inline-form {
