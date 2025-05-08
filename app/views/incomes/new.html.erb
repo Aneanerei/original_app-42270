@@ -186,15 +186,15 @@
       <%= form_with model: @income, local: true, data: { turbo: false } do |f| %>
         
         <div class="form-group">
-          <%= f.label :date, "日付" %><br>
+          <div><%= f.label :date, "日付" %></div>
           <%= f.date_field :date, value: Date.today, class: "form-control" %>
         </div>
         <div class="form-group">
-          <%= f.label :amount, "金額" %><br>
+          <div><%= f.label :amount, "金額" %></div>
           <%= f.number_field :amount, placeholder: "円", class: "form-control" %>
         </div>
         <div class="form-group category-wrapper">
-          <%= f.label :category_income_id, "カテゴリ" %><br>
+          <div><%= f.label :category_income_id, "カテゴリ" %></div>
           <%= f.select :category_income_id,
                 CategoryIncome.where(user_id: nil)
                   .or(CategoryIncome.where(user_id: current_user.id))
@@ -203,14 +203,16 @@
           class: "form-control" %>
           
         <div class="form-group ">
-          <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
+        <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
         </div></div>
         
-        <div class="form-group ">労働時間(任意)</div><div class="form-group ">
-          <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button></div>
+        <div class="form-group ">労働時間(任意)</div>
+        <div class="form-group ">
+        <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button>
+        </div>
 
         <div class="form-group">
-          <%= f.label :memo, "メモ(任意)" %><br>
+          <div><%= f.label :memo, "メモ(任意)" %></div>
           <%= f.text_area :memo, class: "form-control" %>
         </div>
 

@@ -341,7 +341,6 @@ a {
   height: 40px;
   background-color: #4E6DB3;
   color: #ffffff;
-  border-radius: 4px;
   font-size: 16px;
   border: none;
   border-radius: 4px;
@@ -469,6 +468,12 @@ select.form-control {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
+}
+
+.form-layout{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 
