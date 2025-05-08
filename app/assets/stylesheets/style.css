@@ -438,13 +438,19 @@ select.form-control-inline {
 }
 
 .form-control {
-  width: 300px;
-  height: 40px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: center;
   padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.form-button,
+.form-submit {
+  display: block;
+  width: 100%;
+  max-width: 300px;
   margin: 0 auto;
 }
 
