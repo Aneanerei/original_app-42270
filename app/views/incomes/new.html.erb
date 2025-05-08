@@ -210,7 +210,7 @@
           <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button></div>
  <br>
         <div class="form-group">
-          <%= f.label :memo, "メモ(任意)" %>
+          <%= f.label :memo, "メモ(任意)" %><br>
           <%= f.text_area :memo, class: "form-control" %>
         </div>
 
@@ -219,7 +219,6 @@
         </div>
 
       <% end %>
-      <br>
       <div class="form-group">
         <%= link_to "戻る", root_path, class: "back-button", role: "button" %>
       </div>
