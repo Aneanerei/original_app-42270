@@ -251,10 +251,13 @@ a {
 .income-main {
   display: flex;
   justify-content: center; 
-  align-items: center;  
-   height: 500px;  
+  align-items: flex-start;
+  max-width: 600px;
+  width: 100%;
+  padding: 5px;
   background-color: #fdfdfd; 
-  margin-top: 100px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .income-box {
@@ -291,6 +294,14 @@ a {
   border-bottom: 1px dotted #ccc; 
 }
 
+.income-input {
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
 .show-box {
   width: 540px;
   height: 300px;
@@ -299,17 +310,14 @@ a {
 
 .form-group {
   font-family: 'Kiwi Maru', serif;
-  text-align: center;
-  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 4px; 
+  text-align: center;
 }
 
-.label {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-weight: bold;
+.form-group label {
+  margin-bottom: 1px;
 }
 
 .form-submit {
@@ -342,15 +350,10 @@ a {
 }
 
 .back-button {
-  display: inline-block;
-  padding: 6px 12px;
-  background-color: #eee;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  text-align: center;
-  text-decoration: none;
-  color: #333;
-  margin-top: 8px;
+  display: block;
+  width: 100px;
+  height: 40px;
+  margin: 10px auto;
 }
 
 .inline-form {
