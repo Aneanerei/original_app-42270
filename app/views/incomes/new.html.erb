@@ -185,23 +185,23 @@
       <%= form_with model: @income, local: true, data: { turbo: false } do |f| %>
         
         <div class="form-group">
-          <%= f.label :date, "日付" %><br>
+          <%= f.label :date, "日付" %>
           <%= f.date_field :date, value: Date.today, class: "form-control" %>
         </div>
 
         <div class="form-group">
-          <%= f.label :amount, "金額(円)" %><br>
+          <%= f.label :amount, "金額(円)" %>
           <%= f.number_field :amount, class: "form-control" %>
         </div>
 
         <div class="form-group category-wrapper">
-          <%= f.label :category_income_id, "カテゴリ" %><br>
+          <%= f.label :category_income_id, "カテゴリ" %>
           <%= f.select :category_income_id,
                 CategoryIncome.where(user_id: nil)
                   .or(CategoryIncome.where(user_id: current_user.id))
                   .map { |c| [c.name, c.id] },
                 { prompt: "選択してください" },
-                class: "form-control" %><br>
+                class: "form-control" %>
           <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
         </div>
 
@@ -212,7 +212,7 @@
         </div>
 
         <div class="form-group">
-          <%= f.label :memo, "メモ(任意)" %><br>
+          <%= f.label :memo, "メモ(任意)" %>
           <%= f.text_area :memo, class: "form-control" %>
         </div>
 

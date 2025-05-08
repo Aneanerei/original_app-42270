@@ -312,7 +312,7 @@ a {
   font-family: 'Kiwi Maru', serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 4px; 
   text-align: center;
 }
 
