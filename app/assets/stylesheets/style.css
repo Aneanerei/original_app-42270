@@ -314,6 +314,7 @@ a {
   flex-direction: column;
   gap: 4px; 
   text-align: center;
+  margin: 2px 0 5px 0;
 }
 
 .form-group label {
