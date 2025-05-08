@@ -251,10 +251,10 @@ a {
 .income-main {
   display: flex;
   justify-content: center; 
-  align-items: center;  
-  height: 500px;  
-  width: 600px;
-  background-color: #ff6464; 
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 100%;
+  background-color: #fdfdfd; 
   margin: 0 auto;
 }
 
@@ -293,10 +293,13 @@ a {
 }
 
 .income-input {
-  padding: 5px;
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 5px; 
+  gap: 10px;
 }
 
 .show-box {
