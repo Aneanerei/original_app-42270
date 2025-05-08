@@ -297,12 +297,9 @@ a {
 .income-input {
   width: 100%;
   max-width: 500px;
-  padding: 5px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  text-align: center;
 }
 
 .show-box {
@@ -315,6 +312,8 @@ a {
   font-family: 'Kiwi Maru', serif;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .form-group label {
