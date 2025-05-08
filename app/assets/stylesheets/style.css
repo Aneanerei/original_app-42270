@@ -298,14 +298,18 @@ a {
 }
 
 .form-group {
-  margin-bottom: 12px;
   font-family: 'Kiwi Maru', serif;
   text-align: center;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.form-group label {
+.label {
   display: block;
-  margin-bottom: 4px; /* ラベルと入力欄の距離 */
+  margin-bottom: 0.3rem;
+  font-weight: bold;
 }
 
 .form-submit {
