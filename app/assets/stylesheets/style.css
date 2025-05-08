@@ -254,7 +254,7 @@ a {
   align-items: center;  
   height: 500px;  
   width: 600px;
-  background-color: #fdfdfd; 
+  background-color: #ff6464; 
   margin: 0 auto;
 }
 
@@ -293,10 +293,10 @@ a {
 }
 
 .income-input {
-  padding: 20px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 20px; 
+  gap: 5px; 
 }
 
 .show-box {
