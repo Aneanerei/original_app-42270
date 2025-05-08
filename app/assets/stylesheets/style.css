@@ -253,7 +253,7 @@ a {
   justify-content: center; 
   align-items: center;  
   height: 500px;  
-  max-width: 600px;
+  width: 600px;
   background-color: #fdfdfd; 
   margin: 0 auto;
 }
@@ -314,7 +314,7 @@ a {
 }
 
 .label {
-  margin-bottom: 6px;
+  margin-bottom: 1px;
   font-weight: bold;
 }
 
@@ -330,6 +330,12 @@ a {
   font-family: 'Kiwi Maru', serif;
   display: block; 
   margin: 0 auto;
+}
+
+br {
+  line-height: 1;
+  margin: 0;
+  padding: 0;
 }
 
 .form-button {
