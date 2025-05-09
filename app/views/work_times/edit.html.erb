@@ -11,12 +11,16 @@
 
    <%= form_with model: @work_time, local: true do |f| %>
     <div class="form-group">
-      <%= f.label :date, "日付" %><br>
+      <div>
+      <%= f.label :date, "日付" %>
+      </div>
       <%= f.date_field :date, value: Date.today, class: "form-control" %>
     </div>
     
    <div class="form-group">
+       <div>
         <%= f.label :category_work_time_id, "カテゴリ" %><br>
+       </div>
         <%= f.select :category_work_time_id,
         @category_work_times.map { |c| [c.name, c.id] },
        { prompt: "選択してください" },
@@ -24,21 +28,23 @@
    </div>
 
    <div class="form-group">
-     <%= label_tag :labor_hour, "労働時間（時）" %>
-     <%= select_tag :labor_hour,
-      options_for_select((0..24).to_a.map { |h| ["#{h}時間", h] }, selected: @labor_hour),
-      class: "form-control-inline" %>
+      <div>
+      <%= label_tag :labor_hour, "労働時間（時間）" %>
+      </div>
+      <%= number_field_tag :labor_hour, nil, class: "form-control", min: 0 %>
     </div>
 
     <div class="form-group">
-     <%= label_tag :labor_minute, "労働時間（分）" %>
-     <%= select_tag :labor_minute,
-      options_for_select([0, 15, 30, 45].map { |m| ["#{m}分", m] }, selected: @labor_minute),
-      class: "form-control-inline" %>
+      <div>
+      <%= label_tag :labor_minute, "労働時間（分）" %>
+      </div>
+      <%= number_field_tag :labor_minute, nil, class: "form-control", min: 0, max: 59 %>
     </div>
 
     <div class="form-group">
-      <%= f.label :report, "作業日報（任意）" %><br>
+      <div>
+      <%= f.label :report, "作業日報（任意）" %>
+      </div>
       <%= f.text_area :report, class: "form-control" %>
     </div>
 

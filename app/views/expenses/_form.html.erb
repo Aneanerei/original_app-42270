@@ -32,32 +32,7 @@
     <!-- 画像＋タグ -->
     <div class="form-group">
       <div id="tagged-images">
-        <%= f.fields_for :tagged_images do |tf| %>
-          <% preview_index = tf.index || SecureRandom.hex(4) %>
-          <div class="tagged-image-group" data-group>
-            <%= tf.hidden_field :id %>
-            <%= tf.hidden_field :_destroy, class: "destroy-flag" %>
-
-            <%= tf.label :image, "画像", class: "image-label-final" %>
-            <div class="file-center-wrapper">
-              <%= tf.file_field :image, class: "form-button image-input", data: { preview_target: "preview-#{preview_index}" } %>
-            </div>
-
-              <% if tf.object.image.attached? && tf.object.image.variable? %>
-             <div class="image-preview" id="preview-<%= preview_index %>">
-             <%= image_tag tf.object.image.variant(resize_to_limit: [100, 100]), class: "preview-image" %>
-             </div>
-             <% else %>
-             <div class="image-preview" id="preview-<%= preview_index %>"></div>
-             <% end %>
-
-
-            <%= tf.label :tag_list, "タグ（カンマ区切り）" %>
-            <%= tf.text_field :tag_list, class: "form-control" %>
-
-            <button type="button" class="form-button delete-image-button">削除</button>
-          </div>
-        <% end %>
+  
       </div>
       <!-- 画像追加ボタン -->
       <button type="button" id="add-tagged-image" class="form-button">＋画像を追加</button>
@@ -78,18 +53,27 @@
 <!-- テンプレート -->
 <template id="tagged-image-template">
   <div class="tagged-image-group" data-group>
-    <input type="file"
-           name="expense[tagged_images_attributes][NEW_INDEX][image]"
-           class="form-button image-input"
-           data-preview-target="preview-NEW_INDEX">
+    <input type="hidden"
+           name="expense[tagged_images_attributes][NEW_INDEX][_destroy]"
+           class="destroy-flag"
+           value="false">
+
+    <label class="image-label-final">画像</label>
+    <div class="file-center-wrapper">
+      <input type="file"
+             name="expense[tagged_images_attributes][NEW_INDEX][image]"
+             class="form-button image-input"
+             data-preview-target="preview-NEW_INDEX">
+    </div>
 
     <div class="image-preview" id="preview-NEW_INDEX"></div>
 
+    <label>タグ（カンマ区切り）</label>
     <input type="text"
            name="expense[tagged_images_attributes][NEW_INDEX][tag_list]"
            class="form-control"
            placeholder="タグ（カンマ区切り）">
-
-    <button type="button" class="form-button delete-image-button">削除</button>
+    <small class="tag-hint">※タグは「,（カンマ）」で区切って入力してください（例：6月, 通信費）</small>
+    <button type="button" class="form-button delete delete-image-button">削除</button>
   </div>
 </template>

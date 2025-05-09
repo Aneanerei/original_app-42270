@@ -3,21 +3,20 @@
   <div class="page left-page">
 <%= render 'shared/book_style_layout' %>
     <div class="tab-content">
-    <div id="calendar-selects">
-<h2>
+  
+  <div id="calendar-selects">
   <%= form_with url: root_path, method: :get, local: true, html: { class: "inline-form" } do %>
     <%= select_tag :year, options_for_select((2020..2100).to_a, @date.year) %>
     <%= select_tag :month, options_for_select((1..12).to_a, @date.month) %>
     <%= submit_tag "表示" %>
   <% end %>
-</h2>
-     </div>
-      <!-- カレンダー表示 -->
+  </div>
+
+  <!-- カレンダー表示 -->
 <div class="calendar-wrapper">
   <%= month_calendar start_date: @date do |date| %>
     <div>
       <%= date.day %>
-
       <% if @grouped_incomes[date] %>
         <% total_income = @grouped_incomes[date].sum(&:amount) %>
         <div class="income">+<%= number_with_delimiter(total_income) %>円</div>
