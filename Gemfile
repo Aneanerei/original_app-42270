@@ -72,3 +72,6 @@ end
 gem 'devise'
 gem 'simple_calendar'
 gem 'rails-i18n'
+gem 'mini_magick'
+gem 'image_processing', '~> 1.2'
+gem 'acts-as-taggable-on'

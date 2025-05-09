@@ -1,0 +1,95 @@
+<%= form_with model: @expense, local: true do |f| %>
+  <div class="form-layout">
+    <!-- 日付 -->
+    <div class="form-group">
+      <%= f.label :date, "日付" %>
+      <%= f.date_field :date, value: Date.today, class: "form-control" %>
+    </div>
+
+    <!-- 金額 -->
+    <div class="form-group">
+      <%= f.label :amount, "金額" %>
+      <%= f.number_field :amount, placeholder: "円", class: "form-control" %>
+    </div>
+
+    <!-- カテゴリ -->
+    <div class="form-group">
+      <%= f.label :category_expense_id, "カテゴリ" %>
+      <%= f.select :category_expense_id,
+            CategoryExpense.where(user_id: nil)
+              .or(CategoryExpense.where(user_id: current_user.id))
+              .map { |c| [c.name, c.id] },
+            { prompt: "選択してください" },
+            class: "form-control" %>
+    </div>
+
+    <!-- メモ -->
+    <div class="form-group">
+      <%= f.label :memo, "メモ（任意）" %>
+      <%= f.text_area :memo, class: "form-control" %>
+    </div>
+
+    <!-- 画像＋タグ -->
+    <div class="form-group">
+      <div id="tagged-images">
+        <%= f.fields_for :tagged_images do |tf| %>
+          <% preview_index = tf.index || SecureRandom.hex(4) %>
+          <div class="tagged-image-group" data-group>
+            <%= tf.hidden_field :id %>
+            <%= tf.hidden_field :_destroy, class: "destroy-flag" %>
+
+            <%= tf.label :image, "画像", class: "image-label-final" %>
+            <div class="file-center-wrapper">
+              <%= tf.file_field :image, class: "form-button image-input", data: { preview_target: "preview-#{preview_index}" } %>
+            </div>
+
+              <% if tf.object.image.attached? && tf.object.image.variable? %>
+             <div class="image-preview" id="preview-<%= preview_index %>">
+             <%= image_tag tf.object.image.variant(resize_to_limit: [100, 100]), class: "preview-image" %>
+             </div>
+             <% else %>
+             <div class="image-preview" id="preview-<%= preview_index %>"></div>
+             <% end %>
+
+
+            <%= tf.label :tag_list, "タグ（カンマ区切り）" %>
+            <%= tf.text_field :tag_list, class: "form-control" %>
+
+            <button type="button" class="form-button delete-image-button">削除</button>
+          </div>
+        <% end %>
+      </div>
+      <!-- 画像追加ボタン -->
+      <button type="button" id="add-tagged-image" class="form-button">＋画像を追加</button>
+    </div>
+
+    <!-- 登録ボタン -->
+    <div class="form-group">
+      <%= f.submit "登録する", class: "form-submit" %>
+    </div>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
+</div>
+
+
+<!-- テンプレート -->
+<template id="tagged-image-template">
+  <div class="tagged-image-group" data-group>
+    <input type="file"
+           name="expense[tagged_images_attributes][NEW_INDEX][image]"
+           class="form-button image-input"
+           data-preview-target="preview-NEW_INDEX">
+
+    <div class="image-preview" id="preview-NEW_INDEX"></div>
+
+    <input type="text"
+           name="expense[tagged_images_attributes][NEW_INDEX][tag_list]"
+           class="form-control"
+           placeholder="タグ（カンマ区切り）">
+
+    <button type="button" class="form-button delete-image-button">削除</button>
+  </div>
+</template>

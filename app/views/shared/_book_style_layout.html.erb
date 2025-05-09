@@ -1,7 +1,7 @@
    <div class="tabs">
       <button class="tab active"><p class="date white-text"><%= Date.today.strftime('%Y/%m/%d') %></p></button>
       <%= link_to "収入入力", new_income_path, class: "tab" %>
-      <button class="tab">支出入力</button>
+      <%= link_to "支出入力", new_expense_path, class: "tab" %>
       <%= link_to new_work_time_path do %><button class="tab">労働時間入力</button><% end %>
       <button class="tab">アルバム</button>
       <button class="tab">分析</button>

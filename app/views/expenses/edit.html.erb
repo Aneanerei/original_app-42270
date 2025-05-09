@@ -1,0 +1,123 @@
+<div class="book">
+  <!-- 左ページ -->
+  <div class="page left-page"> 
+     
+    <%= render 'shared/book_style_layout' %>
+
+    <div class="tab-content"> 
+      <h2>支出登録</h2>
+  
+      <%= form_with model: @expense, local: true do |f| %>
+        <div class="form-layout">
+
+          <!-- 基本項目 -->
+          <div class="form-group">
+            <%= f.label :date, "日付" %>
+            <%= f.date_field :date, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :amount, "金額" %>
+            <%= f.number_field :amount, placeholder: "円", class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :category_expense_id, "カテゴリ" %>
+            <%= f.select :category_expense_id,
+                  CategoryExpense.where(user_id: nil)
+                                 .or(CategoryExpense.where(user_id: current_user.id))
+                                 .map { |c| [c.name, c.id] },
+                  { prompt: "選択してください" },
+                  class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :memo, "メモ(任意)" %>
+            <%= f.text_area :memo, class: "form-control" %>
+          </div>
+
+          <!-- 画像＋タグ -->
+          <div id="tagged-images">
+            <%= f.fields_for :tagged_images do |tf| %>
+              <% preview_index = tf.index || SecureRandom.hex(4) %>
+              <div class="tagged-image-group" data-group>
+                <%= tf.hidden_field :id %>
+                <%= tf.hidden_field :_destroy, class: "destroy-flag" %>
+
+                <% if tf.object.image.attached? && tf.object.image.variable? %>
+                  <div class="image-preview" id="preview-<%= preview_index %>">
+                    <%= image_tag tf.object.image.variant(resize_to_limit: [300, 300]), class: "preview-image" %>
+                  </div>
+                <% else %>
+                  <div class="image-preview" id="preview-<%= preview_index %>"></div>
+                <% end %>
+
+                <%= tf.label :image, "画像(任意)" %>
+                <%= tf.file_field :image, class: "form-button", data: { preview_target: "preview-#{preview_index}" } %>
+
+                <%= tf.label :tag_list, "タグ(カンマ区切り)" %>
+                <%= tf.text_field :tag_list,
+                      class: "form-control",
+                      value: tf.object.tag_list.join(', ') %>
+                <small class="tag-hint">※タグは「,（カンマ）」で区切って入力してください（例：6月, 通信費）</small>
+
+                <button type="button" class="form-button delete-image-button">削除</button>
+              </div>
+            <% end %>
+          </div>
+
+          <button type="button" id="add-tagged-image" class="form-button">＋画像を追加</button>
+
+          <div class="form-group">
+            <%= f.submit "更新する", class: "form-submit" %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+      <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
+      </div>
+
+      <!-- テンプレート -->
+      <template id="tagged-image-template">
+        <div class="tagged-image-group" data-group>
+          <input type="file" name="expense[tagged_images_attributes][NEW_INDEX][image]" class="form-button" data-preview-target="preview-NEW_INDEX">
+          <div class="image-preview" id="preview-NEW_INDEX"></div>
+
+          <input type="text" name="expense[tagged_images_attributes][NEW_INDEX][tag_list]" class="form-control" placeholder="タグ（カンマ区切り）">
+
+          <button type="button" class="form-button delete-image-button">削除</button>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- 右ページ -->
+  <div class="page">
+    <h2>Information</h2>
+
+    <% if @expense && @expense.errors.any? %>
+      <div class="error-messages">
+        <ul>
+          <% @expense.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <ul>
+  <li><span class="info-title">日付</span>支出のあった日を選択してください。</li>
+  <li><span class="info-title">金額</span>支出を入力してください。</li>
+  <li><span class="info-title">カテゴリ</span>支出のカテゴリを選択してください。</li>
+  <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
+  <li><span class="info-title">カテゴリ追加</span>10個まで自由にカテゴリを追加することができます。</li>
+  <li><span class="info-title">メモ</span>自由に記述することができます。</li>
+  <li><span class="info-title">画像</span>画像のアップロードができます。</li>
+  <li><span class="info-title">画像＋タグ</span>画像を登録すると、登録月とカテゴリ名から自動タグがつきます。</li>
+  <li><span class="info-title">画像＋タグ</span>カンマ区切りで自由にタグ付けも可能です。</li>
+  <li><span class="info-title">画像を追加</span>画像を追加で、複数枚アップロードができます。</li>
+  <li><span class="info-title">入力方法</span>日付、金額、カテゴリは未入力だと登録できません。</li>
+    </ul>
+  </div>
+</div>
