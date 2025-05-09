@@ -1,10 +1,13 @@
 document.addEventListener("turbo:load", () => {
   const addButton = document.getElementById("add-tagged-image");
   const container = document.getElementById("tagged-images");
-  const templateHTML = document.getElementById("tagged-image-template").innerHTML;
+  const templateElement = document.getElementById("tagged-image-template");
   const categorySelect = document.getElementById("expense_category_expense_id");
   const dateInput = document.getElementById("expense_date");
 
+  if (!container || !templateElement) return;
+
+  const templateHTML = templateElement.innerHTML;
   let index = container.querySelectorAll(".tagged-image-group").length;
   const max = 5;
 
@@ -22,7 +25,6 @@ document.addEventListener("turbo:load", () => {
       img.classList.add("preview-image");
       preview.appendChild(img);
 
-      // タグ自動入力（画像選択時）
       const group = input.closest(".tagged-image-group");
       updateTagInput(group);
     });
@@ -30,7 +32,10 @@ document.addEventListener("turbo:load", () => {
 
   const updateTagInput = (group) => {
     const tagInput = group.querySelector('input[name*="[tag_list]"]');
-    if (!tagInput) return;
+    const fileInput = group.querySelector('input[type="file"]');
+    const hasFile = fileInput?.files?.length > 0;
+
+    if (!tagInput || !hasFile) return;
 
     const dateValue = dateInput?.value;
     let monthTag = "";
@@ -42,10 +47,6 @@ document.addEventListener("turbo:load", () => {
     const categoryTag = categorySelect?.options[categorySelect.selectedIndex]?.text || "";
     const tags = [monthTag, categoryTag].filter(Boolean).join(", ");
     tagInput.value = tags;
-  };
-
-  const updateAllTagInputs = () => {
-    container.querySelectorAll(".tagged-image-group").forEach(updateTagInput);
   };
 
   const handleDelete = (e) => {
@@ -72,7 +73,7 @@ document.addEventListener("turbo:load", () => {
     container.querySelectorAll(".tagged-image-group").forEach((group) => {
       const fileInput = group.querySelector('input[type="file"]');
       if (fileInput) {
-        fileInput.removeEventListener("change", () => updateTagInput(group)); // 安全のため
+        fileInput.removeEventListener("change", () => updateTagInput(group)); // 念のため
         fileInput.addEventListener("change", () => updateTagInput(group));
       }
     });
@@ -99,7 +100,7 @@ document.addEventListener("turbo:load", () => {
     index++;
   };
 
-  // 初期画像に対する処理
+  // 初期画像のプレビュー＆タグ自動化
   container.querySelectorAll(".tagged-image-group").forEach((group) => {
     const input = group.querySelector('input[type="file"]');
     const previewId = input?.dataset.previewTarget;
@@ -109,12 +110,11 @@ document.addEventListener("turbo:load", () => {
   attachDeleteHandlers();
   attachTagUpdater();
 
-  // 追加ボタン
   addButton?.addEventListener("click", () => {
     addField();
   });
 
-  // 日付やカテゴリが変更されたら、すべてのタグ入力欄を更新
-  categorySelect?.addEventListener("change", updateAllTagInputs);
-  dateInput?.addEventListener("change", updateAllTagInputs);
+  // ✅ カテゴリ・日付変更時にはタグは更新しないように削除
+  // categorySelect?.addEventListener("change", updateAllTagInputs);
+  // dateInput?.addEventListener("change", updateAllTagInputs);
 });

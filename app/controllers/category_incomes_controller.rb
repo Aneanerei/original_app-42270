@@ -5,11 +5,11 @@ class CategoryIncomesController < ApplicationController
     @category_income = current_user.category_incomes.build(category_income_params)
 
     if @category_income.save
-      redirect_to new_income_path, alert: "カテゴリを追加しました"
+      redirect_to new_income_path, notice: "カテゴリを追加しました"
     else
       @income = current_user.incomes.new
       @work_time = current_user.work_times.new
-
+      @category_income = CategoryIncome.new
       @category_incomes = CategoryIncome.where(user_id: nil)
         .or(CategoryIncome.where(user_id: current_user.id))
         .order(:id)
@@ -27,7 +27,7 @@ class CategoryIncomesController < ApplicationController
 
   def update
     if @category_income.update(category_income_params)
-      redirect_to new_income_path, alert: 'カテゴリを更新しました'
+      redirect_to new_income_path, notice: 'カテゴリを更新しました'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class CategoryIncomesController < ApplicationController
 
   def destroy
     if @category_income.destroy
-      redirect_to new_income_path, alert: "カテゴリを削除しました"
+      redirect_to new_income_path, notice: "カテゴリを削除しました"
     else
       redirect_to new_income_path, alert: @category_income.errors.full_messages.to_sentence
     end
@@ -56,7 +56,7 @@ class CategoryIncomesController < ApplicationController
     end
   
     if category.destroy
-      redirect_to new_income_path, alert: "カテゴリを削除しました"
+      redirect_to new_income_path, notice: "カテゴリを削除しました"
     else
       redirect_to new_income_path, alert: "カテゴリの削除に失敗しました"
     end
@@ -68,7 +68,7 @@ class CategoryIncomesController < ApplicationController
     category = current_user.category_incomes.find_by(id: params[:category_id])
 
     if category.present? && category.update(name: params[:new_name])
-      redirect_to new_income_path, alert: "カテゴリを更新しました"
+      redirect_to new_income_path, notice: "カテゴリを更新しました"
     else
       redirect_to new_income_path, alert: "カテゴリの更新に失敗しました"
     end

@@ -1,7 +1,36 @@
+  <!-- 労働カテゴリ削除確認モーダル：収入カテゴリと同じデザインに統一 -->
+<div id="customWorkCategoryDeleteModal" class="custom-modal" style="display: none;">
+  <div class="custom-modal-content">
+    <p id="customWorkDeleteMessage">
+      本当に <strong id="delete-work-category-name"></strong> を削除しますか？
+    </p>
+    <div class="modal-buttons">
+      <button onclick="submitWorkCategoryDeleteForm()">はい</button>
+      <button onclick="closeWorkCategoryDeleteModal()">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<% if flash[:alert] %>
+  <div class="error-messages">
+    <ul>
+      <li><%= flash[:alert] %></li>
+    </ul>
+  </div>
+<% end %>
+
+ <% if flash[:notice] %>
+  <div class="notice-messages">
+    <ul>
+      <li><%= flash[:notice] %></li>
+    </ul>
+  </div>
+<% end %>
+
+
   <div class="book">
  <div class="page left-page"> 
-   
-  
+  <%= render 'shared/worktime_category_modal', from_worktime_page: true %>
   <%= render 'shared/book_style_layout' %>
 
 <div class="tab-content"> 
@@ -23,6 +52,7 @@
         @category_work_times.map { |c| [c.name, c.id] },
        { prompt: "選択してください" },
        class: "form-control" %>
+       <button type="button" id="show-worktime-category-form" class="form-button">＋カテゴリ追加</button>
    </div>
 
     <div class="form-group">
@@ -55,7 +85,7 @@
   </div>
 
   </div>
-  </div>
+ </div>
 
   <!-- 右ページ -->
   <div class="page">

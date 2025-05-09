@@ -1,3 +1,20 @@
+<% if flash[:notice] %>
+  <div class="notice-messages">
+    <ul>
+      <li><%= flash[:notice] %></li>
+    </ul>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="error-messages">
+    <ul>
+      <li><%= flash[:alert] %></li>
+    </ul>
+  </div>
+<% end %>
+
+
 <div class="book">
   <!-- 左ページ -->
   <div class="page left-page">

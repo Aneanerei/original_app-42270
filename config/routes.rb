@@ -8,10 +8,14 @@ Rails.application.routes.draw do
   resources :expenses do
     resources :tagged_images, only: [:edit, :update]
   end
-  delete 'category_expenses/delete_selected', to: 'category_expenses#delete_selected', as: 'delete_selected_category_incomes'
-  patch  'category_expenses/update_selected', to: 'category_expenses#update_selected', as: 'update_selected_category_incomes'
-  delete 'category_incomes/delete_selected', to: 'category_incomes#delete_selected', as: 'delete_selected_category_expenses'
-  patch  'category_incomes/update_selected', to: 'category_incomes#update_selected', as: 'update_selected_category_expenses'
+# 支出カテゴリ操作
+delete 'category_expenses/delete_selected', to: 'category_expenses#delete_selected', as: 'delete_selected_category_expenses'
+patch  'category_expenses/update_selected', to: 'category_expenses#update_selected', as: 'update_selected_category_expenses'
+
+# 収入カテゴリ操作
+delete 'category_incomes/delete_selected', to: 'category_incomes#delete_selected', as: 'delete_selected_category_incomes'
+patch  'category_incomes/update_selected', to: 'category_incomes#update_selected', as: 'update_selected_category_incomes'
+
   patch  'category_work_times/update_selected', to: 'category_work_times#update_selected', as: 'update_selected_category_work_times'
   delete 'category_work_times/delete_selected', to: 'category_work_times#delete_selected', as: 'delete_selected_category_work_times'
   resources :category_work_times, only: [:create, :destroy, :edit, :update]

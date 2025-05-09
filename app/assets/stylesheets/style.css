@@ -615,7 +615,6 @@ textarea.form-control {
 /* エラーメッセージ */
 
 
-
 .error-messages {
   margin: 4px 0;
   padding: 6px 10px;
@@ -632,11 +631,23 @@ textarea.form-control {
   padding: 0;
   line-height: normal;
 }
-br {
-  line-height: 0.5;
-  display: block;
+
+/* 成功メッセージ */
+.notice-messages {
+  margin: 4px 0;
+  padding: 6px 10px;
+  background-color: #d4edda; 
+  color: #155724; 
+  border-radius: 4px;
+  font-size: 0.9em;
+  line-height: 1.3;
+  border: 1px solid #c3e6cb;
+}
+.field_with_notices {
+  display: inline;
   margin: 0;
   padding: 0;
+  line-height: normal;
 }
 
 label,
@@ -748,13 +759,14 @@ label, input, select, textarea {
   background: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 99999;
 }
 .custom-modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  z-index: 100000;
 }
 .modal-buttons {
   margin-top: 10px;
@@ -803,14 +815,14 @@ label, input, select, textarea {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6); /* 背景を暗くする */
+  background-color: rgba(0, 0, 0, 0.6); /* 背景の暗さ */
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 999999; /* 最前面に表示 */
+  z-index: 99999;
 }
 
-#customWorkCategoryDeleteModal .modal-content {
+#customWorkCategoryDeleteModal .custom-modal-content {
   background-color: #ffffff;
   padding: 2rem;
   border-radius: 12px;
@@ -819,21 +831,16 @@ label, input, select, textarea {
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   animation: fadeInScale 0.25s ease-out;
+  z-index: 100000;
 }
 
-#customWorkCategoryDeleteModal .modal-content p {
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-  color: #333;
-}
-
-#customWorkCategoryDeleteModal .form-group {
+#customWorkCategoryDeleteModal .modal-buttons {
+  margin-top: 1.5rem;
   display: flex;
   justify-content: space-around;
 }
 
-#customWorkCategoryDeleteModal .confirm-button,
-#customWorkCategoryDeleteModal .cancel-button {
+#customWorkCategoryDeleteModal .modal-buttons button {
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border: none;
@@ -841,13 +848,13 @@ label, input, select, textarea {
   cursor: pointer;
 }
 
-#customWorkCategoryDeleteModal .confirm-button {
-  background-color: #e74c3c;
+#customWorkCategoryDeleteModal .modal-buttons button:first-child {
+  background-color: #e74c3c; /* 削除：赤 */
   color: #fff;
 }
 
-#customWorkCategoryDeleteModal .cancel-button {
-  background-color: #bdc3c7;
+#customWorkCategoryDeleteModal .modal-buttons button:last-child {
+  background-color: #bdc3c7; /* キャンセル：グレー */
   color: #2c3e50;
 }
 
@@ -861,6 +868,119 @@ label, input, select, textarea {
     opacity: 1;
   }
 }
+/* 収入カテゴリ削除用モーダル */
+#incomeDeleteConfirmModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6); /* 背景の暗さ */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999; /* 最前面に */
+}
+
+#incomeDeleteConfirmModal .custom-modal-content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeInScale 0.25s ease-out;
+  z-index: 100000;
+}
+
+#incomeDeleteConfirmModal .modal-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+#incomeDeleteConfirmModal .modal-buttons button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#incomeDeleteConfirmModal .modal-buttons button:first-child {
+  background-color: #e74c3c; /* 削除：赤 */
+  color: #fff;
+}
+
+#incomeDeleteConfirmModal .modal-buttons button:last-child {
+  background-color: #bdc3c7; /* キャンセル：グレー */
+  color: #2c3e50;
+}
+
+@keyframes fadeInScale {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* 支出カテゴリ削除用モーダル */
+
+#customExpenseCategoryDeleteModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+#customExpenseCategoryDeleteModal .custom-modal-content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeInScale 0.25s ease-out;
+  z-index: 100000;
+}
+
+#customExpenseCategoryDeleteModal .modal-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+#customExpenseCategoryDeleteModal .modal-buttons button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#customExpenseCategoryDeleteModal .modal-buttons button:first-child {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+#customExpenseCategoryDeleteModal .modal-buttons button:last-child {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+}
+
+
+
 
 /* プレビュー設定 */
 .preview-image {
