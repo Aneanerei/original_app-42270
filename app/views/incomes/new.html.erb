@@ -120,12 +120,16 @@
       <%= hidden_field_tag :from_modal, true %>
 
       <div class="form-group">
-        <%= f.label :date, "日付" %><br>
+        <div>
+        <%= f.label :date, "日付" %>
+        </div>
         <%= f.date_field :date, value: Date.today, class: "form-control" %>
       </div>
 
       <div class="form-group">
-        <%= f.label :category_work_time_id, "カテゴリ" %><br>
+        <div>
+        <%= f.label :category_work_time_id, "カテゴリ" %>
+       </div>
         <%= f.select :category_work_time_id,
         @category_work_times.map { |c| [c.name, c.id] },
        { prompt: "選択してください" },
@@ -134,17 +138,23 @@
       </div>
     
       <div class="form-group">
+        <div>
         <%= label_tag :labor_hour, "労働時間（時）" %>
+        </div>
         <%= select_tag :labor_hour, options_for_select((0..24).to_a.map { |h| ["#{h}時間", h] }), class: "form-control-inline" %>
       </div>
 
       <div class="form-group">
+        <div>
         <%= label_tag :labor_minute, "労働時間（分）" %>
+        </div>
         <%= select_tag :labor_minute, options_for_select([0, 15, 30, 45].map { |m| ["#{m}分", m] }), class: "form-control-inline" %>
       </div>
 
       <div class="form-group">
-        <%= f.label :report, "作業日報（任意）" %><br>
+        <div>
+        <%= f.label :report, "作業日報（任意）" %>
+        </div>
         <%= f.text_area :report, class: "form-control", placeholder: "作業内容など" %>
       </div>
 
@@ -202,12 +212,12 @@
                 { prompt: "選択してください" },
           class: "form-control" %>
           
-        <div class="form-group ">
+        <div>
         <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
         </div></div>
         
         <div class="form-group ">労働時間(任意)</div>
-        <div class="form-group ">
+        <div>
         <button type="button" id="show-worktime-form" class="form-button">＋労働時間の登録</button>
         </div>
 
@@ -278,13 +288,13 @@
   <% end %>
 
     <ul>
-     <li><span class="info-title">日付</span>収入のあった日を選択してください。</li>
+  <li><span class="info-title">日付</span>収入のあった日を選択してください。</li>
   <li><span class="info-title">金額</span>収入を入力してください。</li>
   <li><span class="info-title">カテゴリ</span>収入のカテゴリを選択してください。</li>
   <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
-  <li>5つまで自由にカテゴリを追加することができます。</li>
+  <li><span class="info-title">カテゴリ追加</span>5つまで自由にカテゴリを追加することができます。</li>
   <li><span class="info-title">労働時間の登録</span>労働時間を記録できます。</li>
-  <li>24時間以上の時間を入力したい場合は、左の労働時間入力タブから入力できます。</li>
+  <li><span class="info-title">労働時間の登録</span>24時間以上の入力は、左の労働時間入力タブから可能です。</li>
   <li><span class="info-title">入力方法</span>日付、金額、カテゴリは未入力だと登録できません。</li>
     </ul>
   </div>

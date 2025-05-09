@@ -315,7 +315,7 @@ a {
   flex-direction: column;
   gap: 4px; 
   text-align: center;
-  margin: 2px 0 5px 0;
+  margin: 2px 0 20px 0;
 }
 
 .form-group label {
@@ -368,6 +368,31 @@ a {
 .inline-form input[type="submit"] {
   margin: 0;
 }
+#tagged-images {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.tagged-image-group {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.image-input{
+  margin: 0 auto;
+}
+
 
 /* フォーム切り替えボタンのベース */
 .form-button {
@@ -436,7 +461,7 @@ select.category-select {
 }
 
 select.form-control-inline {
-  width: 150px;   
+  width: 300px;   
   height: 40px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -475,8 +500,37 @@ select.form-control {
   justify-content: center;
   flex-direction: column;
 }
+.tagged-image-group {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
 
+.image-label-final {
+  display: block;
+  text-align: center;
+}
 
+.file-center-wrapper {
+  justify-content: center;
+  width: 100%;
+  display: inline-block
+}
+
+.image-input-final {
+  display: block;
+  width: 300px;
+  height: 40px;
+  margin: 0 auto;
+}
 textarea.form-control {
   width: 300px;
   height: 120px;
@@ -518,12 +572,12 @@ textarea.form-control {
 /* カレンダー表示部分 */
 .income {
   color: #3370ff;
-  font-size: 0.8em;
+  font-size: 0.75em;
 }
 
 .expense {
   color: #ff1d1d;
-  font-size: 0.8em;
+  font-size: 0.75em;
 }
 
 .day-label {
@@ -805,4 +859,39 @@ label, input, select, textarea {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* プレビュー設定 */
+.preview-image {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: block;
+}
+
+.image-preview img {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: block;
+}
+#tagged-images .image-preview img.preview-image {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: cover !important;
+  display: block !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+}
+
+/* タグ */
+.tag-hint {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 4px;
+  display: block;
 }

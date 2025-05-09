@@ -1,5 +1,5 @@
 class CategoryIncome < ApplicationRecord
-  DEFAULT_CATEGORY_NAMES = %w[給料 副収入 臨時収入]
+  DEFAULT_CATEGORY_NAMES = %w[給料 副収入 臨時収入].freeze
 
   belongs_to :user, optional: true
   has_many :incomes
@@ -27,4 +27,6 @@ class CategoryIncome < ApplicationRecord
       errors.add(:base, "カテゴリの追加は最大5件までです")
     end
   end
+
+  
 end

@@ -1,6 +1,6 @@
 class CategoryWorkTime < ApplicationRecord
  
-    DEFAULT_CATEGORY_NAMES = %w[本業 副業 日雇い] 
+    DEFAULT_CATEGORY_NAMES = %w[本業 副業 日雇い].freeze 
   
     belongs_to :user, optional: true
     has_many :work_times

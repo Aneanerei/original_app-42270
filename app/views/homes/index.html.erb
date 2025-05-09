@@ -22,7 +22,12 @@
         <% total_income = @grouped_incomes[date].sum(&:amount) %>
         <div class="income">+<%= number_with_delimiter(total_income) %>円</div>
       <% end %>
-
+      
+      <% if @grouped_expenses[date] %>
+        <% total_income = @grouped_expenses[date].sum(&:amount) %>
+        <div class="expense">-<%= number_with_delimiter(total_income) %>円</div>
+      <% end %>
+      
       <% if @grouped_work_times[date] %>
         <% total_minutes = @grouped_work_times[date].sum(&:minutes) %>
         <% total_hours = (total_minutes / 60.0).round(2) %>
@@ -77,9 +82,11 @@
   <p>今月の労働時間は登録されていません。</p>
   <% end %>
   </div>
-  </div>
-  </div>
+  </div> 
 
+
+  </div>
+ 
 
   <!-- 右ページ -->
   <div class="page">
@@ -119,10 +126,27 @@
 
   <div class="income-box">
     <h3>支出</h3>
-    <% if @expenses && @expenses.any? %>
+    <% if @expenses.any? %>
       <ul>
         <% @expenses.each do |expense| %>
-          <li><%= expense.date.strftime("%m/%d") %>：<%= expense.name || "カテゴリ" %> / ¥<%= number_with_delimiter(expense.amount) %></li>
+          <li><%= expense.date.strftime("%m/%d") %>：<%= expense.category_expense&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(expense.amount) %>
+      <div class="tooltip-wrapper">
+   
+   <!-- 削除ボタン -->
+   <%= form_with url: expense_path(expense), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+      ×<span class="tooltip-text">削除</span>
+   </button>
+    <% end %>
+   </div>       
+   
+   <!-- 編集ボタン -->
+   <div class="tooltip-wrapper">
+   <%= link_to edit_expense_path(expense), class: "edit-link-button" do %> 
+  <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
+   <% end %>
+  </div>          
+      </li>
         <% end %>
       </ul>
     <% else %>

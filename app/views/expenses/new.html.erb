@@ -1,0 +1,45 @@
+ <div class="book">
+  <!-- 左ページ -->
+  <div class="page left-page"> 
+     
+   <%= render 'shared/book_style_layout' %>
+
+   <div class="tab-content"> 
+  <h2>支出登録</h2>
+  <%= render 'form' %>
+   </div>
+ </div>
+  <!-- 右ページ -->
+  <div class="page">
+    <h2>Information</h2>
+
+<% if @expense && @expense.errors.any? %>
+    <div class="error-messages">
+      <ul>
+        <% @expense.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <ul>
+  <li><span class="info-title">日付</span>支出のあった日を選択してください。</li>
+  <li><span class="info-title">金額</span>支出を入力してください。</li>
+  <li><span class="info-title">カテゴリ</span>支出のカテゴリを選択してください。</li>
+  <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
+  <li><span class="info-title">カテゴリ追加</span>10個まで自由にカテゴリを追加することができます。</li>
+  <li><span class="info-title">メモ</span>自由に記述することができます。</li>
+  <li><span class="info-title">画像</span>画像のアップロードができます。</li>
+  <li><span class="info-title">画像＋タグ</span>画像を登録すると、登録月とカテゴリ名から自動タグがつきます。</li>
+  <li><span class="info-title">画像＋タグ</span>カンマ区切りで自由にタグ付けも可能です。</li>
+  <li><span class="info-title">画像を追加</span>画像を追加で、複数枚アップロードができます。</li>
+  <li><span class="info-title">入力方法</span>日付、金額、カテゴリは未入力だと登録できません。</li>
+
+    </ul>
+  </div>
+</div>
+
+ 
+
+
