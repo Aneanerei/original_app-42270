@@ -25,7 +25,9 @@ document.addEventListener("turbo:load", () => {
       img.classList.add("preview-image");
       preview.appendChild(img);
 
+      // タグ自動入力
       const group = input.closest(".tagged-image-group");
+      group?.setAttribute("data-has-image", "true"); // ★ここでマーク
       updateTagInput(group);
     });
   };
@@ -33,9 +35,10 @@ document.addEventListener("turbo:load", () => {
   const updateTagInput = (group) => {
     const tagInput = group.querySelector('input[name*="[tag_list]"]');
     const fileInput = group.querySelector('input[type="file"]');
-    const hasFile = fileInput?.files?.length > 0;
 
-    if (!tagInput || !hasFile) return;
+    // 画像がある（または data-has-image がある）グループだけ更新
+    const hasImage = fileInput?.files?.length > 0 || group?.getAttribute("data-has-image") === "true";
+    if (!tagInput || !hasImage) return;
 
     const dateValue = dateInput?.value;
     let monthTag = "";
@@ -47,6 +50,10 @@ document.addEventListener("turbo:load", () => {
     const categoryTag = categorySelect?.options[categorySelect.selectedIndex]?.text || "";
     const tags = [monthTag, categoryTag].filter(Boolean).join(", ");
     tagInput.value = tags;
+  };
+
+  const updateAllTagInputs = () => {
+    container.querySelectorAll('.tagged-image-group[data-has-image="true"]').forEach(updateTagInput);
   };
 
   const handleDelete = (e) => {
@@ -73,7 +80,7 @@ document.addEventListener("turbo:load", () => {
     container.querySelectorAll(".tagged-image-group").forEach((group) => {
       const fileInput = group.querySelector('input[type="file"]');
       if (fileInput) {
-        fileInput.removeEventListener("change", () => updateTagInput(group)); // 念のため
+        fileInput.removeEventListener("change", () => updateTagInput(group));
         fileInput.addEventListener("change", () => updateTagInput(group));
       }
     });
@@ -100,7 +107,6 @@ document.addEventListener("turbo:load", () => {
     index++;
   };
 
-  // 初期画像のプレビュー＆タグ自動化
   container.querySelectorAll(".tagged-image-group").forEach((group) => {
     const input = group.querySelector('input[type="file"]');
     const previewId = input?.dataset.previewTarget;
@@ -114,7 +120,7 @@ document.addEventListener("turbo:load", () => {
     addField();
   });
 
-  // ✅ カテゴリ・日付変更時にはタグは更新しないように削除
-  // categorySelect?.addEventListener("change", updateAllTagInputs);
-  // dateInput?.addEventListener("change", updateAllTagInputs);
+  // ✅ カテゴリや日付変更 → 画像がある行だけ更新
+  categorySelect?.addEventListener("change", updateAllTagInputs);
+  dateInput?.addEventListener("change", updateAllTagInputs);
 });

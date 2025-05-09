@@ -403,11 +403,11 @@ a {
   cursor: pointer;
 }
 
-/* 削除ボタン：赤、角丸なし、hoverで濃い赤 */
+/* 削除ボタン：赤、hoverで濃い赤 */
 .form-button.delete {
   background-color: #f44336;
   color: #fff;
-  border-radius: 0;
+  border-radius: 4px;
 }
 
 .form-button.delete:hover {
@@ -415,11 +415,11 @@ a {
 }
 
 
-/* 編集ボタン：緑、角丸なし、hoverで濃い緑 */
+/* 編集ボタン：緑、hoverで濃い緑 */
 .form-button.edit {
   background-color: #4caf50;
   color: #fff;
-  border-radius: 0;
+  border-radius: 4px;
 }
 
 .form-button.edit:hover {

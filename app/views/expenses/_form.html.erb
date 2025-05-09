@@ -1,4 +1,4 @@
-<%= form_with model: @expense, local: true do |f| %>
+<%= form_with model: @expense, local: true, multipart: true do |f| %>
   <div class="form-layout">
     <!-- 日付 -->
     <div class="form-group">
@@ -21,9 +21,9 @@
               .map { |c| [c.name, c.id] },
             { prompt: "選択してください" },
             class: "form-control" %>
-            <div>
+      <div>
         <button type="button" id="show-expense-category-form" class="form-button">＋カテゴリ追加</button>
-     </div>
+      </div>
     </div>
 
     <!-- メモ -->
@@ -35,7 +35,6 @@
     <!-- 画像＋タグ -->
     <div class="form-group">
       <div id="tagged-images">
-  
       </div>
       <!-- 画像追加ボタン -->
       <button type="button" id="add-tagged-image" class="form-button">＋画像を追加</button>
@@ -51,7 +50,6 @@
 <div class="form-group">
   <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
 </div>
-
 
 <!-- テンプレート -->
 <template id="tagged-image-template">
@@ -71,7 +69,6 @@
 
     <div class="image-preview" id="preview-NEW_INDEX"></div>
 
-    <label>タグ（カンマ区切り）</label>
     <input type="text"
            name="expense[tagged_images_attributes][NEW_INDEX][tag_list]"
            class="form-control"

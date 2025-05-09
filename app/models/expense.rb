@@ -2,7 +2,7 @@ class Expense < ApplicationRecord
   belongs_to :user
   belongs_to :category_expense
   has_many :tagged_images, inverse_of: :expense, dependent: :destroy
-
+  has_one_attached :image
   accepts_nested_attributes_for :tagged_images,
     allow_destroy: true,
     reject_if: proc { |a| a[:image].blank? && a[:tag_list].blank? }
