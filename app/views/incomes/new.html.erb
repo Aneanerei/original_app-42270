@@ -12,32 +12,31 @@
 </div>
 
 
-<!-- 収入カテゴリ削除モーダル -->
-<div id="customDeleteModal" class="custom-modal" style="display: none;">
+<!-- ✅ 収入カテゴリ削除確認モーダル -->
+<div id="incomeDeleteConfirmModal" class="custom-modal" style="display: none;">
   <div class="custom-modal-content">
-    <p id="customDeleteMessage">
-      本当に <strong id="categoryNameToDelete"></strong> を削除しますか？
+    <p>
+      本当に <strong id="income-category-name-to-delete"></strong> を削除しますか？
     </p>
     <div class="modal-buttons">
-      <button onclick="submitCategoryDeleteForm()">はい</button>
-      <button onclick="closeCategoryDeleteModal()">キャンセル</button>
+      <button onclick="submitIncomeCategoryDeleteForm()">はい</button>
+      <button onclick="closeIncomeCategoryDeleteModal()">キャンセル</button>
     </div>
   </div>
 </div>
 
-
-<!-- カテゴリ追加モーダル -->
+<!-- ✅ 収入カテゴリ操作モーダル -->
 <div id="income-category-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
 
-    <!-- フォーム切り替えボタン -->
+    <!-- フォーム切替ボタン -->
     <div class="form-toggle-buttons">
       <button type="button" id="show-income-add-form" class="form-button">＋カテゴリ追加</button>
       <button type="button" id="show-income-edit-form" class="form-button edit">✎ カテゴリ編集</button>
       <button type="button" id="show-income-delete-form" class="form-button delete">− カテゴリ削除</button>
     </div>
 
-    <!-- カテゴリ追加フォーム -->
+    <!-- ✅ 追加フォーム -->
     <div id="income-add-form" class="category-form-section">
       <%= form_with model: @category_income, url: category_incomes_path, local: true, data: { turbo: false } do |f| %>
         <%= hidden_field_tag :from_modal, true %>
@@ -51,61 +50,55 @@
       <% end %>
     </div>
 
-   <!-- 編集フォーム -->
-<div id="income-edit-form" class="category-form-section" style="display: none;">
-  <h4>カテゴリ名を変更</h4>
-  <% system_categories = current_user.category_incomes.where(user_id: nil) %>
-  <% user_categories = current_user.category_incomes.where.not(user_id: nil) %>
+    <!-- ✅ 編集フォーム -->
+    <div id="income-edit-form" class="category-form-section" style="display: none;">
+      <h4>カテゴリ名を変更</h4>
+      <% system_categories = current_user.category_incomes.where(user_id: nil) %>
+      <% user_categories = current_user.category_incomes.where.not(user_id: nil) %>
 
-  <%= form_with url: update_selected_category_incomes_path, method: :patch, local: true do %>
-    <div class="form-group">
-      <%= label_tag :category_id, "編集したいカテゴリ" %>
-      <%= select_tag :category_id,
-            grouped_options_for_select({
-              '初期カテゴリ（変更不可）' => system_categories.map { |c| [c.name, c.id] },
-              'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
-            }),
-            prompt: "カテゴリを選択", class: "form-control" %>
+      <%= form_with url: update_selected_category_incomes_path, method: :patch, local: true do %>
+        <div class="form-group">
+          <%= label_tag :category_id, "編集したいカテゴリ" %>
+          <%= select_tag :category_id,
+                grouped_options_for_select({
+                  '初期カテゴリ（変更不可）' => system_categories.map { |c| [c.name, c.id] },
+                  'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
+                }),
+                prompt: "カテゴリを選択", class: "form-control", name: "category_id" %>
+        </div>
+        <div class="form-group">
+          <%= label_tag :new_name, "新しいカテゴリ名" %>
+          <%= text_field_tag :new_name, "", class: "form-control", placeholder: "新しい名前を入力" %>
+        </div>
+        <div class="form-group">
+          <%= submit_tag "更新", class: "form-submit" %>
+        </div>
+      <% end %>
     </div>
-    <div class="form-group">
-      <%= label_tag :new_name, "新しいカテゴリ名" %>
-      <%= text_field_tag :new_name, "", class: "form-control", placeholder: "新しい名前を入力" %>
+
+    <!-- ✅ 削除フォーム -->
+    <div id="income-delete-form" class="category-form-section" style="display: none;">
+      <h4>カテゴリを選んで削除</h4>
+      <%= form_with url: delete_selected_category_incomes_path, method: :delete, local: true, html: { id: "income-delete-form" } do %>
+        <div class="form-group">
+          <%= label_tag :category_id, "削除したいカテゴリ" %>
+          <%= select_tag :category_id,
+                grouped_options_for_select({
+                  '初期カテゴリ（削除不可）' => system_categories.map { |c| [c.name, c.id] },
+                  'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
+                }),
+                prompt: "カテゴリを選択", class: "form-control", name: "category_id" %>
+        </div>
+        <div class="form-group">
+          <button type="button" class="form-submit" onclick="confirmIncomeCategoryDelete(this)">削除</button>
+        </div>
+      <% end %>
     </div>
-    <div class="form-group">
-      <%= submit_tag "更新", class: "form-submit" %>
+
+    <!-- ✅ 閉じる -->
+    <div class="form-close-button">
+      <button type="button" id="close-income-category-modal" class="form-button">閉じる</button>
     </div>
-  <% end %>
-</div>
-
-
-<!-- 削除フォーム -->
-<div id="income-delete-form" class="category-form-section" style="display: none;">
-  <h4>カテゴリを選んで削除</h4>
-
-  <% system_categories = current_user.category_incomes.where(user_id: nil) %>
-  <% user_categories = current_user.category_incomes.where.not(user_id: nil) %>
-
-  <%= form_with url: delete_selected_category_incomes_path, method: :delete, local: true, html: { id: "delete-category-form" } do %>
-    <div class="form-group">
-      <%= label_tag :category_id, "削除したいカテゴリ" %>
-      <%= select_tag :category_id,
-            grouped_options_for_select({
-              '初期カテゴリ（削除不可）' => system_categories.map { |c| [c.name, c.id] },
-              'あなたのカテゴリ' => user_categories.map { |c| [c.name, c.id] }
-            }),
-            prompt: "カテゴリを選択", class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <!-- 削除確認モーダルを表示 -->
-      <button type="button" class="form-submit" onclick="confirmCategoryDelete(this)">削除</button>
-    </div>
-  <% end %>
-</div>
-
-<!-- 最後に閉じるボタン -->
-<div class="form-close-button">
-  <button type="button" id="close-income-category-modal" class="form-button">閉じる</button>
-</div>
 
 
   </div>
@@ -166,8 +159,7 @@
     <button id="close-worktime-modal" class="form-button">閉じる</button>
   </div>
 
-
-  <%= render 'shared/worktime_category_modal' %>
+<%= render 'shared/worktime_category_modal', from_worktime_page: false %>
 </div>
 
 
@@ -178,7 +170,13 @@
     </ul>
   </div>
 <% end %>
-
+<% if flash[:notice] %>
+  <div class="notice-messages">
+    <ul>
+      <li><%= flash[:notice] %></li>
+    </ul>
+  </div>
+<% end %>
     <div class="book">
   <!-- 左ページ -->
   <div class="page left-page"> 
@@ -212,9 +210,9 @@
                 { prompt: "選択してください" },
           class: "form-control" %>
           
-        <div>
-        <button type="button" id="show-category-form" class="form-button">＋カテゴリ追加</button>
-        </div></div>
+         <div>
+    <button type="button" id="show-income-category-form" class="form-button">＋カテゴリ追加</button>
+  </div></div>
         
         <div class="form-group ">労働時間(任意)</div>
         <div>

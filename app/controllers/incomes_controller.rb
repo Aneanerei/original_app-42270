@@ -5,7 +5,7 @@ class IncomesController < ApplicationController
     @income = current_user.incomes.new
     @work_time = current_user.work_times.new
     @category_income = current_user.category_incomes.build
-
+    @category_income = CategoryIncome.new 
     @category_incomes = CategoryIncome.where(user_id: nil)
       .or(CategoryIncome.where(user_id: current_user.id))
       .order(:id)

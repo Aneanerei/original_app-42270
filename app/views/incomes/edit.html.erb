@@ -9,17 +9,23 @@
 
 <%= form_with model: @income, local: true do |f| %>
   <div class="form-group">
-    <%= f.label :date, "日付" %><br>
+    <div>
+    <%= f.label :date, "日付" %>
+    </div>
     <%= f.date_field :date, class: "form-control" %>
   </div>
 
   <div class="form-group">
-    <%= f.label :amount, "金額（円）" %><br>
+    <div>
+    <%= f.label :amount, "金額（円）" %>
+    </div>
     <%= f.number_field :amount, class: "form-control" %>
   </div>
 
    <div class="form-group category-wrapper">
-    <%= f.label :category_income_id, "カテゴリ" %><br>
+    <div>
+    <%= f.label :category_income_id, "カテゴリ" %>
+    </div>
     <%= f.select :category_income_id,
         CategoryIncome.where(user_id: nil)
         .or(CategoryIncome.where(user_id: current_user.id))
@@ -29,7 +35,9 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :memo, "メモ（任意）" %><br>
+    <div>
+    <%= f.label :memo, "メモ（任意）" %>
+    </div>
     <%= f.text_area :memo, class: "form-control" %>
   </div>
 
