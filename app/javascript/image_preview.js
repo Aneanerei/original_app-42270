@@ -7,56 +7,47 @@ document.addEventListener("turbo:load", () => {
 
   if (!container || !templateElement) return;
 
-  const templateHTML = templateElement.innerHTML;
   let index = container.querySelectorAll(".tagged-image-group").length;
   const max = 5;
+  const templateHTML = templateElement.innerHTML;
 
-  const handleImagePreview = (input, previewId) => {
-    input.addEventListener("change", (e) => {
-      const file = e.target.files[0];
+  function initImagePreview(input, previewId, group) {
+    input.addEventListener("change", () => {
+      const file = input.files[0];
       if (!file) return;
 
       const preview = document.getElementById(previewId);
-      if (!preview) return;
+      if (preview) {
+        preview.innerHTML = "";
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.classList.add("preview-image");
+        preview.appendChild(img);
+      }
 
-      preview.innerHTML = "";
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      img.classList.add("preview-image");
-      preview.appendChild(img);
-
-      // タグ自動入力
-      const group = input.closest(".tagged-image-group");
-      group?.setAttribute("data-has-image", "true"); // ★ここでマーク
+      group?.setAttribute("data-has-image", "true");
       updateTagInput(group);
     });
-  };
+  }
 
-  const updateTagInput = (group) => {
+  function updateTagInput(group) {
     const tagInput = group.querySelector('input[name*="[tag_list]"]');
     const fileInput = group.querySelector('input[type="file"]');
+    const hasImage = fileInput?.files?.length > 0 || group?.dataset.hasImage === "true";
 
-    // 画像がある（または data-has-image がある）グループだけ更新
-    const hasImage = fileInput?.files?.length > 0 || group?.getAttribute("data-has-image") === "true";
     if (!tagInput || !hasImage) return;
 
-    const dateValue = dateInput?.value;
-    let monthTag = "";
-    if (dateValue) {
-      const selectedDate = new Date(dateValue);
-      monthTag = `${selectedDate.getMonth() + 1}月`;
-    }
-
+    const selectedDate = dateInput?.value ? new Date(dateInput.value) : null;
+    const monthTag = selectedDate ? `${selectedDate.getMonth() + 1}月` : "";
     const categoryTag = categorySelect?.options[categorySelect.selectedIndex]?.text || "";
-    const tags = [monthTag, categoryTag].filter(Boolean).join(", ");
-    tagInput.value = tags;
-  };
+    tagInput.value = [monthTag, categoryTag].filter(Boolean).join(", ");
+  }
 
-  const updateAllTagInputs = () => {
+  function updateAllTagInputs() {
     container.querySelectorAll('.tagged-image-group[data-has-image="true"]').forEach(updateTagInput);
-  };
+  }
 
-  const handleDelete = (e) => {
+  function handleDelete(e) {
     const group = e.target.closest(".tagged-image-group");
     const destroyInput = group.querySelector("input.destroy-flag");
 
@@ -67,60 +58,48 @@ document.addEventListener("turbo:load", () => {
       group.remove();
       index--;
     }
-  };
+  }
 
-  const attachDeleteHandlers = () => {
+  function attachDeleteHandlers() {
     container.querySelectorAll(".delete-image-button").forEach(button => {
       button.removeEventListener("click", handleDelete);
       button.addEventListener("click", handleDelete);
     });
-  };
+  }
 
-  const attachTagUpdater = () => {
-    container.querySelectorAll(".tagged-image-group").forEach((group) => {
-      const fileInput = group.querySelector('input[type="file"]');
-      if (fileInput) {
-        fileInput.removeEventListener("change", () => updateTagInput(group));
-        fileInput.addEventListener("change", () => updateTagInput(group));
-      }
+  function attachInitialPreviews() {
+    container.querySelectorAll(".tagged-image-group").forEach(group => {
+      const input = group.querySelector('input[type="file"]');
+      const previewId = input?.dataset.previewTarget;
+      if (input && previewId) initImagePreview(input, previewId, group);
     });
-  };
+  }
 
-  const addField = () => {
+  function addNewField() {
     if (index >= max) return;
 
-    const replacedHTML = templateHTML.replace(/NEW_INDEX/g, index);
+    const newHTML = templateHTML.replace(/NEW_INDEX/g, index);
     const wrapper = document.createElement("div");
-    wrapper.innerHTML = replacedHTML;
+    wrapper.innerHTML = newHTML;
     const newGroup = wrapper.firstElementChild;
 
     const input = newGroup.querySelector('input[type="file"]');
     const previewId = newGroup.querySelector(".image-preview")?.id;
 
     if (input && previewId) {
-      handleImagePreview(input, previewId);
+      initImagePreview(input, previewId, newGroup);
     }
 
     container.appendChild(newGroup);
     attachDeleteHandlers();
-    attachTagUpdater();
     index++;
-  };
+  }
 
-  container.querySelectorAll(".tagged-image-group").forEach((group) => {
-    const input = group.querySelector('input[type="file"]');
-    const previewId = input?.dataset.previewTarget;
-    if (input && previewId) handleImagePreview(input, previewId);
-  });
-
+  // 初期化処理
+  attachInitialPreviews();
   attachDeleteHandlers();
-  attachTagUpdater();
 
-  addButton?.addEventListener("click", () => {
-    addField();
-  });
-
-  // ✅ カテゴリや日付変更 → 画像がある行だけ更新
+  addButton?.addEventListener("click", addNewField);
   categorySelect?.addEventListener("change", updateAllTagInputs);
   dateInput?.addEventListener("change", updateAllTagInputs);
 });

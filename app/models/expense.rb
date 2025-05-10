@@ -11,6 +11,7 @@ class Expense < ApplicationRecord
   validates :amount, presence: { message: "を入力してください" },
                      numericality: { greater_than_or_equal_to: 0, message: "は0円以上で入力してください" }
   validates :category_expense_id, presence: { message: "を選択してください" }
+  validates :memo, length: { maximum: 300 }
 
   def tag_array
     tag_list.to_s.split(",").map(&:strip)

@@ -1,0 +1,88 @@
+
+
+<div class="book">
+
+  <!-- 左ページ -->
+  <div class="page left-page"><%= render 'shared/book_style_layout' %>
+    <div class="album-left">
+
+      <!-- 検索フォームとタグ一覧 -->
+      <div class="album-header">
+        <h2>アルバム</h2>
+        <%= form_with url: albums_path, method: :get, local: true do |f| %>
+          <%= f.text_field :search, placeholder: "タグ検索...", value: params[:search], class: "album-search-input" %>
+          <%= f.submit "検索", class: "album-search-button" %>
+        <% end %>
+
+        <div class="album-tags">
+          <%= link_to "すべて", albums_path, class: "album-tag #{'active' if params[:tag].blank? || params[:tag] == 'すべて'}" %>
+          <% @tags.each do |tag| %>
+            <%= link_to tag.name, albums_path(tag: tag.name), class: "album-tag #{'active' if params[:tag] == tag.name}" %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 左ページ：画像 0〜3 -->
+      <div class="album-grid-left">
+        <% images = @tagged_images %>
+        <% [0, 1, 2, 3].each do |i| %>
+          <% img = images[i] %>
+          <% break if img.nil? %>
+          <div class="album-card <%= 'no-memo' if img.memo.blank? %>">
+            <div class="album-image">
+              <%= image_tag img.image, class: "album-photo" if img.image.attached? %>
+            </div>
+            <% if img.memo.present? %>
+              <div class="album-memo"><%= simple_format(h(img.memo)) %></div>
+            <% else %>
+              <div class="album-memo empty"></div>
+            <% end %>
+            <div class="album-meta-inline">
+              📅 <%= img.date.present? ? img.date.strftime("%Y/%m/%d") : img.created_at.strftime("%Y/%m/%d") %>
+              <% if img.tag_list.present? %>
+                &nbsp;&nbsp;🏷️ <%= img.tag_list.join(" / ") %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 右ページ -->
+  <div class="page right-page">
+    <div class="album-right">
+      <div class="album-grid-right">
+        <% [4, 5, 6, 7, 8, 9].each do |i| %>
+          <% img = images[i] %>
+          <% break if img.nil? %>
+          <div class="album-card <%= 'no-memo' if img.memo.blank? %>">
+            <div class="album-image">
+              <%= image_tag img.image, class: "album-photo" if img.image.attached? %>
+            </div>
+            <% if img.memo.present? %>
+              <div class="album-memo"><%= simple_format(h(img.memo)) %></div>
+            <% else %>
+              <div class="album-memo empty"></div>
+            <% end %>
+            <div class="album-meta-inline">
+              📅 <%= img.date.present? ? img.date.strftime("%Y/%m/%d") : img.created_at.strftime("%Y/%m/%d") %>
+              <% if img.tag_list.present? %>
+                &nbsp;&nbsp;🏷️ <%= img.tag_list.join(" / ") %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ページネーション -->
+<div class="album-pagination">
+  <%= link_to "← 前", albums_path(page: @tagged_images.prev_page), class: "album-page-link" if @tagged_images.prev_page %>
+  <span>ページ <%= @tagged_images.current_page %> / <%= @tagged_images.total_pages %></span>
+  <%= link_to "次 →", albums_path(page: @tagged_images.next_page), class: "album-page-link" if @tagged_images.next_page %>
+</div>

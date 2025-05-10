@@ -4,10 +4,13 @@ Rails.application.routes.draw do
 
   resources :homes, only: [:index]
   resources :incomes
-  resources :expenses
   resources :expenses do
     resources :tagged_images, only: [:edit, :update]
   end
+  resources :albums, only: [:index]
+  get 'albums/tag/:tag', to: 'albums#index', as: :tagged_album
+
+
 # 支出カテゴリ操作
 delete 'category_expenses/delete_selected', to: 'category_expenses#delete_selected', as: 'delete_selected_category_expenses'
 patch  'category_expenses/update_selected', to: 'category_expenses#update_selected', as: 'update_selected_category_expenses'

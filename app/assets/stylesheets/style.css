@@ -16,7 +16,7 @@ div {
 }
 
 body {
-  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN W3", sans-serif;
+  font-family: 'Kiwi Maru', serif;
   color: #3b4043;
 }
 
@@ -109,12 +109,12 @@ a {
 }
 
 .user {
-  width: 100%; 
+  width: 300px; 
   height: 50px;
-  background-color: #DBE7F2;
+  background-color: #8fb2ff;
   border: 2px solid #CECAE6;
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   transition: 0.3s ease;
   margin: 5px 0px;
@@ -132,6 +132,8 @@ a {
   background-color: #4E6DB3;;
   color: #DBE7F2;
 }
+
+
 
 /* メインページ */
 /* 全体レイアウト：サイドバー＋ノート */
@@ -1016,3 +1018,171 @@ label, input, select, textarea {
   margin-top: 4px;
   display: block;
 }
+
+
+/* ===== 左ページ全体（検索＋画像4枚） ===== */
+.album-left {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 検索欄とタグ */
+.album-left .album-header {
+  width: 100%;
+}
+
+.album-left .album-header h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.album-left .album-search-input {
+  padding: 5px;
+  margin-right: 5px;
+  width: 150px;
+}
+
+.album-left .album-search-button {
+  padding: 5px 10px;
+}
+
+.album-left .album-tags {
+  margin-top: 10px;
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 8px;
+}
+
+.album-left .album-tag {
+  background-color: #eee;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 13px;
+  text-decoration: none;
+  color: #333;
+}
+
+/* 画像4枚：2列×2行 */
+.album-grid-left {
+  display: grid;
+  grid-template-columns: 250px 250px;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* ===== 右ページ：画像6枚（2列×3行） ===== */
+.album-right .album-grid-right {
+  display: grid;
+  grid-template-columns: 250px 250px;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* ===== 画像カード共通 ===== */
+.album-card {
+  width: 250px;
+  height: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.album-card .album-image {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.album-card .album-photo {
+  max-width: 240px;
+  max-height: 240px;
+  object-fit: contain;
+  border: 5px solid white;
+  box-shadow: 0 0 3px rgba(0,0,0,0.2);
+}
+.album-meta-inline {
+  font-size: 12px;
+  padding: 4px 10px;
+  background-color: #fafafa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* メモ部 */
+.album-memo {
+  max-height: 80px;
+  overflow-y: auto;
+  padding: 5px 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  background-color: #f8f8f8;
+
+  white-space: pre-wrap;    /* 改行 & 折り返し有効 */
+  word-break: break-word;   /* 長い単語も折り返し */
+  text-overflow: unset;     /* ← 明示的に無効化 */
+  overflow-x: hidden;       /* 横スクロール抑制 */
+}
+.album-memo::-webkit-scrollbar {
+  width: 6px;
+}
+
+.album-memo::-webkit-scrollbar-track {
+  background: #e0f7ff; /* 薄い水色の背景 */
+  border-radius: 4px;
+}
+
+.album-memo::-webkit-scrollbar-thumb {
+  background: #4E6DB3; /* 鮮やかな水色バー */
+  border-radius: 4px;
+}
+
+.album-memo::-webkit-scrollbar-thumb:hover {
+  background: #2ca8d6;
+}
+
+/* ===== ページネーション ===== */
+.album-pagination {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.album-page-link {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #4a80d6;
+}
+.album-card .album-meta {
+  font-size: 12px;
+  padding: 4px 10px;
+  background-color: #fafafa;
+  border-top: 1px dotted #ddd;
+  margin-top: auto;
+}
+
+.album-card .album-date {
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.album-card .album-tags-list {
+  color: #444;
+  font-style: italic;
+  word-break: break-word;
+}
+
