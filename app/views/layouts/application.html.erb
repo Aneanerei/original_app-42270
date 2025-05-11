@@ -15,8 +15,8 @@
     <header class="header">
       <div class="title"><a href="/">household account book</a></div>
      <% if user_signed_in? %>
-      <div class="button-area">
-        <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "login-button" %>  
+      <div class="button-area"> 
+        <%= link_to "ログアウト", destroy_user_session_path,class: "login-button", data: { turbo_method: :delete } %>
       </div>
      <% elsif %>
       <div class="button-area">
