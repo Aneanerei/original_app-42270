@@ -40,7 +40,7 @@
           <% preview_index = tf.index || SecureRandom.hex(4) %>
           <% is_new = tf.object.new_record? || tf.object.image.blank? %>
 
-          <div class="tagged-image-group" data-group data-is-new="<%= is_new %>">
+          <div class="tagged-image-group" data-group="<%= preview_index %>" data-is-new="<%= is_new %>">
             <%= tf.hidden_field :id %>
             <%= tf.hidden_field :_destroy, class: "destroy-flag", value: "false" %>
 
@@ -51,10 +51,11 @@
               <% end %>
             </div>
 
-            <%= tf.label :image, "画像(任意)" %>
-            <%= tf.file_field :image, class: "form-button image-input", data: { preview_target: "preview-#{preview_index}" } %>
+            <!-- ファイル入力 -->
+            <%= tf.label :image, "画像(任意)", for: "expense_tagged_images_attributes_#{preview_index}_image" %>
+            <%= tf.file_field :image, class: "form-button image-input", data: { preview_target: "preview-#{preview_index}" }, id: "expense_tagged_images_attributes_#{preview_index}_image" %>
 
-            <!-- タグ入力UI -->
+            <!-- タグ入力 -->
             <label>タグ</label>
             <div class="tag-input-wrapper" data-index="<%= preview_index %>" data-removed-auto-tags="">
               <div class="tags">
@@ -74,6 +75,7 @@
           </div>
         <% end %>
       </div>
+
       <button type="button" id="add-tagged-image" class="form-button">＋画像を追加</button>
     </div>
 
@@ -84,20 +86,29 @@
   </div>
 <% end %>
 
+<!-- 戻るボタン -->
 <div class="form-group">
   <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
 </div>
+
+<!-- 画像＋タグのテンプレート -->
 <template id="tagged-image-template">
-  <div class="tagged-image-group" data-group data-is-new="true">
-    <input type="hidden" name="expense[tagged_images_attributes][NEW_INDEX][_destroy]" class="destroy-flag" value="false">
+  <div class="tagged-image-group" data-group="NEW_INDEX" data-is-new="true">
+    <input type="hidden" name="expense[tagged_images_attributes][NEW_INDEX][_destroy]"
+           id="expense_tagged_images_attributes_NEW_INDEX__destroy"
+           class="destroy-flag" value="false">
 
     <!-- プレビュー -->
     <div class="image-preview" id="preview-NEW_INDEX"></div>
 
     <!-- ファイル入力 -->
-    <label class="image-label-final">画像</label>
+    <label for="expense_tagged_images_attributes_NEW_INDEX_image">画像</label>
     <div class="file-center-wrapper">
-      <input type="file" name="expense[tagged_images_attributes][NEW_INDEX][image]" class="form-button image-input" data-preview-target="preview-NEW_INDEX">
+      <input type="file"
+             name="expense[tagged_images_attributes][NEW_INDEX][image]"
+             id="expense_tagged_images_attributes_NEW_INDEX_image"
+             class="form-button image-input"
+             data-preview-target="preview-NEW_INDEX">
     </div>
 
     <!-- タグ入力 -->
@@ -105,8 +116,14 @@
     <div class="tag-input-wrapper" data-index="NEW_INDEX" data-removed-auto-tags="">
       <div class="tags"></div>
       <input type="text" class="tag-input form-control" placeholder="タグを入力">
-      <input type="hidden" name="expense[tagged_images_attributes][NEW_INDEX][tag_list]" class="hidden-tag-input">
-      <input type="hidden" name="expense[tagged_images_attributes][NEW_INDEX][removed_auto_tags]" class="removed-auto-tags-input">
+      <input type="hidden"
+             name="expense[tagged_images_attributes][NEW_INDEX][tag_list]"
+             id="expense_tagged_images_attributes_NEW_INDEX_tag_list"
+             class="hidden-tag-input">
+      <input type="hidden"
+             name="expense[tagged_images_attributes][NEW_INDEX][removed_auto_tags]"
+             id="expense_tagged_images_attributes_NEW_INDEX_removed_auto_tags"
+             class="removed-auto-tags-input">
     </div>
     <small class="tag-hint">※タグはEnter・カンマ・スペースで追加できます</small>
 

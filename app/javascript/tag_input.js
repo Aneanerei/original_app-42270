@@ -60,36 +60,36 @@ document.addEventListener("turbo:load", () => {
     syncTagsToHiddenInput(wrapper);
   }
 
- function applyAutoTags(group) {
-  const formMode = document.getElementById("expense-form")?.dataset.mode;
-  if (formMode === "edit") return; // ← 編集画面では何もしない
+  function applyAutoTags(group) {
+    const formMode = document.getElementById("expense-form")?.dataset.mode;
+    if (formMode === "edit") return;
 
-  const wrapper = group.querySelector(".tag-input-wrapper");
-  if (!wrapper) return;
+    const wrapper = group.querySelector(".tag-input-wrapper");
+    if (!wrapper) return;
 
-  const removed = (wrapper.dataset.removedAutoTags || "").split(",");
-  wrapper.querySelectorAll(".tag-badge[data-auto='true']").forEach(el => el.remove());
+    const removed = (wrapper.dataset.removedAutoTags || "").split(",");
+    wrapper.querySelectorAll(".tag-badge[data-auto='true']").forEach(el => el.remove());
 
-  const isNew = group.dataset.isNew === "true";
-  const fileInput = group.querySelector('input[type="file"]');
-  const hasFile = fileInput?.files?.length > 0;
+    const isNew = group.dataset.isNew === "true";
+    const fileInput = group.querySelector('input[type="file"]');
+    const hasFile = fileInput?.files?.length > 0;
 
-  if (!isNew || !hasFile) return;
+    if (!isNew || !hasFile) return;
 
-  const date = dateInput?.value ? new Date(dateInput.value) : new Date();
-  const monthTag = `${date.getMonth() + 1}月`;
+    const date = dateInput?.value ? new Date(dateInput.value) : new Date();
+    const monthTag = `${date.getMonth() + 1}月`;
 
-  const categoryOption = categorySelect?.selectedOptions[0];
-  const categoryTag = categoryOption?.value ? categoryOption.textContent : "";
+    const categoryOption = categorySelect?.selectedOptions[0];
+    const categoryTag = categoryOption?.value ? categoryOption.textContent : "";
 
-  [monthTag, categoryTag].forEach(tag => {
-    if (tag && !removed.includes(tag)) {
-      addTag(wrapper, tag, true);
-    }
-  });
+    [monthTag, categoryTag].forEach(tag => {
+      if (tag && !removed.includes(tag)) {
+        addTag(wrapper, tag, true);
+      }
+    });
 
-  syncTagsToHiddenInput(wrapper);
-}
+    syncTagsToHiddenInput(wrapper);
+  }
 
   function initTagInput(wrapper) {
     const input = wrapper.querySelector(".tag-input");
@@ -129,14 +129,8 @@ document.addEventListener("turbo:load", () => {
     const wrapper = group.querySelector(".tag-input-wrapper");
     if (!input || !preview || !wrapper) return;
 
-    if (input.files.length === 0 && preview.querySelector("img")) {
-      group.setAttribute("data-has-image", "true");
-      return;
-    }
-
     input.addEventListener("change", () => {
       const file = input.files[0];
-
       if (file) {
         preview.innerHTML = "";
         const img = document.createElement("img");
@@ -156,34 +150,25 @@ document.addEventListener("turbo:load", () => {
     });
   }
 
- function handleDelete(e) {
-  const group = e.target.closest(".tagged-image-group");
-  const destroyInput = group.querySelector("input.destroy-flag");
+  function handleDelete(e) {
+    const group = e.target.closest(".tagged-image-group");
+    const destroyInput = group.querySelector("input.destroy-flag");
 
-  if (!group || !destroyInput) return;
+    if (!group || !destroyInput) return;
 
-  // 削除フラグON
-  destroyInput.value = "1";
+    destroyInput.value = "1";
+    const preview = group.querySelector(".image-preview");
+    if (preview) preview.innerHTML = "";
 
-  // プレビュー削除
-  const preview = group.querySelector(".image-preview");
-  if (preview) preview.innerHTML = "";
+    const wrapper = group.querySelector(".tag-input-wrapper");
+    if (wrapper) {
+      wrapper.querySelector(".tags").innerHTML = "";
+      wrapper.querySelector(".hidden-tag-input").value = "";
+      wrapper.querySelector(".tag-input").value = "";
+    }
 
-  // タグ欄・入力欄クリア
-  const wrapper = group.querySelector(".tag-input-wrapper");
-  if (wrapper) {
-    const tags = wrapper.querySelector(".tags");
-    const hidden = wrapper.querySelector(".hidden-tag-input");
-    const input = wrapper.querySelector(".tag-input");
-    if (tags) tags.innerHTML = "";
-    if (hidden) hidden.value = "";
-    if (input) input.value = "";
+    group.style.display = "none";
   }
-
-  // 最後に非表示にする
-  group.style.display = "none";
-}
-
 
   function attachDeleteHandlers() {
     container.querySelectorAll(".delete-image-button").forEach(btn => {
@@ -197,6 +182,7 @@ document.addEventListener("turbo:load", () => {
       const wrapper = group.querySelector(".tag-input-wrapper");
       const input = group.querySelector("input[type='file']");
       const previewId = group.querySelector(".image-preview")?.id;
+
       if (input && previewId) initImagePreview(input, previewId, group);
       if (wrapper) {
         initTagInput(wrapper);
@@ -207,20 +193,30 @@ document.addEventListener("turbo:load", () => {
 
   function addNewField() {
     if (index >= max) return;
+
     const html = template.innerHTML.replace(/NEW_INDEX/g, index);
     const temp = document.createElement("div");
     temp.innerHTML = html;
     const group = temp.firstElementChild;
     group.dataset.isNew = "true";
+    group.dataset.group = index;
+
+    container.appendChild(group);
 
     const input = group.querySelector("input[type='file']");
     const previewId = group.querySelector(".image-preview")?.id;
-    if (input && previewId) initImagePreview(input, previewId, group);
+
+    if (input && previewId) {
+      initImagePreview(input, previewId, group);
+
+      if (input.files.length > 0) {
+        input.dispatchEvent(new Event("change"));
+      }
+    }
 
     const wrapper = group.querySelector(".tag-input-wrapper");
     if (wrapper) initTagInput(wrapper);
 
-    container.appendChild(group);
     attachDeleteHandlers();
     index++;
   }
@@ -235,4 +231,3 @@ document.addEventListener("turbo:load", () => {
   categorySelect?.addEventListener("change", updateAllAutoTags);
   dateInput?.addEventListener("change", updateAllAutoTags);
 });
-
