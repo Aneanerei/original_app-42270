@@ -1,11 +1,25 @@
-
+<!-- タグ管理モーダル（使用タグ一覧も統合） -->
+<div id="tag-admin-modal" class="tag-admin-modal" style="display: none;">
+  <div class="tag-admin-content">
+    <h3>タグの管理</h3>
+    <input type="text" id="tag-admin-search" placeholder="タグ検索..." class="form-control">
+    <div id="tag-admin-list" class="tag-admin-list">
+      <% @my_tags.each do |tag| %>
+        <div class="tag-admin-item" data-name="<%= tag.name %>">
+          <%= link_to "#{tag.name}（#{tag.count}回）", albums_path(tag: tag.name), class: "tag-name-link" %>
+          <button class="rename-tag-btn" data-id="<%= tag.id %>" data-name="<%= tag.name %>">✎</button>
+          <button class="delete-tag-btn" data-id="<%= tag.id %>">🗑</button>
+        </div>
+      <% end %>
+    </div>
+    <button id="close-tag-admin" class="form-button">閉じる</button>
+  </div>
+</div>
 
 <div class="book">
-
   <!-- 左ページ -->
   <div class="page left-page"><%= render 'shared/book_style_layout' %>
     <div class="album-left">
-
       <!-- 検索フォームとタグ一覧 -->
       <div class="album-header">
         <h2>アルバム</h2>
@@ -13,11 +27,14 @@
           <%= f.text_field :search, placeholder: "タグ検索...", value: params[:search], class: "album-search-input" %>
           <%= f.submit "検索", class: "album-search-button" %>
         <% end %>
+        <div class="popular-tags">
+        <button id="open-tag-admin" class="form-button">🏷️ タグ一覧・管理</button>
 
-        <div class="album-tags">
+          <h3>人気タグ</h3>
+          <div class="popular-tags-list">
           <%= link_to "すべて", albums_path, class: "album-tag #{'active' if params[:tag].blank? || params[:tag] == 'すべて'}" %>
-          <% @tags.each do |tag| %>
-            <%= link_to tag.name, albums_path(tag: tag.name), class: "album-tag #{'active' if params[:tag] == tag.name}" %>
+          <% @popular_tags.each do |tag| %>
+            <%= link_to "#{tag.name} (#{tag.count})", albums_path(tag: tag.name), class: "popular-tag-link" %>
           <% end %>
         </div>
       </div>
@@ -49,7 +66,7 @@
 
     </div>
   </div>
-
+ </div>
   <!-- 右ページ -->
   <div class="page right-page">
     <div class="album-right">
@@ -77,9 +94,7 @@
       </div>
     </div>
   </div>
-
 </div>
-
 <!-- ページネーション -->
 <div class="album-pagination">
   <%= link_to "← 前", albums_path(page: @tagged_images.prev_page), class: "album-page-link" if @tagged_images.prev_page %>

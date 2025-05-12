@@ -13,9 +13,13 @@ document.addEventListener("turbo:load", () => {
   const maxTagCount = 10;
 
   const normalizeTag = (tag) =>
-    tag.trim().replace(/[０-９Ａ-Ｚａ-ｚ]/g, s =>
-      String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
-    ).replace(/[,\s]/g, "");
+    tag.trim()
+      .replace(/[！-～]/g, s =>
+        String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
+      )
+      .replace(/[ー－]/g, "-")
+      .replace(/[、，]/g, ",")
+      .replace(/\s/g, "");
 
   const getTags = (wrapper) =>
     Array.from(wrapper.querySelectorAll(".tag-badge")).map(el =>
@@ -99,7 +103,9 @@ document.addEventListener("turbo:load", () => {
     input.addEventListener("keydown", (e) => {
       if (["Enter", ",", " "].includes(e.key)) {
         e.preventDefault();
-        addTag(wrapper, input.value);
+        const raw = input.value;
+        const tag = normalizeTag(raw);
+        addTag(wrapper, tag);
         input.value = "";
       }
     });

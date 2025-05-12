@@ -10,3 +10,5 @@ import "category_expense_modal"
 import "expense_category_delete"
 import "form_reload"
 import "tag_input"
+import "tag_admin"
+

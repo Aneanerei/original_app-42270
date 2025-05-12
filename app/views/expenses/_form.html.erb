@@ -46,7 +46,7 @@
 
             <!-- プレビュー -->
             <div class="image-preview" id="preview-<%= preview_index %>">
-              <% if tf.object.image.attached? %>
+              <% if tf.object.persisted? && tf.object.image.attached? %>
                 <%= image_tag tf.object.image.variant(resize_to_limit: [300, 300]), class: "preview-image" %>
               <% end %>
             </div>
