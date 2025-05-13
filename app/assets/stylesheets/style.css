@@ -689,7 +689,7 @@ label, input, select, textarea {
 
 /* 労働時間一覧 */
 .work-box {
-  width: 45%;
+  width: 270px;
   margin-top: 20px;
   border: 2px solid #ccc;
   padding: 10px;
@@ -1550,3 +1550,47 @@ label, input, select, textarea {
   font-size: 1.1em;
   margin-right: 10px;
 }
+
+/* 目標メーター設定 */
+.goal-main {display: flex;
+
+}
+
+
+.meter-outer {
+  width: 100%;
+  background: #eee;
+  border-radius: 12px;
+  height: 24px;
+  position: relative;
+  overflow-x: auto;
+}
+
+.meter-bar {
+  height: 100%;
+  text-align: center;
+  color: white;
+  line-height: 24px;
+  white-space: nowrap;
+  transition: width 0.5s;
+  min-width: 0%;
+  max-width: 200%;
+}
+
+.meter-bar.income {
+  background-color: #2196f3;
+}
+
+.meter-bar.saving {
+  background-color: #4caf50;
+}
+
+.meter-marker-100 {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #ff9800;
+}
+

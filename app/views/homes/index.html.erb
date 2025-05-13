@@ -1,3 +1,4 @@
+
 <% if flash[:notice] %>
   <div class="notice-messages">
     <ul>
@@ -65,7 +66,7 @@
   </div>
 </div>
 
-
+<div class="goal-main">
 <div class="work-box">
   <div class="small-heading">今月の労働時間一覧</div>
   <% if @work_times.any? %>
@@ -99,10 +100,40 @@
   <% end %>
   </div>
   </div> 
-
-
   </div>
  
+
+<div class="work-box">
+
+<div class="goal-meter">
+  <h3>収入目標達成率</h3>
+  <div class="meter-outer">
+    <div class="meter-bar income" style="width: <%= @income_progress %>%;">
+      <%= @income_progress %>%（<%= number_to_currency(@income_total) %> / <%= number_to_currency(@income_goal) %>）
+    </div>
+    <div class="meter-marker-100"></div>
+  </div>
+</div>
+
+<div class="goal-meter">
+  <h3>貯金目標達成率</h3>
+  <div class="meter-outer">
+    <div class="meter-bar saving" style="width: <%= @savings_progress %>%;">
+      <%= @savings_progress %>%（<%= number_to_currency(@actual_saving) %> / <%= number_to_currency(@savings_goal) %>）
+    </div>
+    <div class="meter-marker-100"></div>
+  </div>
+</div>
+
+ </div>
+ </div>
+
+
+
+
+
+
+
 
   <!-- 右ページ -->
   <div class="page">
@@ -243,4 +274,30 @@
 </div>
 </div>
 </div>
+</div>
+<!-- 目標設定モーダル -->
+<div id="goal-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <h2>今月の目標設定</h2>
+
+    <%= form_with model: MonthlyGoal.new, url: monthly_goals_path, local: true do |f| %>
+      <%= hidden_field_tag :year, Date.today.year %>
+      <%= hidden_field_tag :month, Date.today.month %>
+
+      <div class="form-group">
+        <%= f.label :income_goal, "収入目標額" %>
+        <%= f.number_field :income_goal, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :savings_goal, "貯金目標額" %>
+        <%= f.number_field :savings_goal, class: "form-control" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "保存", class: "form-submit" %>
+        <button type="button" onclick="closeGoalModal()" class="form-button">キャンセル</button>
+      </div>
+    <% end %>
+  </div>
 </div>
