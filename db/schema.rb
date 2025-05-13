@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_13_031714) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_13_054845) do
   create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -102,13 +102,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_13_031714) do
     t.index ["user_id"], name: "index_monthly_goals_on_user_id"
   end
 
-  create_table "tagged_images", charset: "utf8mb3", force: :cascade do |t|
-    t.bigint "expense_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["expense_id"], name: "index_tagged_images_on_expense_id"
-  end
-
   create_table "taggings", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "tag_id"
     t.string "taggable_type"
@@ -174,7 +167,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_13_031714) do
   add_foreign_key "incomes", "category_incomes"
   add_foreign_key "incomes", "users"
   add_foreign_key "monthly_goals", "users"
-  add_foreign_key "tagged_images", "expenses"
   add_foreign_key "taggings", "tags"
   add_foreign_key "work_times", "category_work_times"
   add_foreign_key "work_times", "users"
