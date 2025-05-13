@@ -41,5 +41,26 @@ class HomesController < ApplicationController
     # 上位3カテゴリ（収入・支出）
     @top_incomes = @income_summary.to_a.first(3)
     @top_expenses = @expense_summary.to_a.first(3)
+
+    # 目標設定モーダル
+    today = Date.today
+    start_date = today.beginning_of_month
+    end_date = today.end_of_month
+
+    @monthly_goal = current_user.monthly_goals.find_by(year: today.year, month: today.month)
+    @income_goal = @monthly_goal&.income_goal.to_i
+    @savings_goal = @monthly_goal&.savings_goal.to_i
+
+    @income_total = current_user.incomes.where(date: start_date..end_date).sum(:amount)
+    @expense_total = current_user.expenses.where(date: start_date..end_date).sum(:amount)
+    @actual_saving = @income_total - @expense_total
+
+    @income_progress = if @income_goal.positive?
+                       [(@income_total.to_f / @income_goal * 100).round, 200].min
+                     else 0 end
+
+    @savings_progress = if @savings_goal.positive?
+                        [(@actual_saving.to_f / @savings_goal * 100).round, 200].min
+                      else 0 end
   end
 end

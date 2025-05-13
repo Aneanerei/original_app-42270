@@ -43,4 +43,8 @@ Rails.application.routes.draw do
 
   # 労働時間入力・編集
   resources :work_times, only: [:new, :create, :edit, :update, :destroy]
+
+  # 目標メーター設定
+  resources :monthly_goals, only: [:create]
+
 end

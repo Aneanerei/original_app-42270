@@ -11,4 +11,4 @@ import "expense_category_delete"
 import "form_reload"
 import "tag_input"
 import "tag_admin"
-
+import "goal_modal"
