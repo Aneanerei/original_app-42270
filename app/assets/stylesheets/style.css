@@ -16,7 +16,7 @@ div {
 }
 
 body {
-  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN W3", sans-serif;
+  font-family: 'Kiwi Maru', serif;
   color: #3b4043;
 }
 
@@ -109,12 +109,12 @@ a {
 }
 
 .user {
-  width: 100%; 
+  width: 300px; 
   height: 50px;
-  background-color: #DBE7F2;
+  background-color: #8fb2ff;
   border: 2px solid #CECAE6;
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   transition: 0.3s ease;
   margin: 5px 0px;
@@ -132,6 +132,8 @@ a {
   background-color: #4E6DB3;;
   color: #DBE7F2;
 }
+
+
 
 /* メインページ */
 /* 全体レイアウト：サイドバー＋ノート */
@@ -261,7 +263,7 @@ a {
   box-sizing: border-box;
 }
 
-.income-box {
+.balance-box {
   width: 270px;
   max-height: 300px;
   overflow-y: auto;
@@ -271,31 +273,31 @@ a {
   border-radius: 8px;
 }
 
-.income-box::-webkit-scrollbar {
+.balance-box::-webkit-scrollbar {
   width: 8px;
 }
 
-.income-box::-webkit-scrollbar-track {
+.balance-box::-webkit-scrollbar-track {
   background: #fdfdfd; 
 }
 
-.income-box::-webkit-scrollbar-thumb {
+.balance-box::-webkit-scrollbar-thumb {
   background: rgba(206, 202, 230, 0.4);
   border-radius: 4px;
 }
 
-.income-box ul {
+.balance-box ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.income-box li {
+.balance-box-box li {
   padding: 5px 0;
   border-bottom: 1px dotted #ccc; 
 }
 
-.income-input {
+.balance-box-input {
   width: 100%;
   max-width: 500px;
   box-sizing: border-box;
@@ -1009,10 +1011,542 @@ label, input, select, textarea {
   border-radius: 4px !important;
 }
 
-/* タグ */
+
+
+/* ===== 左ページ全体（検索＋画像4枚） ===== */
+.album-left {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 検索欄とタグ */
+.album-left .album-header {
+  width: 100%;
+}
+
+.album-left .album-header h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.album-left .album-search-input {
+  padding: 5px;
+  margin-right: 5px;
+  width: 150px;
+}
+
+.album-left .album-search-button {
+  padding: 5px 10px;
+}
+
+.album-left .album-tags {
+  margin-top: 10px;
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 8px;
+}
+
+.album-left .album-tag {
+  background-color: #eee;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 13px;
+  text-decoration: none;
+  color: #333;
+}
+
+/* 画像4枚：2列×2行 */
+.album-grid-left {
+  display: grid;
+  grid-template-columns: 250px 250px;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* ===== 右ページ：画像6枚（2列×3行） ===== */
+.album-right .album-grid-right {
+  display: grid;
+  grid-template-columns: 250px 250px;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* ===== 画像カード共通 ===== */
+.album-card {
+  width: 250px;
+  height: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.album-card .album-image {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.album-card .album-photo {
+  max-width: 240px;
+  max-height: 240px;
+  object-fit: contain;
+  border: 5px solid white;
+  box-shadow: 0 0 3px rgba(0,0,0,0.2);
+}
+.album-meta-inline {
+  font-size: 12px;
+  padding: 4px 10px;
+  background-color: #fafafa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* メモ部 */
+.album-memo {
+  max-height: 80px;
+  overflow-y: auto;
+  padding: 5px 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  background-color: #f8f8f8;
+
+  white-space: pre-wrap;    /* 改行 & 折り返し有効 */
+  word-break: break-word;   /* 長い単語も折り返し */
+  text-overflow: unset;     /* ← 明示的に無効化 */
+  overflow-x: hidden;       /* 横スクロール抑制 */
+}
+.album-memo::-webkit-scrollbar {
+  width: 6px;
+}
+
+.album-memo::-webkit-scrollbar-track {
+  background: #e0f7ff;
+  border-radius: 4px;
+}
+
+.album-memo::-webkit-scrollbar-thumb {
+  background: #4E6DB3;
+  border-radius: 4px;
+}
+
+.album-memo::-webkit-scrollbar-thumb:hover {
+  background: #2ca8d6;
+}
+
+/* ===== ページネーション ===== */
+.album-pagination {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.album-page-link {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #4a80d6;
+}
+
+/* ===== アルバムカードメタ情報 ===== */
+.album-card .album-meta {
+  font-size: 12px;
+  padding: 4px 10px;
+  background-color: #fafafa;
+  border-top: 1px dotted #ddd;
+  margin-top: auto;
+}
+
+.album-card .album-date {
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.album-card .album-tags-list {
+  color: #444;
+  font-style: italic;
+  word-break: break-word;
+}
+
+/* ===== タグバッジ 共通 ===== */
+.tag-badge {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin: 5px 5px 0 0;
+  font-size: 0.9em;
+  color: #333;
+}
+
+/* ===== 手動タグ（デフォルト） ===== */
+.tag-badge:not([data-auto="true"]) {
+  background-color: #e0e0e0;
+}
+
+/* ===== 自動タグ（data-auto=true） ===== */
+.tag-badge[data-auto="true"] {
+  background-color: #ffe066;
+  color: #271500;
+}
+
+/* ===== タグ削除ボタン ===== */
+.tag-badge .remove-tag {
+  background: none;
+  border: none;
+  margin-left: 5px;
+  color: #888;
+  cursor: pointer;
+}
+
+/* ===== タグ追加アニメーション ===== */
+.tag-badge.highlight {
+  animation: pulse 0.3s ease;
+  background-color: #ffcdd2;
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.tag-badge.duplicate-tag {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  animation: shake 0.3s;
+}
+
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-3px); }
+  50%  { transform: translateX(3px); }
+  75%  { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+/* ===== 人気タグ表示 ===== */
+.popular-tags {
+  margin-top: 1em;
+}
+
+.popular-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.popular-tag-link {
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  padding: 0.4em 0.8em;
+  text-decoration: none;
+  color: #333;
+  font-size: 0.8em;
+}
+
 .tag-hint {
   font-size: 0.8em;
   color: #666;
   margin-top: 4px;
   display: block;
+}
+
+
+/* ===== タグ管理機能 ===== */
+.tag-admin-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.tag-admin-content {
+  background: white;
+  padding: 2em;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.tag-admin-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+}
+
+.tag-admin-list::-webkit-scrollbar {
+  width: 8px;
+}
+.tag-admin-list::-webkit-scrollbar-track {
+  background: #e0f7ff;
+  border-radius: 4px;
+}
+.tag-admin-list::-webkit-scrollbar-thumb {
+  background: #4E6DB3;
+  border-radius: 4px;
+}
+.tag-admin-list::-webkit-scrollbar-thumb:hover {
+  background: #2ca8d6;
+}
+.important-warning {
+  color: #d9534f;
+}
+.tag-name-highlight {
+    color: #d9534f;
+}
+/* ========== オーバーレイ（共通） ========== */
+.rename-modal-overlay,
+.delete-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+/* ========== 編集モーダル専用 ========== */
+.rename-modal-box {
+  background: #fff;
+  padding: 2em;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.rename-input {
+  width: 100%;
+  padding: 0.5em;
+  margin: 1em 0;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.rename-message {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.rename-proceed-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.rename-proceed-button:hover {
+  background-color: #3e8e41;
+}
+
+/* ========== 削除モーダル専用 ========== */
+.delete-modal-box {
+  background: white;
+  padding: 1.2em;
+  border-radius: 8px;
+  max-width: 320px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.tag-delete-message {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.important-warning {
+  color: red;
+  font-weight: bold;
+  margin-top: 0.5em;
+}
+
+/* ========== 共通ボタンスタイル ========== */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 0.5em 1em;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.form-button.delete {
+  background-color: #d9534f;
+  color: white;
+}
+
+.form-button.delete:hover {
+  background-color: #c9302c;
+}
+
+.form-button.cancel {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* ========== 集計 ========== */
+.summary-box {
+  width: 540px;
+  height: 180px;
+  margin-top: 10px;
+  padding: 1em 1.5em;
+  background: #f5f9ff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+.summary-box h3 {
+  margin-bottom: 10px;
+  color: #000000;
+  font-size: 1.2rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5em;
+  padding: 1em 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.summary-item {
+  text-align: center;
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 1rem;
+  margin-bottom: 0.3em;
+}
+
+.summary-value {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.balance-positive {
+  color: #007bff; /* ========== 青 ========== */
+}
+
+.balance-negative {
+  color: #d9534f; /* ========== 赤 ========== */
+}
+
+.summary-heading {
+  font-size: 1.2rem;
+  color: #000;
+  margin: 0.5em 0 0.3em 0; /* ========== 上下の余白を狭く ========== */
+  text-align: center;
+}
+
+/* ========== 黒字（収支がプラス）の背景色：水色 ========== */
+.summary-positive {
+  background-color: #e6f4ff;
+}
+
+/* ========== 赤字（収支がマイナス）の背景色：赤色 ========== */
+.summary-negative {
+  background-color: #ffeaea;
+}
+
+/* ========== ランキング ========== */
+.category-box {
+  font-weight: 600;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rank-1 {
+  background: linear-gradient(135deg, #fff8dc, #ffd700, #ffcc00);
+  font-size: 1.2em;
+  font-weight: 700;
+  border: 2px solid #ffc107;
+}
+
+.rank-2 {
+  background: linear-gradient(135deg, #ffffff, #d3d3d3, #a9a9a9);
+  font-size: 1.1em;
+  font-weight: 600;
+  border: 2px solid #adb5bd;
+}
+
+.rank-3 {
+  background: linear-gradient(135deg, #ffefde, #d2a679, #b87333);
+  font-size: 1.05em;
+  font-weight: 600;
+  border: 2px solid #bb8f15;
+}
+
+.rank-default {
+  background-color: #ffffff;
+  font-size: 1em;
+  border: 1px solid #ccc;
+}
+/* 支出ランキングカラー */
+.expense-rank-1 {
+  background-color: #ffadad; /* 薄い赤系（強調） */
+  font-size: 1.2em;
+  font-weight: 700;
+  border: 2px solid #9e3641;
+}
+
+.expense-rank-2 {
+  background-color: #ffe3bb; /* 薄いオレンジ系 */
+  font-size: 1.1em;
+  font-weight: 600;
+  border: 2px solid #ffba65;
+}
+
+.expense-rank-3 {
+  background-color: #fff7bc; /* 薄い黄色系 */
+  font-size: 1.05em;
+  font-weight: 600;
+  border: 2px solid #ffe07c;
+}
+
+.expense-rank-default {
+  background-color: #ffffff;
+  font-size: 1em;
+  border: 1px solid #ccc;
+}
+
+.rank-number {
+  font-size: 1.1em;
+  margin-right: 10px;
 }

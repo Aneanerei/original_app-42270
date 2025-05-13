@@ -1,109 +1,151 @@
 <div class="book">
-  <!-- 左ページ -->
-  <div class="page left-page"> 
-     
+  <div class="page left-page">
     <%= render 'shared/book_style_layout' %>
 
-    <div class="tab-content"> 
-      <h2>支出登録</h2>
-  
-      <%= form_with model: @expense, local: true, html: { multipart: true } do |f| %>
-        <div class="form-layout">
+    <div class="tab-content">
+      <h2>支出編集</h2>
 
-          <!-- 基本項目 -->
-          <div class="form-group">
-            <%= f.label :date, "日付" %>
-            <%= f.date_field :date, class: "form-control" %>
-          </div>
+<%= form_with model: @expense, local: true, multipart: true, id: "expense-form", data: { mode: action_name } do |f| %>
+  <div class="form-layout">
 
-          <div class="form-group">
-            <%= f.label :amount, "金額" %>
-            <%= f.number_field :amount, placeholder: "円", class: "form-control" %>
-          </div>
+    <!-- 日付 -->
+    <div class="form-group">
+      <%= f.label :date, "日付" %>
+      <%= f.date_field :date, value: @expense.date || Date.today, class: "form-control", id: "expense_date" %>
+    </div>
 
-          <div class="form-group">
-            <%= f.label :category_expense_id, "カテゴリ" %>
-            <%= f.select :category_expense_id,
-                  CategoryExpense.where(user_id: nil)
-                                 .or(CategoryExpense.where(user_id: current_user.id))
-                                 .map { |c| [c.name, c.id] },
-                  { prompt: "選択してください" },
-                  class: "form-control" %>
-          </div>
+    <!-- 金額 -->
+    <div class="form-group">
+      <%= f.label :amount, "金額" %>
+      <%= f.number_field :amount, placeholder: "円", class: "form-control amount-input" %>
+    </div>
 
-          <div class="form-group">
-            <%= f.label :memo, "メモ(任意)" %>
-            <%= f.text_area :memo, class: "form-control" %>
-          </div>
+    <!-- カテゴリ -->
+    <div class="form-group">
+      <%= f.label :category_expense_id, "カテゴリ" %>
+      <%= f.select :category_expense_id,
+          CategoryExpense.where(user_id: nil)
+            .or(CategoryExpense.where(user_id: current_user.id))
+            .map { |c| [c.name, c.id] },
+          { prompt: "選択してください" },
+          class: "form-control", id: "expense_category_expense_id" %>
+      <div>
+        <button type="button" id="show-expense-category-form" class="form-button">＋カテゴリ追加</button>
+      </div>
+    </div>
 
-          <!-- 画像＋タグ -->
-          <div id="tagged-images">
-            <%= f.fields_for :tagged_images do |tf| %>
-              <% preview_index = tf.index || SecureRandom.hex(4) %>
-              <div class="tagged-image-group" data-group>
-                <%= tf.hidden_field :id %>
-                <%= tf.hidden_field :_destroy, class: "destroy-flag" %>
+    <!-- メモ -->
+    <div class="form-group">
+      <%= f.label :memo, "メモ（任意）" %>
+      <%= f.text_area :memo, class: "form-control" %>
+    </div>
 
-                <% if tf.object.image.attached? && tf.object.image.variable? %>
-                  <div class="image-preview" id="preview-<%= preview_index %>">
-                    <%= image_tag tf.object.image.variant(resize_to_limit: [300, 300]), class: "preview-image" %>
-                  </div>
-                <% else %>
-                  <div class="image-preview" id="preview-<%= preview_index %>"></div>
+    <!-- 画像＋タグ -->
+    <div class="form-group">
+      <div id="tagged-images">
+        <%= f.fields_for :tagged_images do |tf| %>
+          <% preview_index = tf.index || SecureRandom.hex(4) %>
+          <% is_new = tf.object.new_record? || tf.object.image.blank? %>
+
+          <div class="tagged-image-group" data-group="<%= preview_index %>" data-is-new="<%= is_new %>">
+            <%= tf.hidden_field :id %>
+            <%= tf.hidden_field :_destroy, class: "destroy-flag", value: "false" %>
+
+            <!-- プレビュー -->
+            <div class="image-preview" id="preview-<%= preview_index %>">
+              <% if tf.object.image.attached? %>
+                <%= image_tag tf.object.image.variant(resize_to_limit: [300, 300]), class: "preview-image" %>
+              <% end %>
+            </div>
+
+            <!-- ファイル入力 -->
+            <%= tf.label :image, "画像(任意)", for: "expense_tagged_images_attributes_#{preview_index}_image" %>
+            <%= tf.file_field :image, class: "form-button image-input", data: { preview_target: "preview-#{preview_index}" }, id: "expense_tagged_images_attributes_#{preview_index}_image" %>
+
+            <!-- タグ入力 -->
+            <label>タグ</label>
+            <div class="tag-input-wrapper" data-index="<%= preview_index %>" data-removed-auto-tags="">
+              <div class="tags">
+                <% tf.object.tag_list.each do |tag| %>
+                  <span class="tag-badge" data-auto="false">
+                    <%= tag %><button type="button" class="remove-tag" data-tag="<%= tag %>">×</button>
+                  </span>
                 <% end %>
-
-                <%= tf.label :image, "画像(任意)" %>
-                <%= tf.file_field :image, class: "form-button", data: { preview_target: "preview-#{preview_index}" } %>
-
-                <%= tf.label :tag_list, "タグ(カンマ区切り)" %>
-                <%= tf.text_field :tag_list,
-                      class: "form-control",
-                      value: tf.object.tag_list.join(', ') %>
-                <small class="tag-hint">※タグは「,（カンマ）」で区切って入力してください（例：6月, 通信費）</small>
-
-                <button type="button" class="form-button delete delete-image-button">削除</button>
               </div>
-            <% end %>
+              <input type="text" class="tag-input form-control" placeholder="タグを入力">
+              <%= tf.hidden_field :tag_list, class: "hidden-tag-input", value: tf.object.tag_list.join(',') %>
+              <%= tf.hidden_field :removed_auto_tags, class: "removed-auto-tags-input" %>
+            </div>
+            <small class="tag-hint">※タグはEnter・カンマ・スペースで追加できます</small>
+
+            <button type="button" class="form-button delete delete-image-button">削除</button>
           </div>
-
-          <button type="button" id="add-tagged-image" class="form-button">＋画像を追加</button>
-
-          <div class="form-group">
-            <%= f.submit "更新する", class: "form-submit" %>
-          </div>
-        </div>
-      <% end %>
-
-      <div class="form-group">
-        <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
+        <% end %>
       </div>
 
-      <!-- テンプレート -->
-      <template id="tagged-image-template">
-        <div class="tagged-image-group" data-group>
-          <input type="hidden" name="expense[tagged_images_attributes][NEW_INDEX][_destroy]" class="destroy-flag" value="false">
+      <button type="button" id="add-tagged-image" class="form-button">＋画像を追加</button>
+    </div>
 
-          <label class="image-label-final">画像</label>
-          <div class="file-center-wrapper">
-            <input type="file" name="expense[tagged_images_attributes][NEW_INDEX][image]" class="form-button image-input" data-preview-target="preview-NEW_INDEX">
-          </div>
+    <!-- 登録ボタン -->
+    <div class="form-group">
+      <%= f.submit action_name == 'edit' ? "更新する" : "登録する", class: "form-submit" %>
+    </div>
+  </div>
+<% end %>
 
-          <div class="image-preview" id="preview-NEW_INDEX"></div>
+<!-- 戻るボタン -->
+<div class="form-group">
+  <%= link_to "戻る", root_path, class: "form-control", role: "button" %>
+</div>
 
-          <label>タグ（カンマ区切り）</label>
-          <input type="text" name="expense[tagged_images_attributes][NEW_INDEX][tag_list]" class="form-control" placeholder="タグ（カンマ区切り）">
-          <small class="tag-hint">※タグは「,（カンマ）」で区切って入力してください（例：6月, 通信費）</small>
+<!-- 画像＋タグのテンプレート -->
+<template id="tagged-image-template">
+  <div class="tagged-image-group" data-group="NEW_INDEX" data-is-new="true">
+    <input type="hidden" name="expense[tagged_images_attributes][NEW_INDEX][_destroy]"
+           id="expense_tagged_images_attributes_NEW_INDEX__destroy"
+           class="destroy-flag" value="false">
 
-          <button type="button" class="form-button delete-image-button">削除</button>
-        </div>
-      </template>
+    <!-- プレビュー -->
+    <div class="image-preview" id="preview-NEW_INDEX"></div>
+
+    <!-- ファイル入力 -->
+    <label for="expense_tagged_images_attributes_NEW_INDEX_image">画像</label>
+    <div class="file-center-wrapper">
+      <input type="file"
+             name="expense[tagged_images_attributes][NEW_INDEX][image]"
+             id="expense_tagged_images_attributes_NEW_INDEX_image"
+             class="form-button image-input"
+             data-preview-target="preview-NEW_INDEX">
+    </div>
+
+    <!-- タグ入力 -->
+    <label>タグ</label>
+    <div class="tag-input-wrapper" data-index="NEW_INDEX" data-removed-auto-tags="">
+      <div class="tags"></div>
+      <input type="text" class="tag-input form-control" placeholder="タグを入力">
+      <input type="hidden"
+             name="expense[tagged_images_attributes][NEW_INDEX][tag_list]"
+             id="expense_tagged_images_attributes_NEW_INDEX_tag_list"
+             class="hidden-tag-input">
+      <input type="hidden"
+             name="expense[tagged_images_attributes][NEW_INDEX][removed_auto_tags]"
+             id="expense_tagged_images_attributes_NEW_INDEX_removed_auto_tags"
+             class="removed-auto-tags-input">
+    </div>
+    <small class="tag-hint">※タグはEnter・カンマ・スペースで追加できます</small>
+
+    <button type="button" class="form-button delete delete-image-button">削除</button>
+  </div>
+</template>
+
+
+
     </div>
   </div>
 
   <!-- 右ページ -->
   <div class="page">
     <h2>Information</h2>
-
     <% if @expense && @expense.errors.any? %>
       <div class="error-messages">
         <ul>
@@ -118,14 +160,9 @@
       <li><span class="info-title">日付</span>支出のあった日を選択してください。</li>
       <li><span class="info-title">金額</span>支出を入力してください。</li>
       <li><span class="info-title">カテゴリ</span>支出のカテゴリを選択してください。</li>
-      <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
-      <li><span class="info-title">カテゴリ追加</span>10個まで自由にカテゴリを追加することができます。</li>
-      <li><span class="info-title">メモ</span>自由に記述することができます。</li>
+      <li><span class="info-title">メモ</span>自由に記述できます。</li>
       <li><span class="info-title">画像</span>画像のアップロードができます。</li>
-      <li><span class="info-title">画像＋タグ</span>画像を登録すると、登録月とカテゴリ名から自動タグがつきます。</li>
-      <li><span class="info-title">画像＋タグ</span>カンマ区切りで自由にタグ付けも可能です。</li>
-      <li><span class="info-title">画像を追加</span>画像を追加で、複数枚アップロードができます。</li>
-      <li><span class="info-title">入力方法</span>日付、金額、カテゴリは未入力だと登録できません。</li>
+      <li><span class="info-title">画像＋タグ</span>新規画像には自動でタグ（カテゴリと月）が付きます。編集時の既存画像には追加されません。</li>
     </ul>
   </div>
 </div>

@@ -109,7 +109,7 @@
      <h2><%= @date.strftime("%Y年%m月") %>の家計簿</h2>
   <!-- 今月の収支 -->
   <div class="show-box ">
-  <div class="income-box">
+  <div class="balance-box">
     <h3>収入</h3>
     <% if @incomes.any? %>
       <ul>
@@ -140,7 +140,7 @@
     <% end %>
   </div>
 
-  <div class="income-box">
+  <div class="balance-box">
     <h3>支出</h3>
     <% if @expenses.any? %>
       <ul>
@@ -171,6 +171,76 @@
   </div>
   </div>
 
-  
+<!-- 月間集計セクション -->
+<div class="summary-box <%= @balance >= 0 ? 'summary-positive' : 'summary-negative' %>">
+<h3 class="summary-heading">今月の集計</h3>
+<div class="summary-row">
+<div class="summary-item">
+  <div class="summary-label">収入</div>
+  <div class="summary-value balance-positive">＋¥<%= number_with_delimiter(@total_income) %></div>
+</div>
+  <div class="summary-item">
+    <div class="summary-label">支出</div>
+    <div class="summary-value balance-negative">－¥<%= number_with_delimiter(@total_expense) %></div>
   </div>
+ <div class="summary-item">
+  <div class="summary-label">合計</div>
+  <div class="summary-value <%= @balance >= 0 ? 'balance-positive' : 'balance-negative' %>">
+    <%= @balance >= 0 ? "＋" : "－" %>¥<%= number_with_delimiter(@balance.abs) %>
+  </div>
+</div>
+</div>
+</div>
+<div class="show-box ">
+  <div class="balance-box">
+    <h2>今月のカテゴリ別収入</h2>
+    <ul>
+<% if @income_summary.present? %>
+  <% @income_summary.to_a.each_with_index do |(category, amount), index| %>
+    <% rank_class = case index
+      when 0 then "rank-1"
+      when 1 then "rank-2"
+      when 2 then "rank-3"
+      else "rank-default"
+    end %>
+
+    <div class="category-box <%= rank_class %>">
+      <span class="rank-number">No.<%= index + 1 %></span>
+      <span class="category-name"><%= category %></span>
+      <span class="category-amount"><%= number_to_currency(amount, unit: "円") %></span>
+    </div>
+  <% end %>
+<% else %>
+  <p>収入データがありません。</p>
+<% end %>
+    </ul>
+  </div>
+  <div class="balance-box">
+  <h2>今月のカテゴリ別支出</h2>
+    <ul>
+  <% if @expense_summary.present? %>
+  <% @expense_summary.to_a.each_with_index do |(category, amount), index| %>
+    <% rank_class = case index
+      when 0 then "expense-rank-1"
+      when 1 then "expense-rank-2"
+      when 2 then "expense-rank-3"
+      else "expense-rank-default"
+    end %>
+
+    <div class="category-box <%= rank_class %>">
+      <span class="rank-number">No.<%= index + 1 %></span>
+      <span class="category-name"><%= category %></span>
+      <span class="category-amount"><%= number_to_currency(amount, unit: "円") %></span>
+    </div>
+  <% end %>
+<% else %>
+  <p>支出データがありません。</p>
+<% end %>
+    </ul>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
 </div>

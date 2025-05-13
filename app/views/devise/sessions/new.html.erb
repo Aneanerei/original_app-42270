@@ -4,18 +4,24 @@
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="field">
-    <%= f.label :email %><br />
+    <div>
+    <%= f.label :email %>
+    </div>
     <%= f.email_field :email, autofocus: true, autocomplete: "email",class: "user-input" %>
   </div>
 
   <div class="field">
-    <%= f.label :password %><br />
+    <div>
+    <%= f.label :password %>
+    </div>
     <%= f.password_field :password, autocomplete: "current-password",class: "user-input" %>
   </div>
 
   <% if devise_mapping.rememberable? %>
     <div class="field">
+      <div>
       <%= f.check_box :remember_me %>
+      </div>
       <%= f.label :remember_me, "ログイン状態を保持する", class: "remember-label" %>
     </div>
   <% end %>

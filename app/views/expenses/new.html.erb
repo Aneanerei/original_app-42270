@@ -11,19 +11,14 @@
   </div>
 </div>
 
-
 <!-- ✅ 支出カテゴリ操作モーダル -->
 <div id="expense-category-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-
-    <!-- フォーム切替ボタン -->
     <div class="form-toggle-buttons">
       <button type="button" id="show-expense-add-form" class="form-button">＋カテゴリ追加</button>
       <button type="button" id="show-expense-edit-form" class="form-button edit">✎ カテゴリ編集</button>
       <button type="button" id="show-expense-delete-form" class="form-button delete">− カテゴリ削除</button>
     </div>
-
-    <!-- ✅ カテゴリ追加フォーム -->
     <div id="expense-add-form" class="category-form-section">
       <%= form_with model: @category_expense, url: category_expenses_path, local: true, data: { turbo: false } do |f| %>
         <%= hidden_field_tag :from_modal, true %>
@@ -36,13 +31,10 @@
         </div>
       <% end %>
     </div>
-
-    <!-- ✅ カテゴリ編集フォーム -->
     <div id="expense-edit-form" class="category-form-section" style="display: none;">
       <h4>カテゴリ名を変更</h4>
       <% system_categories = current_user.category_expenses.where(user_id: nil) %>
       <% user_categories = current_user.category_expenses.where.not(user_id: nil) %>
-
       <%= form_with url: update_selected_category_expenses_path, method: :patch, local: true do %>
         <div class="form-group">
           <%= label_tag :category_id, "編集したいカテゴリ" %>
@@ -62,13 +54,10 @@
         </div>
       <% end %>
     </div>
-
-    <!-- ✅ カテゴリ削除フォーム -->
     <div id="expense-delete-form" class="category-form-section" style="display: none;">
       <h4>カテゴリを選んで削除</h4>
       <% system_categories = current_user.category_expenses.where(user_id: nil) %>
       <% user_categories = current_user.category_expenses.where.not(user_id: nil) %>
-
       <%= form_with url: delete_selected_category_expenses_path, method: :delete, local: true, html: { id: "expense-delete-form" } do %>
         <div class="form-group">
           <%= label_tag :category_id, "削除したいカテゴリ" %>
@@ -84,70 +73,59 @@
         </div>
       <% end %>
     </div>
-
-    <!-- ✅ 閉じる -->
     <div class="form-close-button">
       <button type="button" id="close-expense-category-modal" class="form-button">閉じる</button>
     </div>
   </div>
 </div>
 
- <% if flash[:alert] %>
+<% if flash[:alert] %>
   <div class="error-messages">
     <ul>
       <li><%= flash[:alert] %></li>
     </ul>
   </div>
 <% end %>
- <% if flash[:notice] %>
+<% if flash[:notice] %>
   <div class="notice-messages">
     <ul>
       <li><%= flash[:notice] %></li>
     </ul>
   </div>
 <% end %>
- <div class="book">
-  <!-- 左ページ -->
-  <div class="page left-page"> 
-     
-   <%= render 'shared/book_style_layout' %>
 
-   <div class="tab-content"> 
-  <h2>支出登録</h2>
-  <%= render 'expenses/form' %>
-   </div>
- </div>
-  <!-- 右ページ -->
+<div class="book">
+  <div class="page left-page">
+    <%= render 'shared/book_style_layout' %>
+    <div class="tab-content">
+      <h2>支出登録</h2>
+      <%= render 'expenses/form' %>
+    </div>
+  </div>
   <div class="page">
     <h2>Information</h2>
-
-<% if @expense && @expense.errors.any? %>
-    <div class="error-messages">
-      <ul>
-        <% @expense.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+    <% if @expense && @expense.errors.any? %>
+      <div class="error-messages">
+        <ul>
+          <% @expense.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
     <ul>
-  <li><span class="info-title">日付</span>支出のあった日を選択してください。</li>
-  <li><span class="info-title">金額</span>支出を入力してください。</li>
-  <li><span class="info-title">カテゴリ</span>支出のカテゴリを選択してください。</li>
-  <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
-  <li><span class="info-title">カテゴリ追加</span>10個まで自由にカテゴリを追加することができます。</li>
-  <li><span class="info-title">メモ</span>自由に記述することができます。</li>
-  <li><span class="info-title">画像</span>1度に5枚まで画像のアップロードができます。</li>
-  <li><span class="info-title">画像＋タグ</span>画像を登録すると、登録月とカテゴリ名から自動タグがつきます。</li>
-  <li><span class="info-title">画像＋タグ</span>カンマ区切りで自由にタグ付けも可能です。</li>
-  <li><span class="info-title">画像を追加</span>画像を追加で、複数枚アップロードができます。</li>
-  <li><span class="info-title">入力方法</span>日付、金額、カテゴリは未入力だと登録できません。</li>
-
+      <li><span class="info-title">日付</span>支出のあった日を選択してください。</li>
+      <li><span class="info-title">金額</span>支出を入力してください。</li>
+      <li><span class="info-title">カテゴリ</span>支出のカテゴリを選択してください。</li>
+      <li><span class="info-title">カテゴリ追加</span>クリックすると入力欄が表示されます。</li>
+      <li><span class="info-title">カテゴリ追加</span>10個まで自由にカテゴリを追加することができます。</li>
+      <li><span class="info-title">メモ</span>300文字以内で自由にメモを残すことができます。</li>
+      <li><span class="info-title">画像</span>1度に5枚まで画像のアップロードができます。</li>
+      <li><span class="info-title">画像＋タグ</span>画像を登録すると、登録月とカテゴリ名から自動タグがつきます。</li>
+      <li><span class="info-title">画像＋タグ</span>自動タグは黄色で表示され、不要な場合は×を押すと削除できます。</li>
+      <li><span class="info-title">画像＋タグ</span>好きな単語を入力し、エンターで自由にタグ付けも可能です。</li>
+      <li><span class="info-title">画像を追加</span>画像を追加で、複数枚アップロードができます。</li>
+      <li><span class="info-title">入力方法</span>日付、金額、カテゴリは未入力だと登録できません。</li>
     </ul>
   </div>
 </div>
-
- 
-
-

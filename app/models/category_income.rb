@@ -7,8 +7,9 @@ class CategoryIncome < ApplicationRecord
 
   before_destroy :prevent_deletion_of_default_categories
   validates :name,
-   presence: { message: "を入力してください" },
-  uniqueness: { scope: :user_id, message: "はすでに存在しています" }
+    presence: { message: "を入力してください" },
+    uniqueness: { scope: :user_id, message: "はすでに存在しています" },
+    length: { maximum: 20 }
   validate :category_limit, on: :create
 
   

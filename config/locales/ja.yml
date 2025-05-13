@@ -10,7 +10,6 @@ ja:
         amount: 金額
         category_income_id: 収入カテゴリ名
         name: カテゴリ名
-        amount: 金額
         category_work_time: 労働カテゴリ名
       category_income:
         name: カテゴリ名
@@ -19,3 +18,10 @@ ja:
       work_time:
         minutes: 時間
         :category_work_time_id: 労働カテゴリ名 
+      expense:
+        category_expense: 支出カテゴリ名
+        amount: 金額
+        category_expense_id: 支出カテゴリ名
+        name: カテゴリ名
+      category_expense:
+        name: カテゴリ名

@@ -3,11 +3,8 @@ class ExpensesController < ApplicationController
 
   def new
     @expense = current_user.expenses.new
-    @category_expense = current_user.category_expenses.build
-    @category_expenses = CategoryExpense.where(user_id: nil)
-      .or(CategoryExpense.where(user_id: current_user.id))
-      .order(:id)
-    @expense.tagged_images.build
+    prepare_form_data
+    ensure_tagged_images
   end
 
   def create
@@ -17,44 +14,39 @@ class ExpensesController < ApplicationController
     if @expense.save
       redirect_to root_path, notice: "支出を登録しました"
     else
-      prepare_form_for(:new)
+      prepare_form_data
+      ensure_tagged_images
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @category_expenses = CategoryExpense.where(user_id: nil)
-      .or(CategoryExpense.where(user_id: current_user.id))
-      .order(:id)
-    @expense.tagged_images.build if @expense.tagged_images.empty?
+    prepare_form_data
+    ensure_tagged_images
   end
 
-  def update
-    # タグ再付与は新規画像が含まれているときのみ
-    if params[:expense][:tagged_images_attributes].present?
-      category_tag = CategoryExpense.find_by(id: expense_params[:category_expense_id])&.name
-      month_tag = "#{expense_params[:date].to_date.month}月" rescue nil
+ def update
+  if @expense.update(expense_params)
+    # 削除が反映されたあと、残った画像に対してタグ更新する
+    @expense.tagged_images.each do |image|
+      next if image.marked_for_destruction?
 
-      if category_tag || month_tag
-        @expense.tagged_images.each do |image|
-          next unless image.image.attached?
+      submitted_attrs = expense_params[:tagged_images_attributes]&.values&.find { |h| h[:id].to_s == image.id.to_s }
+      next unless submitted_attrs
 
-          if image.image.attachment&.created_at.present? && image.image.attachment.created_at >= 5.seconds.ago
-            image.tag_list.add(month_tag) if month_tag.present? && !image.tag_list.include?(month_tag)
-            image.tag_list.add(category_tag) if category_tag.present? && !image.tag_list.include?(category_tag)
-          end
-        end
-      end
+      new_tags = submitted_attrs[:tag_list].to_s.split(",").map(&:strip).reject(&:blank?)
+      image.tag_list = new_tags
+      image.save!
     end
 
-    if @expense.update(expense_params)
-      redirect_to root_path, notice: "支出を更新しました"
-    else
-      @category_expenses = CategoryExpense.where(user_id: nil)
-        .or(CategoryExpense.where(user_id: current_user.id)).order(:id)
-      render :edit, status: :unprocessable_entity
-    end
+    redirect_to root_path, notice: "支出を更新しました"
+  else
+    prepare_form_data
+    ensure_tagged_images
+    render :edit, status: :unprocessable_entity
   end
+end
+
 
   def destroy
     @expense.destroy
@@ -67,10 +59,20 @@ class ExpensesController < ApplicationController
     @expense = current_user.expenses.find(params[:id])
   end
 
+  def prepare_form_data
+    @category_expense = current_user.category_expenses.build
+    @category_expenses = CategoryExpense.where(user_id: nil)
+      .or(CategoryExpense.where(user_id: current_user.id)).order(:id)
+  end
+
+  def ensure_tagged_images
+    @expense.tagged_images.build if @expense.tagged_images.empty?
+  end
+
   def expense_params
     params.require(:expense).permit(
-      :date, :amount, :category_expense_id, :memo,
-      tagged_images_attributes: [:id, :image, :tag_list, :_destroy]
+      :date, :amount, :memo, :category_expense_id,
+      tagged_images_attributes: [:id, :image, :tag_list, :removed_auto_tags, :_destroy]
     )
   end
 
@@ -83,17 +85,16 @@ class ExpensesController < ApplicationController
     expense.tagged_images.each do |image|
       next unless image.image.attached?
 
-      if image.image.attachment&.created_at.present? && image.image.attachment.created_at >= 5.seconds.ago
-        image.tag_list.add(month_tag) if month_tag.present? && !image.tag_list.include?(month_tag)
-        image.tag_list.add(category_tag) if category_tag.present? && !image.tag_list.include?(category_tag)
+      removed = (image.removed_auto_tags || "").split(",").map(&:strip)
+
+      if newly_uploaded?(image.image.attachment)
+        image.tag_list.add(month_tag) if month_tag.present? && !removed.include?(month_tag)
+        image.tag_list.add(category_tag) if category_tag.present? && !removed.include?(category_tag)
       end
     end
   end
 
-  def prepare_form_for(action)
-    @category_expense = current_user.category_expenses.build
-    @category_expenses = CategoryExpense.where(user_id: nil)
-      .or(CategoryExpense.where(user_id: current_user.id)).order(:id)
-    @expense.tagged_images.build if @expense.tagged_images.empty?
+  def newly_uploaded?(attachment)
+    attachment.created_at.present? && attachment.created_at >= 10.seconds.ago
   end
 end

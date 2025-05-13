@@ -1,0 +1,158 @@
+<!-- タグ管理モーダル（使用タグ一覧も統合） -->
+<div id="tag-admin-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <h3>タグの管理</h3>
+    <input type="text" id="tag-admin-search" placeholder="タグ検索..." class="form-control">
+    <div id="tag-admin-list" class="tag-admin-list">
+      <% @my_tags.each do |tag| %>
+        <div class="tag-admin-item" data-name="<%= tag.name %>">
+          <%= link_to "#{tag.name}（#{tag.count}回）", albums_path(tag: tag.name), class: "tag-name-link" %>
+          <button class="rename-tag-btn" data-id="<%= tag.id %>" data-name="<%= tag.name %>">✎</button>
+          <button class="delete-tag-btn" data-id="<%= tag.id %>">🗑</button>
+        </div>
+      <% end %>
+    </div>
+    <button id="close-tag-admin" class="form-button">閉じる</button>
+  </div>
+</div>
+
+<!-- 削除モーダル Step 1：警告 -->
+<div id="tag-delete-warning-modal" class="delete-modal-overlay">
+  <div class="delete-modal-box">
+    <p id="tag-warning-message" class="tag-delete-message"></p>
+    <div class="modal-buttons">
+      <button id="proceed-to-confirm" class="form-button delete">次へ</button>
+      <button id="cancel-tag-warning" class="form-button cancel">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- 削除モーダル Step 2：最終確認 -->
+<div id="tag-delete-confirm-modal" class="delete-modal-overlay">
+  <div class="delete-modal-box">
+    <p class="important-warning">本当に削除しますか？</p>
+    <div class="modal-buttons">
+      <button id="confirm-tag-delete-yes" class="form-button delete">削除する</button>
+      <button id="confirm-tag-delete-no" class="form-button cancel">やめる</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- 編集モーダル Step 1：警告と入力 -->
+<div id="tag-rename-warning-modal" class="rename-modal-overlay">
+  <div class="rename-modal-box">
+    <p id="tag-rename-warning-message" class="rename-message"></p>
+    <input type="text" id="tag-rename-input" class="rename-input" />
+    <div class="modal-buttons">
+      <button id="proceed-to-rename-confirm" class="form-button rename-proceed-button">次へ</button>
+      <button id="cancel-tag-rename" class="form-button cancel">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- 編集モーダル Step 2：最終確認 -->
+<div id="tag-rename-confirm-modal" class="rename-modal-overlay">
+  <div class="rename-modal-box">
+    <p class="important-warning">本当に変更しますか？</p>
+    <div class="modal-buttons">
+      <button id="confirm-tag-rename-yes" class="form-button rename-proceed-button">変更する</button>
+      <button id="confirm-tag-rename-no" class="form-button cancel">やめる</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="book">
+
+  <!-- 左ページ -->
+  <div class="page left-page"><%= render 'shared/book_style_layout' %>
+    <div class="album-left">
+
+      <!-- 検索フォームとタグ一覧 -->
+      <div class="album-header">
+        <h2>アルバム</h2>
+        <%= form_with url: albums_path, method: :get, local: true do |f| %>
+          <%= f.text_field :search, placeholder: "タグ検索...", value: params[:search], class: "album-search-input" %>
+          <%= f.submit "検索", class: "album-search-button" %>
+        <% end %>
+        <div class="popular-tags">
+        <button id="open-tag-admin" class="form-button"> 🏷️タグ一覧・管理</button>
+
+          <h3>人気タグ</h3>
+          <div class="popular-tags-list">
+          <%= link_to "すべて", albums_path, class: "album-tag #{'active' if params[:tag].blank? || params[:tag] == 'すべて'}" %>
+          <% @popular_tags.each do |tag| %>
+            <%= link_to "#{tag.name} (#{tag.count})", albums_path(tag: tag.name), class: "popular-tag-link" %>
+          <% end %>
+        </div>
+      </div>
+
+
+      <!-- 左ページ：画像 0〜3 -->
+      <div class="album-grid-left">
+        <% images = @tagged_images %>
+        <% [0, 1, 2, 3].each do |i| %>
+          <% img = images[i] %>
+          <% break if img.nil? %>
+          <div class="album-card <%= 'no-memo' if img.memo.blank? %>">
+            <div class="album-image">
+              <%= image_tag img.image, class: "album-photo" if img.image.attached? %>
+            </div>
+            <% if img.memo.present? %>
+              <div class="album-memo"><%= simple_format(h(img.memo)) %></div>
+            <% else %>
+              <div class="album-memo empty"></div>
+            <% end %>
+            <div class="album-meta-inline">
+              📅 <%= img.date.present? ? img.date.strftime("%Y/%m/%d") : img.created_at.strftime("%Y/%m/%d") %>
+              <% if img.tag_list.present? %>
+                &nbsp;&nbsp;🏷️ <%= img.tag_list.join(" / ") %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+   </div>
+    </div>
+  </div>
+
+  <!-- 右ページ -->
+  <div class="page right-page">
+    <div class="album-right">
+      <div class="album-grid-right">
+        <% [4, 5, 6, 7, 8, 9].each do |i| %>
+          <% img = images[i] %>
+          <% break if img.nil? %>
+          <div class="album-card <%= 'no-memo' if img.memo.blank? %>">
+            <div class="album-image">
+              <%= image_tag img.image, class: "album-photo" if img.image.attached? %>
+            </div>
+            <% if img.memo.present? %>
+              <div class="album-memo"><%= simple_format(h(img.memo)) %></div>
+            <% else %>
+              <div class="album-memo empty"></div>
+            <% end %>
+            <div class="album-meta-inline">
+              📅 <%= img.date.present? ? img.date.strftime("%Y/%m/%d") : img.created_at.strftime("%Y/%m/%d") %>
+              <% if img.tag_list.present? %>
+                &nbsp;&nbsp;🏷️ <%= img.tag_list.join(" / ") %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- ページネーション -->
+<div class="album-pagination">
+  <%= link_to "← 前", albums_path(page: @tagged_images.prev_page), class: "album-page-link" if @tagged_images.prev_page %>
+  <span>ページ <%= @tagged_images.current_page %> / <%= @tagged_images.total_pages %></span>
+  <%= link_to "次 →", albums_path(page: @tagged_images.next_page), class: "album-page-link" if @tagged_images.next_page %>
+</div>

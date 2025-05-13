@@ -11,7 +11,8 @@ class CategoryExpense < ApplicationRecord
 
   validates :name,
     presence: { message: "を入力してください" },
-    uniqueness: { scope: :user_id, message: "はすでに存在しています" }
+    uniqueness: { scope: :user_id, message: "はすでに存在しています" },
+    length: { maximum: 20 }
 
   validate :user_category_limit, on: :create
 
