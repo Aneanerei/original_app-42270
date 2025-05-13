@@ -1,6 +1,6 @@
 <!-- タグ管理モーダル（使用タグ一覧も統合） -->
-<div id="tag-admin-modal" class="tag-admin-modal" style="display: none;">
-  <div class="tag-admin-content">
+<div id="tag-admin-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
     <h3>タグの管理</h3>
     <input type="text" id="tag-admin-search" placeholder="タグ検索..." class="form-control">
     <div id="tag-admin-list" class="tag-admin-list">
@@ -16,10 +16,62 @@
   </div>
 </div>
 
+<!-- 削除モーダル Step 1：警告 -->
+<div id="tag-delete-warning-modal" class="delete-modal-overlay">
+  <div class="delete-modal-box">
+    <p id="tag-warning-message" class="tag-delete-message"></p>
+    <div class="modal-buttons">
+      <button id="proceed-to-confirm" class="form-button delete">次へ</button>
+      <button id="cancel-tag-warning" class="form-button cancel">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- 削除モーダル Step 2：最終確認 -->
+<div id="tag-delete-confirm-modal" class="delete-modal-overlay">
+  <div class="delete-modal-box">
+    <p class="important-warning">本当に削除しますか？</p>
+    <div class="modal-buttons">
+      <button id="confirm-tag-delete-yes" class="form-button delete">削除する</button>
+      <button id="confirm-tag-delete-no" class="form-button cancel">やめる</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- 編集モーダル Step 1：警告と入力 -->
+<div id="tag-rename-warning-modal" class="rename-modal-overlay">
+  <div class="rename-modal-box">
+    <p id="tag-rename-warning-message" class="rename-message"></p>
+    <input type="text" id="tag-rename-input" class="rename-input" />
+    <div class="modal-buttons">
+      <button id="proceed-to-rename-confirm" class="form-button rename-proceed-button">次へ</button>
+      <button id="cancel-tag-rename" class="form-button cancel">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- 編集モーダル Step 2：最終確認 -->
+<div id="tag-rename-confirm-modal" class="rename-modal-overlay">
+  <div class="rename-modal-box">
+    <p class="important-warning">本当に変更しますか？</p>
+    <div class="modal-buttons">
+      <button id="confirm-tag-rename-yes" class="form-button rename-proceed-button">変更する</button>
+      <button id="confirm-tag-rename-no" class="form-button cancel">やめる</button>
+    </div>
+  </div>
+</div>
+
+
+
+
 <div class="book">
+
   <!-- 左ページ -->
   <div class="page left-page"><%= render 'shared/book_style_layout' %>
     <div class="album-left">
+
       <!-- 検索フォームとタグ一覧 -->
       <div class="album-header">
         <h2>アルバム</h2>
@@ -28,7 +80,7 @@
           <%= f.submit "検索", class: "album-search-button" %>
         <% end %>
         <div class="popular-tags">
-        <button id="open-tag-admin" class="form-button">🏷️ タグ一覧・管理</button>
+        <button id="open-tag-admin" class="form-button"> 🏷️タグ一覧・管理</button>
 
           <h3>人気タグ</h3>
           <div class="popular-tags-list">
@@ -38,6 +90,7 @@
           <% end %>
         </div>
       </div>
+
 
       <!-- 左ページ：画像 0〜3 -->
       <div class="album-grid-left">
@@ -63,10 +116,10 @@
           </div>
         <% end %>
       </div>
-
+   </div>
     </div>
   </div>
- </div>
+
   <!-- 右ページ -->
   <div class="page right-page">
     <div class="album-right">
@@ -94,6 +147,8 @@
       </div>
     </div>
   </div>
+
+</div>
 </div>
 <!-- ページネーション -->
 <div class="album-pagination">

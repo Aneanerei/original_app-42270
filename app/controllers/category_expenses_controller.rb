@@ -11,6 +11,7 @@ class CategoryExpensesController < ApplicationController
       @category_expenses = CategoryExpense.where(user_id: nil)
                                 .or(CategoryExpense.where(user_id: current_user.id))
                                 .order(:id)
+       flash.now[:alert] = "カテゴリの追加に失敗しました"
       render 'expenses/new', status: :unprocessable_entity
     end
   end

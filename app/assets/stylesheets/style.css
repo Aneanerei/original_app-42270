@@ -263,7 +263,7 @@ a {
   box-sizing: border-box;
 }
 
-.income-box {
+.balance-box {
   width: 270px;
   max-height: 300px;
   overflow-y: auto;
@@ -273,31 +273,31 @@ a {
   border-radius: 8px;
 }
 
-.income-box::-webkit-scrollbar {
+.balance-box::-webkit-scrollbar {
   width: 8px;
 }
 
-.income-box::-webkit-scrollbar-track {
+.balance-box::-webkit-scrollbar-track {
   background: #fdfdfd; 
 }
 
-.income-box::-webkit-scrollbar-thumb {
+.balance-box::-webkit-scrollbar-thumb {
   background: rgba(206, 202, 230, 0.4);
   border-radius: 4px;
 }
 
-.income-box ul {
+.balance-box ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.income-box li {
+.balance-box-box li {
   padding: 5px 0;
   border-bottom: 1px dotted #ccc; 
 }
 
-.income-input {
+.balance-box-input {
   width: 100%;
   max-width: 500px;
   box-sizing: border-box;
@@ -1308,4 +1308,245 @@ label, input, select, textarea {
 }
 .tag-admin-list::-webkit-scrollbar-thumb:hover {
   background: #2ca8d6;
+}
+.important-warning {
+  color: #d9534f;
+}
+.tag-name-highlight {
+    color: #d9534f;
+}
+/* ========== オーバーレイ（共通） ========== */
+.rename-modal-overlay,
+.delete-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+/* ========== 編集モーダル専用 ========== */
+.rename-modal-box {
+  background: #fff;
+  padding: 2em;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.rename-input {
+  width: 100%;
+  padding: 0.5em;
+  margin: 1em 0;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.rename-message {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.rename-proceed-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.rename-proceed-button:hover {
+  background-color: #3e8e41;
+}
+
+/* ========== 削除モーダル専用 ========== */
+.delete-modal-box {
+  background: white;
+  padding: 1.2em;
+  border-radius: 8px;
+  max-width: 320px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.tag-delete-message {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.important-warning {
+  color: red;
+  font-weight: bold;
+  margin-top: 0.5em;
+}
+
+/* ========== 共通ボタンスタイル ========== */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 0.5em 1em;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.form-button.delete {
+  background-color: #d9534f;
+  color: white;
+}
+
+.form-button.delete:hover {
+  background-color: #c9302c;
+}
+
+.form-button.cancel {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* ========== 集計 ========== */
+.summary-box {
+  width: 540px;
+  height: 180px;
+  margin-top: 10px;
+  padding: 1em 1.5em;
+  background: #f5f9ff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+.summary-box h3 {
+  margin-bottom: 10px;
+  color: #000000;
+  font-size: 1.2rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5em;
+  padding: 1em 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.summary-item {
+  text-align: center;
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 1rem;
+  margin-bottom: 0.3em;
+}
+
+.summary-value {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.balance-positive {
+  color: #007bff; /* ========== 青 ========== */
+}
+
+.balance-negative {
+  color: #d9534f; /* ========== 赤 ========== */
+}
+
+.summary-heading {
+  font-size: 1.2rem;
+  color: #000;
+  margin: 0.5em 0 0.3em 0; /* ========== 上下の余白を狭く ========== */
+  text-align: center;
+}
+
+/* ========== 黒字（収支がプラス）の背景色：水色 ========== */
+.summary-positive {
+  background-color: #e6f4ff;
+}
+
+/* ========== 赤字（収支がマイナス）の背景色：赤色 ========== */
+.summary-negative {
+  background-color: #ffeaea;
+}
+
+/* ========== ランキング ========== */
+.category-box {
+  font-weight: 600;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rank-1 {
+  background: linear-gradient(135deg, #fff8dc, #ffd700, #ffcc00);
+  font-size: 1.2em;
+  font-weight: 700;
+  border: 2px solid #ffc107;
+}
+
+.rank-2 {
+  background: linear-gradient(135deg, #ffffff, #d3d3d3, #a9a9a9);
+  font-size: 1.1em;
+  font-weight: 600;
+  border: 2px solid #adb5bd;
+}
+
+.rank-3 {
+  background: linear-gradient(135deg, #ffefde, #d2a679, #b87333);
+  font-size: 1.05em;
+  font-weight: 600;
+  border: 2px solid #bb8f15;
+}
+
+.rank-default {
+  background-color: #ffffff;
+  font-size: 1em;
+  border: 1px solid #ccc;
+}
+/* 支出ランキングカラー */
+.expense-rank-1 {
+  background-color: #ffadad; /* 薄い赤系（強調） */
+  font-size: 1.2em;
+  font-weight: 700;
+  border: 2px solid #9e3641;
+}
+
+.expense-rank-2 {
+  background-color: #ffe3bb; /* 薄いオレンジ系 */
+  font-size: 1.1em;
+  font-weight: 600;
+  border: 2px solid #ffba65;
+}
+
+.expense-rank-3 {
+  background-color: #fff7bc; /* 薄い黄色系 */
+  font-size: 1.05em;
+  font-weight: 600;
+  border: 2px solid #ffe07c;
+}
+
+.expense-rank-default {
+  background-color: #ffffff;
+  font-size: 1em;
+  border: 1px solid #ccc;
+}
+
+.rank-number {
+  font-size: 1.1em;
+  margin-right: 10px;
 }

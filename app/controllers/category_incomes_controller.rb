@@ -17,7 +17,7 @@ class CategoryIncomesController < ApplicationController
       @category_work_times = CategoryWorkTime.where(user_id: nil)
         .or(CategoryWorkTime.where(user_id: current_user.id))
         .order(:id)
-
+      flash.now[:alert] = "カテゴリの追加に失敗しました"
       render 'incomes/new', status: :unprocessable_entity
     end
   end

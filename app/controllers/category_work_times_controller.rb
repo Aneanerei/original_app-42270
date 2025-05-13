@@ -3,11 +3,11 @@ class CategoryWorkTimesController < ApplicationController
 
   def create
     @category_work_time = current_user.category_work_times.build(category_work_time_params)
-
     if @category_work_time.save
       redirect_to determine_redirect_path, notice: "カテゴリを追加しました"
     else
       prepare_common_variables
+      flash.now[:alert] = "カテゴリの追加に失敗しました"
       render determine_render_template, status: :unprocessable_entity
     end
   end
