@@ -159,8 +159,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_13_031714) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "report"
     t.integer "category_work_time_id", null: false
+    t.text "report"
     t.index ["user_id"], name: "index_work_times_on_user_id"
   end
 
