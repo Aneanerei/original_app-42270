@@ -12,14 +12,11 @@ document.addEventListener("turbo:load", () => {
   const maxTagLength = 20;
   const maxTagCount = 10;
 
-  const normalizeTag = (tag) =>
-    tag.trim()
-      .replace(/[！-～]/g, s =>
-        String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
-      )
-      .replace(/[ー－]/g, "-")
-      .replace(/[、，]/g, ",")
-      .replace(/\s/g, "");
+ const normalizeTag = (tag) =>
+  tag.trim()
+    .replace(/[Ａ-Ｚａ-ｚ０-９]/g, s =>
+      String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
+    );
 
   const getTags = (wrapper) =>
     Array.from(wrapper.querySelectorAll(".tag-badge")).map(el =>

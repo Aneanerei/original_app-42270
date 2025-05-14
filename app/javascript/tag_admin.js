@@ -12,12 +12,12 @@ document.addEventListener("turbo:load", () => {
     adminModal.style.display = "none";
   });
 
-  // 全角→半角変換（英数字・記号）
+  // 全角→半角変換（英数字）
   function normalizeToHalfWidth(str) {
-    return str.replace(/[Ａ-Ｚａ-ｚ０-９！＠＃＄％＆（）ー－＝＋：；？’”“［］｛｝＜＞／＼]/g, (s) =>
-      String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
-    );
-  }
+  return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) =>
+    String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
+  );
+}
 
   // タグ検索フィルター
   const input = document.getElementById("tag-admin-search");

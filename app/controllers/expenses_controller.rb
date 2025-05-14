@@ -27,7 +27,6 @@ class ExpensesController < ApplicationController
 
  def update
   if @expense.update(expense_params)
-    # 削除が反映されたあと、残った画像に対してタグ更新する
     @expense.tagged_images.each do |image|
       next if image.marked_for_destruction?
 

@@ -30,30 +30,38 @@
   <% end %>
   </div>
 
-  <!-- カレンダー表示 -->
+<!-- カレンダー表示 -->
 <div class="calendar-wrapper">
-  <%= month_calendar start_date: @date do |date| %>
-    <div>
-      <%= date.day %>
-      <% if @grouped_incomes[date] %>
-        <% total_income = @grouped_incomes[date].sum(&:amount) %>
-        <div class="income">+<%= number_with_delimiter(total_income) %>円</div>
-      <% end %>
-      
-      <% if @grouped_expenses[date] %>
-        <% total_income = @grouped_expenses[date].sum(&:amount) %>
-        <div class="expense">-<%= number_with_delimiter(total_income) %>円</div>
-      <% end %>
-      
-      <% if @grouped_work_times[date] %>
-        <% total_minutes = @grouped_work_times[date].sum(&:minutes) %>
-        <% total_hours = (total_minutes / 60.0).round(2) %>
-        <div class="labor">🕒 <%= total_hours %>h</div>
-        
+  <%= month_calendar start_date: @date, start_day: :sunday do |date| %>
+    <% is_outside = date.month != @date.month %>
+    <% wday_class = "wday-#{date.wday}" %>
+    <% holiday = @holidays[date] %>
+
+    <div class="<%= [wday_class, ("holiday" if holiday), ("empty-day" if is_outside)].compact.join(' ') %> calendar-day">
+      <% unless is_outside %>
+        <div class="date-number"><%= date.day %></div>
+
+        <% if @grouped_incomes[date] %>
+          <% total_income = @grouped_incomes[date].sum(&:amount) %>
+          <div class="income">+<%= number_with_delimiter(total_income) %>円</div>
+        <% end %>
+
+        <% if @grouped_expenses[date] %>
+          <% total_expense = @grouped_expenses[date].sum(&:amount) %>
+          <div class="expense">-<%= number_with_delimiter(total_expense) %>円</div>
+        <% end %>
+
+        <% if @grouped_work_times[date] %>
+          <% total_minutes = @grouped_work_times[date].sum(&:minutes) %>
+          <% total_hours = (total_minutes / 60.0).round(2) %>
+          <div class="labor">🕒 <%= total_hours %>h</div>
+        <% end %>
       <% end %>
     </div>
   <% end %>
 </div>
+
+
 
 <!-- カスタムモーダル -->
 <div id="customDeleteModal" class="custom-modal">
@@ -66,68 +74,130 @@
   </div>
 </div>
 
+
+
 <div class="goal-main">
-<div class="work-box">
-  <div class="small-heading">今月の労働時間一覧</div>
-  <% if @work_times.any? %>
-  <ul class="worktime-list">
-    <% @work_times.each do |work_time| %>
-      <li>
-        <%= work_time.date.strftime('%m/%d') %> :
-       <span class="category-label">
-  <%= work_time.category_work_time&.name || '未設定' %>
-</span>
-        /<%= (work_time.minutes / 60.0).round(2) %>h
-   
+  <div class="goal-box-row">
+    <!-- 左：労働時間一覧 -->
+    <div class="goal-box work-box">
+      <div class="small-heading">今月の労働時間一覧</div>
+      <% if @work_times.any? %>
+        <ul class="worktime-list">
+          <% @work_times.each do |work_time| %>
+            <li>
+              <%= work_time.date.strftime('%m/%d') %> :
+              <span class="category-label">
+                <%= work_time.category_work_time&.name || '未設定' %>
+              </span>
+              /<%= (work_time.minutes / 60.0).round(2) %>h
 
-  <div class="tooltip-wrapper">
-    <%= form_with url: work_time_path(work_time), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
-      <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
-        ×<span class="tooltip-text">削除</span>
-      </button>
-    <% end %>
-  </div>
-
-  <div class="tooltip-wrapper">
-    <%= link_to edit_work_time_path(work_time), class: "edit-link-button" do %>
-      <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
-    <% end %>
-  </div>
-       <% end %>
-  </ul>
-  <% else %>
-  <p>今月の労働時間は登録されていません。</p>
-  <% end %>
-  </div>
-  </div> 
-  </div>
- 
-
-<div class="work-box">
-
-<div class="goal-meter">
-  <h3>収入目標達成率</h3>
-  <div class="meter-outer">
-    <div class="meter-bar income" style="width: <%= @income_progress %>%;">
-      <%= @income_progress %>%（<%= number_to_currency(@income_total) %> / <%= number_to_currency(@income_goal) %>）
+              <div class="tooltip-wrapper">
+                <%= form_with url: work_time_path(work_time), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+                  <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+                    ×<span class="tooltip-text">削除</span>
+                  </button>
+                <% end %>
+              </div>
+              <div class="tooltip-wrapper">
+                <%= link_to edit_work_time_path(work_time), class: "edit-link-button" do %>
+                  <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>今月の労働時間は登録されていません。</p>
+      <% end %>
     </div>
-    <div class="meter-marker-100"></div>
+
+    <!-- 右：目標設定と金額表示 -->
+  <div class="goal-box work-box">
+  <div class="goal-setting-button-wrapper left-align">
+    <button type="button" onclick="openGoalModal()" class="goal-setting-button">
+      📈 目標を設定する
+    </button>
   </div>
+
+  <p class="goal-info highlight-goal">
+    <span class="goal-font">収入目標：</span><span class="goal-amount"><%= number_to_currency(@income_goal) %></span>
+  </p>
+  <p class="goal-info highlight-goal">
+    <span class="goal-font">貯金目標：</span><span class="goal-amount"><%= number_to_currency(@savings_goal) %></span>
+  </p>
+</div>
+</div>
 </div>
 
-<div class="goal-meter">
-  <h3>貯金目標達成率</h3>
-  <div class="meter-outer">
-    <div class="meter-bar saving" style="width: <%= @savings_progress %>%;">
-      <%= @savings_progress %>%（<%= number_to_currency(@actual_saving) %> / <%= number_to_currency(@savings_goal) %>）
+
+<!-- ✅ HTML 全体セット（収入・貯金メーター） -->
+<div class="goal-meter-container">
+  <!-- ▼ 収入目標メーター -->
+  <div class="goal-meter-box">
+    <div class="goal-label">
+      <span class="goal-font">収入目標達成率</span>
+      <div>
+        <span class="goal-font-set">現在の収入：<%= number_to_currency(@income_total) %></span>
+      </div>
+      <% if @income_goal.nil? %>
+        <span class="goal-message goal-unset">目標が設定されていません</span>
+      <% elsif @income_remaining > 0 %>
+        <span class="goal-message goal-remaining">
+          あと <%= number_to_currency(@income_remaining) %>（残り <%= @days_left %>日）
+        </span>
+      <% else %>
+        <span class="goal-message goal-achieved">
+          🎉 達成済（+<%= number_to_currency(@income_total - @income_goal) %>）
+        </span>
+      <% end %>
     </div>
-    <div class="meter-marker-100"></div>
+
+    <div class="meter-container">
+      <div class="meter-outer">
+        <div class="meter-bar income"
+             data-percent="<%= @income_progress %>"
+             data-max="<%= @income_meter_max %>">
+        </div>
+        <div class="meter-label">0%</div>
+      </div>
+      <div class="meter-scale" data-max="<%= @income_meter_max %>"></div>
+    </div>
+  </div>
+
+  <!-- ▼ 貯金目標メーター -->
+  <div class="goal-meter-box">
+    <div class="goal-label">
+      <span class="goal-font">貯金目標達成率</span>
+      <div>
+        <span class="goal-font-set">今月の貯金額：<%= number_to_currency(@actual_saving) %></span>
+      </div>
+      <% if @savings_goal.nil? %>
+        <span class="goal-message goal-unset">目標が設定されていません</span>
+      <% elsif @savings_remaining > 0 %>
+        <span class="goal-message goal-remaining">
+          あと <%= number_to_currency(@savings_remaining) %>（残り <%= @days_left %>日）
+        </span>
+      <% else %>
+        <span class="goal-message goal-achieved">
+          🎉 達成済（+<%= number_to_currency(@actual_saving - @savings_goal) %>）
+        </span>
+      <% end %>
+    </div>
+
+    <div class="meter-container">
+      <div class="meter-outer">
+        <div class="meter-bar saving"
+             data-percent="<%= @savings_progress %>"
+             data-max="<%= @savings_meter_max %>">
+        </div>
+        <div class="meter-label">0%</div>
+      </div>
+      <div class="meter-scale" data-max="<%= @savings_meter_max %>"></div>
+    </div>
   </div>
 </div>
-
- </div>
- </div>
-
+</div>
+</div>
 
 
 
@@ -276,24 +346,29 @@
 </div>
 </div>
 <!-- 目標設定モーダル -->
-<div id="goal-modal" class="modal-overlay" style="display: none;">
+<!-- 月次目標設定モーダル -->
+<div id="goal-modal" class="goal-modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h2>今月の目標設定</h2>
+    <h2><%= @selected_year %>年<%= @selected_month %>月の目標を設定</h2>
 
     <%= form_with model: MonthlyGoal.new, url: monthly_goals_path, local: true do |f| %>
-      <%= hidden_field_tag :year, Date.today.year %>
-      <%= hidden_field_tag :month, Date.today.month %>
+      <!-- 表示中の年月を hidden で送信 -->
+      <%= hidden_field_tag "monthly_goal[year]", @selected_year %>
+      <%= hidden_field_tag "monthly_goal[month]", @selected_month %>
 
+      <!-- 収入目標 -->
       <div class="form-group">
         <%= f.label :income_goal, "収入目標額" %>
-        <%= f.number_field :income_goal, class: "form-control" %>
+        <%= f.number_field :income_goal, class: "form-control", value: @monthly_goal&.income_goal %>
       </div>
 
+      <!-- 貯金目標 -->
       <div class="form-group">
         <%= f.label :savings_goal, "貯金目標額" %>
-        <%= f.number_field :savings_goal, class: "form-control" %>
+        <%= f.number_field :savings_goal, class: "form-control", value: @monthly_goal&.savings_goal %>
       </div>
 
+      <!-- ボタン群 -->
       <div class="form-actions">
         <%= f.submit "保存", class: "form-submit" %>
         <button type="button" onclick="closeGoalModal()" class="form-button">キャンセル</button>

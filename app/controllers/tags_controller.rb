@@ -26,8 +26,7 @@ class TagsController < ApplicationController
   private
 
   # 全角英数字記号を半角に変換するメソッド
-  def normalize(str)
-    str.to_s.tr('ａ-ｚＡ-Ｚ０-９！＠＃＄％＆（）ー－＝＋：；？’”“［］｛｝＜＞／＼', 
-                'a-zA-Z0-9!@#$%&()-=+:;?\'"\"[]{}<>/\\')
-  end
+ def normalize(str)
+  str.to_s.unicode_normalize(:nfkc)
+end
 end
