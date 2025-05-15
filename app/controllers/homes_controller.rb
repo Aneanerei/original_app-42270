@@ -72,6 +72,18 @@ class HomesController < ApplicationController
     @days_left = [(end_date - today).to_i + 1, 1].max
     @income_daily_target = @income_remaining.positive? ? (@income_remaining / @days_left.to_f).ceil : 0
     @savings_daily_target = @savings_remaining.positive? ? (@savings_remaining / @days_left.to_f).ceil : 0
+ 
+ 
+    @worktime_summary = current_user.work_times
+      .where(date: month_start..month_end)
+      .joins(:category_work_time)
+      .group("category_work_times.name")
+      .sum(:minutes)
+
+ 
+ 
+ 
+ 
   end
 
   private

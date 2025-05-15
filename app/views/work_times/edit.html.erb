@@ -9,49 +9,38 @@
 <div class="tab-content"> 
 <h2>労働時間の編集</h2>
 
-   <%= form_with model: @work_time, local: true do |f| %>
-    <div class="form-group">
-      <div>
-      <%= f.label :date, "日付" %>
-      </div>
-      <%= f.date_field :date, value: Date.today, class: "form-control" %>
-    </div>
-    
-   <div class="form-group">
-       <div>
-        <%= f.label :category_work_time_id, "カテゴリ" %><br>
-       </div>
-        <%= f.select :category_work_time_id,
-        @category_work_times.map { |c| [c.name, c.id] },
-       { prompt: "選択してください" },
-       class: "form-control" %>
-   </div>
+<%= form_with model: @work_time, local: true do |f| %>
+  <div class="form-group">
+    <%= f.label :date, "日付" %>
+    <%= f.date_field :date, class: "form-control" %>
+  </div>
 
-   <div class="form-group">
-      <div>
-      <%= label_tag :labor_hour, "労働時間（時間）" %>
-      </div>
-      <%= number_field_tag :labor_hour, nil, class: "form-control", min: 0 %>
-    </div>
+  <div class="form-group">
+    <%= f.label :category_work_time_id, "カテゴリ" %>
+    <%= f.select :category_work_time_id,
+      @category_work_times.map { |c| [c.name, c.id] },
+      { prompt: "選択してください" },
+      class: "form-control" %>
+  </div>
 
-    <div class="form-group">
-      <div>
-      <%= label_tag :labor_minute, "労働時間（分）" %>
-      </div>
-      <%= number_field_tag :labor_minute, nil, class: "form-control", min: 0, max: 59 %>
-    </div>
+<div class="form-group">
+  <%= label_tag :labor_hour, "労働時間（時間）" %>
+  <%= number_field_tag :labor_hour, @labor_hour, class: "form-control", min: 0 %>
+</div>
 
-    <div class="form-group">
-      <div>
-      <%= f.label :report, "作業日報（任意）" %>
-      </div>
-      <%= f.text_area :report, class: "form-control" %>
-    </div>
+<div class="form-group">
+  <%= label_tag :labor_minute, "労働時間（分）" %>
+  <%= number_field_tag :labor_minute, @labor_minute, class: "form-control", min: 0, max: 59 %>
+</div>
 
-    <div class="form-group">
-      <%= f.submit "更新する", class: "form-submit" %>
-    </div>
-  <% end %>
+  <div class="form-group">
+    <%= f.label :report, "作業日報（任意）" %>
+    <%= f.text_area :report, class: "form-control" %>
+  </div>
+
+  <%= f.submit "更新する", class: "form-submit" %>
+<% end %>
+
 
   <div class="form-group">
     <%= link_to "戻る", root_path, class: "form-control", role: "button" %>

@@ -76,10 +76,57 @@
 
 
 
-<div class="goal-main">
-  <div class="goal-box-row">
-    <!-- 左：労働時間一覧 -->
-    <div class="goal-box work-box">
+  <div class="work-goal-box">
+  <div class="goal-left">
+    <div class="balance-box">
+      <h4>今月のカテゴリ別労働時間</h4>
+      <% if @worktime_summary.present? %>
+        <% @worktime_summary.to_a.sort_by { |_, minutes| -minutes }.each_with_index do |(category, minutes), index| %>
+          <% rank_class = case index
+            when 0 then "worktime-rank-1"
+            when 1 then "worktime-rank-2"
+            when 2 then "worktime-rank-3"
+            else "worktime-rank-default"
+          end %>
+          <% hours = minutes.to_f / 60 %>
+          <div class="category-box <%= rank_class %>">
+            <span class="rank-number">No.<%= index + 1 %></span>
+            <span class="category-name"><%= category %></span>
+            <span class="category-amount"><%= "#{hours.round(1)}h" %></span>
+          </div>
+        <% end %>
+        <% total_minutes = @worktime_summary.values.sum %>
+        <% total_hours = total_minutes.to_f / 60 %>
+        <div class="category-total">合計：<%= "#{total_hours.round(1)}h" %></div>
+      <% else %>
+        <p>労働時間のデータがありません。</p>
+      <% end %>
+    </div>
+  </div>
+
+
+
+
+<div class="right-box">
+    <!-- 目標設定 -->
+    <div class="goal-box-right">
+      <div class="goal-setting-button-wrapper left-align">
+        <button type="button" onclick="openGoalModal()" class="goal-setting-button">
+          📈 目標を設定する
+        </button>
+      </div>
+      <p class="goal-info highlight-goal">
+        <span class="goal-font">収入目標：</span><span class="goal-amount"><%= number_to_currency(@income_goal) %></span>
+      </p>
+      <p class="goal-info highlight-goal">
+        <span class="goal-font">貯金目標：</span><span class="goal-amount"><%= number_to_currency(@savings_goal) %></span>
+      </p>
+   </div>
+
+
+
+    <!-- 今月の労働時間一覧 -->
+    <div class="worktime-list-box">
       <div class="small-heading">今月の労働時間一覧</div>
       <% if @work_times.any? %>
         <ul class="worktime-list">
@@ -110,24 +157,111 @@
         <p>今月の労働時間は登録されていません。</p>
       <% end %>
     </div>
-
-    <!-- 右：目標設定と金額表示 -->
-  <div class="goal-box work-box">
-  <div class="goal-setting-button-wrapper left-align">
-    <button type="button" onclick="openGoalModal()" class="goal-setting-button">
-      📈 目標を設定する
-    </button>
   </div>
 
-  <p class="goal-info highlight-goal">
-    <span class="goal-font">収入目標：</span><span class="goal-amount"><%= number_to_currency(@income_goal) %></span>
-  </p>
-  <p class="goal-info highlight-goal">
-    <span class="goal-font">貯金目標：</span><span class="goal-amount"><%= number_to_currency(@savings_goal) %></span>
-  </p>
+
+
+
 </div>
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+  <!-- 右ページ -->
+  <div class="page">
+     <h2><%= @date.strftime("%Y年%m月") %>の家計簿</h2>
+  <!-- 今月の収支 -->
+  <div class="show-box ">
+  <div class="balance-box">
+    <h4>収入</h4>
+    <% if @incomes.any? %>
+      <ul>
+        <% @incomes.each do |income| %>
+          <li><%= income.date.strftime("%m/%d") %>：<%= income.category_income&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(income.amount) %>
+   
+   <div class="tooltip-wrapper">
+   <!-- 削除ボタン -->
+   <%= form_with url: income_path(income), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+      ×<span class="tooltip-text">削除</span>
+    </button>
+    <% end %>
+   </div>  
+  
+   <!-- 編集ボタン -->
+   <div class="tooltip-wrapper">
+   <%= link_to edit_income_path(income), class: "edit-link-button" do %> 
+  <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
+   <% end %>
+  </div>  
+
+      </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>この月の収入はありません。</p>
+    <% end %>
+  </div>
+
+  <div class="balance-box">
+    <h4>支出</h4>
+    <% if @expenses.any? %>
+      <ul>
+        <% @expenses.each do |expense| %>
+          <li><%= expense.date.strftime("%m/%d") %>：<%= expense.category_expense&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(expense.amount) %>
+      <div class="tooltip-wrapper">
+   
+   <!-- 削除ボタン -->
+   <%= form_with url: expense_path(expense), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
+    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+      ×<span class="tooltip-text">削除</span>
+   </button>
+    <% end %>
+   </div>       
+   
+   <!-- 編集ボタン -->
+   <div class="tooltip-wrapper">
+   <%= link_to edit_expense_path(expense), class: "edit-link-button" do %> 
+  <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
+   <% end %>
+  </div>          
+      </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>この月の支出はありません。</p>
+    <% end %>
+  </div>
+  </div>
+
+<!-- 月間集計セクション -->
+<div class="summary-box <%= @balance >= 0 ? 'summary-positive' : 'summary-negative' %>">
+<h3 class="summary-heading">今月の集計</h3>
+<div class="summary-row">
+<div class="summary-item">
+  <div class="summary-label">収入</div>
+  <div class="summary-value balance-positive">＋¥<%= number_with_delimiter(@total_income) %></div>
+</div>
+  <div class="summary-item">
+    <div class="summary-label">支出</div>
+    <div class="summary-value balance-negative">－¥<%= number_with_delimiter(@total_expense) %></div>
+  </div>
+ <div class="summary-item">
+  <div class="summary-label">合計</div>
+  <div class="summary-value <%= @balance >= 0 ? 'balance-positive' : 'balance-negative' %>">
+    <%= @balance >= 0 ? "＋" : "－" %>¥<%= number_with_delimiter(@balance.abs) %>
+  </div>
+</div>
+</div>
+</div>
+
 
 
 <!-- ✅ HTML 全体セット（収入・貯金メーター） -->
@@ -140,7 +274,7 @@
         <span class="goal-font-set">現在の収入：<%= number_to_currency(@income_total) %></span>
       </div>
       <% if @income_goal.nil? %>
-        <span class="goal-message goal-unset">目標が設定されていません</span>
+        <span class="goal-message goal-unset">目標が設定されていません。</span>
       <% elsif @income_remaining > 0 %>
         <span class="goal-message goal-remaining">
           あと <%= number_to_currency(@income_remaining) %>（残り <%= @days_left %>日）
@@ -172,7 +306,7 @@
         <span class="goal-font-set">今月の貯金額：<%= number_to_currency(@actual_saving) %></span>
       </div>
       <% if @savings_goal.nil? %>
-        <span class="goal-message goal-unset">目標が設定されていません</span>
+        <span class="goal-message goal-unset">目標が設定されていません。</span>
       <% elsif @savings_remaining > 0 %>
         <span class="goal-message goal-remaining">
           あと <%= number_to_currency(@savings_remaining) %>（残り <%= @days_left %>日）
@@ -196,105 +330,13 @@
     </div>
   </div>
 </div>
-</div>
-</div>
 
 
 
 
-
-
-
-  <!-- 右ページ -->
-  <div class="page">
-     <h2><%= @date.strftime("%Y年%m月") %>の家計簿</h2>
-  <!-- 今月の収支 -->
-  <div class="show-box ">
+<div class="rank-box">
   <div class="balance-box">
-    <h3>収入</h3>
-    <% if @incomes.any? %>
-      <ul>
-        <% @incomes.each do |income| %>
-          <li><%= income.date.strftime("%m/%d") %>：<%= income.category_income&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(income.amount) %>
-   
-   <div class="tooltip-wrapper">
-   <!-- 削除ボタン -->
-   <%= form_with url: income_path(income), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
-    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
-      ×<span class="tooltip-text">削除</span>
-    </button>
-    <% end %>
-   </div>  
-  
-   <!-- 編集ボタン -->
-   <div class="tooltip-wrapper">
-   <%= link_to edit_income_path(income), class: "edit-link-button" do %> 
-  <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
-   <% end %>
-  </div>  
-
-      </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>この月の収入はありません</p>
-    <% end %>
-  </div>
-
-  <div class="balance-box">
-    <h3>支出</h3>
-    <% if @expenses.any? %>
-      <ul>
-        <% @expenses.each do |expense| %>
-          <li><%= expense.date.strftime("%m/%d") %>：<%= expense.category_expense&.name || "カテゴリ" %> / ¥<%= number_with_delimiter(expense.amount) %>
-      <div class="tooltip-wrapper">
-   
-   <!-- 削除ボタン -->
-   <%= form_with url: expense_path(expense), method: :delete, html: { class: "delete-form", style: "display: inline;" } do %>
-    <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
-      ×<span class="tooltip-text">削除</span>
-   </button>
-    <% end %>
-   </div>       
-   
-   <!-- 編集ボタン -->
-   <div class="tooltip-wrapper">
-   <%= link_to edit_expense_path(expense), class: "edit-link-button" do %> 
-  <span class="mirrored-icon">✎</span><span class="tooltip-text">編集</span>
-   <% end %>
-  </div>          
-      </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>この月の支出はありません</p>
-    <% end %>
-  </div>
-  </div>
-
-<!-- 月間集計セクション -->
-<div class="summary-box <%= @balance >= 0 ? 'summary-positive' : 'summary-negative' %>">
-<h3 class="summary-heading">今月の集計</h3>
-<div class="summary-row">
-<div class="summary-item">
-  <div class="summary-label">収入</div>
-  <div class="summary-value balance-positive">＋¥<%= number_with_delimiter(@total_income) %></div>
-</div>
-  <div class="summary-item">
-    <div class="summary-label">支出</div>
-    <div class="summary-value balance-negative">－¥<%= number_with_delimiter(@total_expense) %></div>
-  </div>
- <div class="summary-item">
-  <div class="summary-label">合計</div>
-  <div class="summary-value <%= @balance >= 0 ? 'balance-positive' : 'balance-negative' %>">
-    <%= @balance >= 0 ? "＋" : "－" %>¥<%= number_with_delimiter(@balance.abs) %>
-  </div>
-</div>
-</div>
-</div>
-<div class="show-box ">
-  <div class="balance-box">
-    <h2>今月のカテゴリ別収入</h2>
+    <h4>今月のカテゴリ別収入</h4>
     <ul>
 <% if @income_summary.present? %>
   <% @income_summary.to_a.each_with_index do |(category, amount), index| %>
@@ -305,11 +347,13 @@
       else "rank-default"
     end %>
 
-    <div class="category-box <%= rank_class %>">
-      <span class="rank-number">No.<%= index + 1 %></span>
-      <span class="category-name"><%= category %></span>
-      <span class="category-amount"><%= number_to_currency(amount, unit: "円") %></span>
-    </div>
+
+     <li class="category-box <%= rank_class %>">
+          <span class="rank-number">No.<%= index + 1 %></span>
+          <span class="category-name"><%= category %></span>
+          <span class="category-amount"><%= number_to_currency(amount, unit: "円") %></span>
+        </li>
+
   <% end %>
 <% else %>
   <p>収入データがありません。</p>
@@ -317,7 +361,7 @@
     </ul>
   </div>
   <div class="balance-box">
-  <h2>今月のカテゴリ別支出</h2>
+  <h4>今月のカテゴリ別支出</h4>
     <ul>
   <% if @expense_summary.present? %>
   <% @expense_summary.to_a.each_with_index do |(category, amount), index| %>
@@ -328,11 +372,11 @@
       else "expense-rank-default"
     end %>
 
-    <div class="category-box <%= rank_class %>">
-      <span class="rank-number">No.<%= index + 1 %></span>
-      <span class="category-name"><%= category %></span>
-      <span class="category-amount"><%= number_to_currency(amount, unit: "円") %></span>
-    </div>
+   <li class="category-box <%= rank_class %>">
+          <span class="rank-number">No.<%= index + 1 %></span>
+          <span class="category-name"><%= category %></span>
+          <span class="category-amount"><%= number_to_currency(amount, unit: "円") %></span>
+        </li>
   <% end %>
 <% else %>
   <p>支出データがありません。</p>
@@ -340,6 +384,16 @@
     </ul>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
 
 </div>
 </div>
