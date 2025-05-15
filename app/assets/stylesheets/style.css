@@ -307,10 +307,16 @@ a {
 
 .show-box {
   width: 540px;
-  height: 300px;
+  height: 200px;
   display: flex;
 
 }
+.rank-box {
+  width: 540px;
+  height: 200px;
+  display: flex;
+}
+
 
 .form-group {
   font-family: 'Kiwi Maru', serif;
@@ -814,6 +820,8 @@ label, input, select, textarea {
   justify-content: center;
   align-items: center;
 }
+
+
 /* 編集ボタン */
 .edit-link-button {
   border: none;
@@ -1483,104 +1491,109 @@ label, input, select, textarea {
 }
 
 .balance-positive {
-  color: #007bff; /* ========== 青 ========== */
+  color: #007bff; 
 }
 
 .balance-negative {
-  color: #d9534f; /* ========== 赤 ========== */
+  color: #d9534f; 
 }
 
 .summary-heading {
   font-size: 1.2rem;
   color: #000;
-  margin: 0.5em 0 0.3em 0; /* ========== 上下の余白を狭く ========== */
+  margin: 0.5em 0 0.3em 0; 
   text-align: center;
 }
 
-/* ========== 黒字（収支がプラス）の背景色：水色 ========== */
 .summary-positive {
   background-color: #e6f4ff;
 }
 
-/* ========== 赤字（収支がマイナス）の背景色：赤色 ========== */
 .summary-negative {
   background-color: #ffeaea;
 }
 
-/* ========== ランキング ========== */
 .category-box {
   font-weight: 600;
   padding: 10px;
   margin-bottom: 8px;
   border-radius: 6px;
-  background-color: #f8f9fa;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-.rank-1 {
+li.category-box.rank-1 {
   background: linear-gradient(135deg, #fff8dc, #ffd700, #ffcc00);
-  font-size: 1.2em;
+  font-size: 20px;
   font-weight: 700;
   border: 2px solid #ffc107;
 }
 
-.rank-2 {
+li.category-box.rank-2 {
   background: linear-gradient(135deg, #ffffff, #d3d3d3, #a9a9a9);
-  font-size: 1.1em;
+  font-size: 18px;
   font-weight: 600;
   border: 2px solid #adb5bd;
 }
 
-.rank-3 {
+li.category-box.rank-3 {
   background: linear-gradient(135deg, #ffefde, #d2a679, #b87333);
-  font-size: 1.05em;
+  font-size: 16px;
   font-weight: 600;
   border: 2px solid #bb8f15;
 }
 
-.rank-default {
+li.category-box.rank-default {
   background-color: #ffffff;
-  font-size: 1em;
+  font-size: 15px;
   border: 1px solid #ccc;
 }
+
 /* 支出ランキングカラー */
-.expense-rank-1 {
-  background-color: #ffadad; /* 薄い赤系（強調） */
-  font-size: 1.2em;
+li.category-box.expense-rank-1 {
+  background-color: #ffadad;
+  font-size: 20px;
   font-weight: 700;
   border: 2px solid #9e3641;
 }
 
-.expense-rank-2 {
-  background-color: #ffe3bb; /* 薄いオレンジ系 */
-  font-size: 1.1em;
+li.category-box.expense-rank-2 {
+  background-color: #ffe3bb; 
+  font-size: 18px;
   font-weight: 600;
   border: 2px solid #ffba65;
 }
 
-.expense-rank-3 {
-  background-color: #fff7bc; /* 薄い黄色系 */
-  font-size: 1.05em;
+li.category-box.expense-rank-3 {
+  background-color: #fff7bc;
+  font-size: 16px;
   font-weight: 600;
   border: 2px solid #ffe07c;
 }
 
-.expense-rank-default {
+li.category-box.expense-rank-default {
   background-color: #ffffff;
-  font-size: 1em;
+  font-size: 15px;
   border: 1px solid #ccc;
 }
 
 .rank-number {
-  font-size: 1.1em;
+  font-size: 15px;
   margin-right: 10px;
+}
+
+.category-name {
+  font-size: 15px;
+}
+
+.category-amount {
+  font-size: 15px;
 }
 
 /* --- レイアウト --- */
 .goal-main {
   width: 100%;
+  display: flex;
 }
 
 .goal-box-row {
@@ -1865,3 +1878,134 @@ label, input, select, textarea {
   color: #666;
   white-space: nowrap;
 }
+
+.goal-work {
+  display: flex;
+  flex-direction: column;
+}
+
+.goal-main-two-column {
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* 左：カテゴリ別 */
+.goal-left-column {
+  width: 38%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 右：目標 + 一覧 */
+.goal-right-column {
+  width: 58%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 各ボックス共通スタイル */
+.worktime-summary-box,
+.work-goal-box,
+.worktime-list-box {
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  font-size: 14px;
+}
+
+/* カテゴリ別の中身 */
+.worktime-summary-box h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+.category-box {
+  background-color: #f9f9f9;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.category-total {
+  text-align: right;
+  margin-top: 12px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* 目標設定 */
+.work-goal-box {
+  text-align: center;
+  display: flex;
+}
+.work-goal-box .goal-setting-button {
+  background-color: transparent;
+  border: 2px solid #86a8f1;
+  color: #111274;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 10px;
+}
+.work-goal-box .goal-setting-button:hover {
+  background-color: #d5ebff;
+}
+.work-goal-box p {
+  font-size: 14px;
+  margin: 6px 0;
+}
+
+.goal-box-right {
+  width: 220px;
+
+}
+
+/* 一覧部分 */
+.worktime-list-box .small-heading {
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.worktime-list-box ul {
+  padding-left: 0;
+  margin: 0;
+}
+.worktime-list-box li {
+  list-style: none;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.worktime-list-box {
+  width: 220px;
+  margin-top: 5px;
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  max-height: 150px;
+  overflow-y: auto; 
+}
+
+.right-box {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+

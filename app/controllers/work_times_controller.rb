@@ -3,9 +3,7 @@ class WorkTimesController < ApplicationController
 
   def new
     @work_time = current_user.work_times.new
-    @category_work_times = CategoryWorkTime.where(user_id: nil)
-      .or(CategoryWorkTime.where(user_id: current_user.id))
-      .order(:id)
+    @category_work_times = load_category_work_times
   end
 
   def create
@@ -17,36 +15,29 @@ class WorkTimesController < ApplicationController
     @work_time.minutes = total_minutes
 
     if @work_time.save
-      redirect_to root_path, notice: "労働時間を登録しました"
+      if params[:from_income_modal].present?
+        redirect_to new_income_path, notice: "労働時間を登録しました"
+      else
+        redirect_to root_path, notice: "労働時間を登録しました"
+      end
     else
-      if params[:from_modal].present?
+      @category_work_times = load_category_work_times
+
+      if params[:from_income_modal].present?
+        # incomes/new に必要な変数を再設定
         @income = current_user.incomes.new
         @category_income = current_user.category_incomes.build
-        @category_incomes = CategoryIncome.where(user_id: nil)
-          .or(CategoryIncome.where(user_id: current_user.id))
-          .order(:id)
-
-        @category_work_times = CategoryWorkTime.where(user_id: nil)
-          .or(CategoryWorkTime.where(user_id: current_user.id))
-          .order(:id)
+        @category_incomes = load_category_incomes
 
         render 'incomes/new', status: :unprocessable_entity
       else
-        @category_work_times = CategoryWorkTime.where(user_id: nil)
-          .or(CategoryWorkTime.where(user_id: current_user.id))
-          .order(:id)
-
         render :new, status: :unprocessable_entity
       end
     end
   end
 
   def edit
-    @work_time = current_user.work_times.find(params[:id])
-    @category_work_times = CategoryWorkTime.where(user_id: nil)
-      .or(CategoryWorkTime.where(user_id: current_user.id))
-      .order(:id)
-  
+    @category_work_times = load_category_work_times
     @labor_hour = @work_time.minutes / 60
     @labor_minute = @work_time.minutes % 60
   end
@@ -60,10 +51,7 @@ class WorkTimesController < ApplicationController
     if @work_time.update(work_time_params)
       redirect_to root_path, notice: "労働時間を更新しました"
     else
-      @category_work_times = CategoryWorkTime.where(user_id: nil)
-        .or(CategoryWorkTime.where(user_id: current_user.id))
-        .order(:id)
-
+      @category_work_times = load_category_work_times
       render :edit, status: :unprocessable_entity
     end
   end
@@ -74,7 +62,6 @@ class WorkTimesController < ApplicationController
   end
 
   private
-  
 
   def set_work_time
     @work_time = current_user.work_times.find(params[:id])
@@ -82,5 +69,13 @@ class WorkTimesController < ApplicationController
 
   def work_time_params
     params.require(:work_time).permit(:date, :minutes, :report, :category_work_time_id)
+  end
+
+  def load_category_work_times
+    CategoryWorkTime.where(user_id: nil).or(CategoryWorkTime.where(user_id: current_user.id)).order(:id)
+  end
+
+  def load_category_incomes
+    CategoryIncome.where(user_id: nil).or(CategoryIncome.where(user_id: current_user.id)).order(:id)
   end
 end

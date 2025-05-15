@@ -110,8 +110,7 @@
   <div class="modal-content-work">
     
     <%= form_with model: @work_time, url: work_times_path, local: true, data: { turbo: false } do |f| %>
-      <%= hidden_field_tag :from_modal, true %>
-
+      <%= hidden_field_tag :from_income_modal, true %>
       <div class="form-group">
         <div>
         <%= f.label :date, "日付" %>
