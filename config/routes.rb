@@ -47,4 +47,6 @@ Rails.application.routes.draw do
   # 目標メーター設定
   resources :monthly_goals, only: [:create]
 
+  resources :analyses, only: [:index]
+
 end

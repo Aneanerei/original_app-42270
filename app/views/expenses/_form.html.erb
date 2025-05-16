@@ -53,7 +53,7 @@
 
             <!-- ファイル入力 -->
             <%= tf.label :image, "画像(任意)", for: "expense_tagged_images_attributes_#{preview_index}_image" %>
-            <%= tf.file_field :image, class: "form-button image-input", data: { preview_target: "preview-#{preview_index}" }, id: "expense_tagged_images_attributes_#{preview_index}_image" %>
+            <%= tf.file_field :image, class: "form-button image-input file-small", data: { preview_target: "preview-#{preview_index}" }, id: "expense_tagged_images_attributes_#{preview_index}_image" %>
 
             <!-- タグ入力 -->
             <label>タグ</label>
@@ -107,7 +107,7 @@
       <input type="file"
              name="expense[tagged_images_attributes][NEW_INDEX][image]"
              id="expense_tagged_images_attributes_NEW_INDEX_image"
-             class="form-button image-input"
+             class="form-button image-input file-small"
              data-preview-target="preview-NEW_INDEX">
     </div>
 

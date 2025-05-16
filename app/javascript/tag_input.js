@@ -126,32 +126,43 @@ document.addEventListener("turbo:load", () => {
       }
     });
   }
+function initImagePreview(input, previewId, group) {
+  const preview = document.getElementById(previewId);
+  const wrapper = group.querySelector(".tag-input-wrapper");
+  const filenameEl = group.querySelector(`[data-filename-target="${previewId}"]`);
 
-  function initImagePreview(input, previewId, group) {
-    const preview = document.getElementById(previewId);
-    const wrapper = group.querySelector(".tag-input-wrapper");
-    if (!input || !preview || !wrapper) return;
+  if (!input || !preview || !wrapper) return;
 
-    input.addEventListener("change", () => {
-      const file = input.files[0];
-      if (file) {
-        preview.innerHTML = "";
-        const img = document.createElement("img");
-        img.src = URL.createObjectURL(file);
-        img.className = "preview-image";
-        preview.appendChild(img);
+  input.addEventListener("change", () => {
+    const file = input.files[0];
+    if (file) {
+      // プレビュー画像
+      preview.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.className = "preview-image";
+      preview.appendChild(img);
 
-        group.setAttribute("data-has-image", "true");
-        initTagInput(wrapper);
-        applyAutoTags(group);
-      } else {
-        group.removeAttribute("data-has-image");
-        preview.innerHTML = "";
-        wrapper.querySelector(".tags").innerHTML = "";
-        wrapper.querySelector(".hidden-tag-input").value = "";
+      // ファイル名表示
+      if (filenameEl) {
+        filenameEl.textContent = file.name;
       }
-    });
-  }
+
+      group.setAttribute("data-has-image", "true");
+      initTagInput(wrapper);
+      applyAutoTags(group);
+    } else {
+      group.removeAttribute("data-has-image");
+      preview.innerHTML = "";
+      if (filenameEl) {
+        filenameEl.textContent = "";
+      }
+      wrapper.querySelector(".tags").innerHTML = "";
+      wrapper.querySelector(".hidden-tag-input").value = "";
+    }
+  });
+}
+
 
   function handleDelete(e) {
     const group = e.target.closest(".tagged-image-group");

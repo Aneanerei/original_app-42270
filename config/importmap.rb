@@ -15,3 +15,7 @@ pin "tag_input", to:"tag_input.js"
 pin "tag_admin", to:"tag_admin.js"
 pin "goal_modal", to:"goal_modal.js"
 pin "goal-meter", to:"goal-meter.js"
+pin "chartkick", to: "chartkick.js"
+pin "Chart.bundle", to: "Chart.bundle.js"
+pin "analysis", to: "analysis.js"
+

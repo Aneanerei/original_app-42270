@@ -1,0 +1,344 @@
+<div class="book">
+  <!-- 左ページ：分析メニュー -->
+  <div class="page left-page">
+        <%= render 'shared/book_style_layout' %>
+            <div class="left-menu">
+<div class="analysis-sidebar">
+  <h3 class="menu-title">📊 分析メニュー</h3>
+
+  <!-- 年度選択 -->
+  <div class="year-select-wrapper">
+    <%= form_with url: analyses_path, method: :get, local: true do %>
+      <label for="year" class="year-label">分析年度</label>
+      <%= select_tag :year, options_for_select((2020..2100).to_a, @year), class: "year-select" %>
+      <%= submit_tag "表示", class: "year-submit" %>
+    <% end %>
+  </div>
+
+  <!-- 収支分析グループ -->
+  <div class="menu-group">
+    <div class="group-title">💰 収支分析</div>
+    <button type="button" data-target="analysis-income" class="analysis-button active">収入分析</button>
+    <button type="button" data-target="analysis-expense" class="analysis-button">支出分析</button>
+    <button type="button" data-target="analysis-savings" class="analysis-button">貯金分析</button>
+  </div>
+
+  <!-- 労働分析グループ -->
+  <div class="menu-group">
+    <div class="group-title">🛠 労働分析</div>
+    <button type="button" data-target="analysis-total-summary" class="analysis-button">総労働データ</button>
+    <button type="button" data-target="analysis-category-stats" class="analysis-button">カテゴリ別統計</button>
+    <button type="button" data-target="analysis-ratio" class="analysis-button">年間割合</button>
+  </div>
+</div>
+  </div>
+
+
+
+ <!-- 右：分析概要 -->
+    <div class="analysis-description">
+      <h4 class="desc-title">分析概要</h4>
+      <p id="analysis-desc-text">
+        選択した分析内容の概要がここに表示されます。
+      </p>
+    </div>
+
+  </div>
+
+
+
+
+
+  <!-- 右ページ：分析表示 -->
+  <div class="page right-page">
+
+    <!-- 収入分析 -->
+    <div class="analysis-content" id="analysis-income" style="display: block;">
+      <h3><%= @year %>年 月別収入合計</h3>
+      <%= column_chart @monthly_income_totals,
+        height: "300px",
+        library: {
+          title: { text: "#{@year}年 月別収入", style: { fontSize: "16px" } },
+          yAxis: {
+            min: 0,
+            max: (@y_step_size * 10).ceil,
+            ticks: {
+              stepSize: @y_step_size,
+              callback: %|function(value) { return value.toLocaleString(); }|
+            },
+            title: { text: "金額（円）" }
+          },
+          xAxis: {
+            title: { text: "月" }
+          }
+        }
+      %>
+<table class="summary-table">
+  <thead>
+    <tr>
+      <th>月</th>
+      <th>収入（円）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% (1..12).each do |month| %>
+      <% label = "#{month}月" %>
+      <% amount = @monthly_income_totals[label] || 0 %>
+      <tr>
+        <td><%= label %></td>
+        <td><%= number_to_currency(amount, unit: "", delimiter: ",") %> 円</td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr class="total-row">
+      <th>合計</th>
+      <th>
+        <%= number_to_currency(@monthly_income_totals.values.sum, unit: "", delimiter: ",") %> 円
+      </th>
+    </tr>
+  </tfoot>
+</table>
+    </div>
+
+    <!-- 支出分析 -->
+    <div class="analysis-content" id="analysis-expense" style="display: none;">
+      <h3><%= @year %>年 月別支出合計</h3>
+      <%= column_chart @monthly_expense_totals,
+        height: "300px",
+        library: {
+          title: { text: "#{@year}年 月別支出", style: { fontSize: "16px" } },
+          yAxis: {
+            min: 0,
+            max: (@y_step_size_expense * 10).ceil,
+            ticks: {
+              stepSize: @y_step_size_expense,
+              callback: %|function(value) { return value.toLocaleString(); }|
+            },
+            title: { text: "金額（円）" }
+          },
+          xAxis: {
+            title: { text: "月" }
+          },
+          datasets: [{ backgroundColor: "#ff6b6b" }]
+        }
+      %>
+   <table class="summary-table expense">
+  <thead>
+    <tr>
+      <th>月</th>
+      <th>支出（円）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% (1..12).each do |month| %>
+      <% label = "#{month}月" %>
+      <% amount = @monthly_expense_totals[label] || 0 %>
+      <tr>
+        <td><%= label %></td>
+        <td><%= number_to_currency(amount, unit: "", delimiter: ",") %> 円</td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr class="total-row">
+      <th>合計</th>
+      <th><%= number_to_currency(@monthly_expense_totals.values.sum, unit: "", delimiter: ",") %> 円</th>
+    </tr>
+  </tfoot>
+</table>
+
+    </div>
+
+    <!-- 貯金分析 -->
+    <div class="analysis-content" id="analysis-savings" style="display: none;">
+      <h3><%= @year %>年 月別貯金額</h3>
+      <%= column_chart @monthly_savings_totals,
+        height: "300px",
+        library: {
+          title: { text: "#{@year}年 月別貯金額", style: { fontSize: "16px" } },
+          yAxis: {
+            min: 0,
+            max: (@y_step_size_saving * 10).ceil,
+            ticks: {
+              stepSize: @y_step_size_saving,
+              callback: %|function(value) { return value.toLocaleString(); }|
+            },
+            title: { text: "金額（円）" }
+          },
+          xAxis: {
+            title: { text: "月" }
+          }
+        }
+      %>
+  <table class="summary-table">
+  <thead>
+    <tr>
+      <th>月</th>
+      <th>貯金（円）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% (1..12).each do |month| %>
+      <% label = "#{month}月" %>
+      <% amount = @monthly_savings_totals[label] || 0 %>
+      <tr>
+        <td><%= label %></td>
+        <td><%= number_to_currency(amount, unit: "", delimiter: ",") %> 円</td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr class="total-row">
+      <th>合計</th>
+      <th><%= number_to_currency(@monthly_savings_totals.values.sum, unit: "", delimiter: ",") %> 円</th>
+    </tr>
+  </tfoot>
+</table>
+
+    </div>
+
+    <!-- 労働時間分析 -->
+  <div class="analysis-content" id="analysis-total-summary" style="display: none;">
+    <h3><%= @year %>年 労働時間分析</h3>
+      <!-- 労働時間の推移 -->
+<span class="chart-unit-title">労働時間の推移(月別)</span>
+      <%= line_chart @monthly_worktime_totals,
+        height: "300px",
+        library: {
+          title: { text: "#{@year}年 月別合計労働時間" },
+          yAxis: {
+            title: { text: "時間 (h)" },
+            ticks: { callback: %|function(value) { return value + 'h'; }| }
+          },
+          xAxis: { title: { text: "月" } }
+        }
+      %>
+
+      <h3><%= @year %>年 月別総労働時間（単位：h）</h3>
+<table class="summary-table total-worktime">
+  <thead>
+    <tr>
+      <% (1..12).each do |m| %>
+        <th><%= "#{m}月" %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <% (1..12).each do |m| %>
+        <% hours = @monthly_worktime_totals["#{m}月"] || 0 %>
+        <% css_class = hours.zero? ? 'dimmed' : 'highlight' %>
+        <td class="<%= css_class %>"><%= hours %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+
+<h3><%= @year %>年 総労働データ</h3>
+<table class="summary-table total-summary">
+  <tr>
+    <th>総労働日数</th>
+    <td><%= @total_work_days %> 日</td>
+  </tr>
+  <tr>
+    <th>総労働時間</th>
+    <td><%= @total_work_hours %> 時間</td>
+  </tr>
+</table>
+  </div>
+
+
+<%# 合計労働時間(カテゴリ・月別) %>
+
+<div class="analysis-content" id="analysis-category-stats" style="display: none;">
+  <h3><%= @year %>年　合計労働時間(カテゴリ・月別)</h3>
+    <h4 class="chart-unit-label">労働時間(h)</h4>     
+    <%= column_chart @worktime_chart_for_grouped_bar,
+  height: "350px",
+  library: {
+    title: { text: "#{@year}年 月別カテゴリ別労働時間（h）" },
+    yAxis: {
+      min: 0,
+      max: (@y_step_size_worktime * 10),
+      ticks: {
+        stepSize: @y_step_size_worktime,
+        callback: %|function(value) { return value + 'h'; }|
+      }
+    },
+    xAxis: { title: { text: "月" } }
+  }
+%>
+ 
+
+
+<table class="summary-table worktime-monthly">
+  <thead>
+    <tr>
+      <th>月</th>
+      <% @worktime_monthly_table_data.keys.each do |category| %>
+        <th><%= category %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% (1..12).each do |month| %>
+      <tr>
+        <td><%= "#{month}月" %></td>
+        <% @worktime_monthly_table_data.each do |_, month_array| %>
+          <% hours = month_array[month - 1] %>
+          <% css_class = hours.zero? ? 'dimmed' : 'highlight' %>
+          <td class="<%= css_class %>"><%= hours %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+ </div>
+ 
+
+
+  <div class="analysis-content" id="analysis-ratio" style="display: none;">
+  <h3><%= @year %>年　年間労働割合</h3>   
+  <%= pie_chart @worktime_total_by_category,
+    library: {
+      plugins: {
+        datalabels: {
+          formatter: %|function(value, ctx) {
+            let total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            let percentage = ((value / total) * 100).toFixed(1);
+            return ctx.chart.data.labels[ctx.dataIndex] + ': ' + percentage + '%';
+          }|,
+          color: "#333",
+          font: { size: 12 }
+        }
+      },
+      title: { text: "#{@year}年 労働時間配分（割合）" }
+    }
+  %>
+
+  <h3>カテゴリ別年間労働時間と割合</h3>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>カテゴリ</th>
+        <th>時間（h）</th>
+        <th>割合（%）</th>
+        <th>労働日数（日）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @worktime_ratios.each do |entry| %>
+        <tr>
+      <td><%= entry[:name] %></td>
+      <td><%= entry[:hours] %></td>
+      <td><%= entry[:percentage] %> %</td>
+      <td><%= entry[:days] %>日</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div></div>
+ </div> 
+
+
