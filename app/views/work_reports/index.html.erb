@@ -1,0 +1,64 @@
+<div class="book">
+ <div class="page left-page"> 
+  <%= render 'shared/book_style_layout' %>
+  
+<div class="calendar-wrapper">
+  <%= form_with url: work_reports_path, method: :get, local: true, class: "inline-form" do %>
+    <%= select_tag :year, options_for_select((2020..Date.today.year).to_a.reverse, @date.year) %>
+    <%= select_tag :month, options_for_select((1..12).to_a, @date.month) %>
+    <%= submit_tag "表示", class: "btn" %>
+  <% end %>
+  
+<% calendar = SimpleCalendar::MonthCalendar.new(self, events: @work_times, start_date: @date) %>
+
+<%= render partial: "shared/custom_month_calendar",
+           locals: {
+             start_date: @date,
+             events: @work_times,
+             date_range: calendar.date_range,
+             calendar: calendar,
+             path_helper: ->(date) { work_reports_path(month: date.strftime("%Y-%m")) },
+             passed_block: ->(date, events) do
+               render partial: "shared/calendar_day", locals: { date: date, work_times: events }
+             end
+           } %>
+
+  </div>
+ </div>
+  <!-- 右ページ -->
+  <div class="page">
+
+
+<!-- 労働時間テーブル -->
+<div class="worktime-table-scroll">
+  <table class="daily-report-table">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>カテゴリ</th>
+        <th>労働時間</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @work_times.each do |wt| %>
+        <tr>
+          <td><%= wt.date.strftime("%Y/%m/%d") %></td>
+          <td><%= wt.category_work_time&.name || "未分類" %></td>
+          <td><%= (wt.minutes.to_f / 60).round(1) %>h</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- 日報表示 -->
+<div id="daily-report-list-container" class="scroll-box">
+  <div id="daily-report-list">
+    <%= render partial: "work_reports/report_list", locals: { grouped_worktimes: @grouped_worktimes } %>
+  </div>
+</div>
+
+
+</div>
+</div>

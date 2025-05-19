@@ -1,0 +1,46 @@
+<div class="category-filter">
+  <button class="category-badge active" data-category="all">すべて</button>
+<% CategoryWorkTime.where(user_id: nil).or(CategoryWorkTime.where(user: current_user)).pluck(:name).uniq.each do |cat| %>
+  <button class="category-badge" data-category="<%= cat %>"><%= cat %></button>
+<% end %>
+</div>
+
+<div id="daily-report-list">
+  <% grouped_worktimes.sort.reverse.each do |date, items| %>
+    <% reports_with_content = items.select { |wt| wt.report.present? } %>
+    <% next if reports_with_content.empty? %>
+
+    <% reports_with_content.each_with_index do |wt, i| %>
+      <% full_report = wt.report %>
+      <% is_truncated = full_report.length > 150 %>
+      <% truncated = full_report.truncate(150, omission: "") %>
+
+      <div class="report-entry" data-category="<%= wt.category_work_time&.name || '未分類' %>">
+        <div class="report-meta">
+          <span class="report-date"><%= date.strftime("%Y/%m/%d") %></span>
+          <span class="report-category">
+            <%= wt.category_work_time&.name || "未分類" %> ／ <%= (wt.minutes.to_f / 60).round(1) %>h
+          </span>
+        </div>
+
+        <div class="report-body" id="report-body-<%= date %>-<%= i %>">
+          <% if is_truncated %>
+            <div class="report-text short">
+              <%= simple_format(h(truncated)) %>
+            </div>
+
+            <div class="report-text full" style="display: none;">
+              <%= simple_format(h(full_report)) %>
+            </div>
+
+            <button class="read-more-btn" data-target="report-body-<%= date %>-<%= i %>">続きを読む</button>
+          <% else %>
+            <div class="report-text full">
+              <%= simple_format(h(full_report)) %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

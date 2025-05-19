@@ -107,9 +107,9 @@ class AnalysesController < ApplicationController
 
     total_hours = @work_stats_by_category.sum { |s| s[:hours] }
 
-    @worktime_ratios = @work_stats_by_category.map do |entry|
-      percentage = total_hours > 0 ? ((entry[:hours] / total_hours.to_f) * 100).round(1) : 0
-      entry.merge(percentage: percentage)
-    end
+   @worktime_ratios = @work_stats_by_category.map do |entry|
+   percentage = total_hours > 0 ? ((entry[:hours] / total_hours.to_f) * 100).round(1) : 0
+   entry.merge(percentage: percentage)
+   end.sort_by { |entry| -entry[:percentage] } 
   end
 end

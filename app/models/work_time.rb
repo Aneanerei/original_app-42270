@@ -9,5 +9,7 @@ class WorkTime < ApplicationRecord
     greater_than: 0,
     message: "は1分以上の整数で入力してください。"
   }
-  
+    def start_time
+    date
+  end
 end

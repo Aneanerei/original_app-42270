@@ -18,4 +18,5 @@ pin "goal-meter", to:"goal-meter.js"
 pin "chartkick", to: "chartkick.js"
 pin "Chart.bundle", to: "Chart.bundle.js"
 pin "analysis", to: "analysis.js"
-
+pin "work-reports", to: "work-reports.js"
+pin "work-report-filter", to: "work-report-filter.js"

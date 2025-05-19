@@ -1,0 +1,11 @@
+<div class="calendar-day">
+  <div class="date-label"><%= date.day %></div>
+
+  <% if work_times.any? %>
+    <% total_minutes = work_times.sum(&:minutes) %>
+    <div class="worktime-total"><%= (total_minutes.to_f / 60).round(1) %>h</div>
+
+    <% categories = work_times.map { |w| w.category_work_time&.name || "未分類" }.uniq %>
+    <div class="worktime-categories"><%= categories.join(" / ") %></div>
+  <% end %>
+</div>
