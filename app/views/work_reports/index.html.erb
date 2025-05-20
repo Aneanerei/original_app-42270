@@ -1,3 +1,22 @@
+<% if flash[:notice] %>
+  <div class="notice-message"><%= flash[:notice] %></div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="alert-message"><%= flash[:alert] %></div>
+<% end %>
+
+<!-- カスタムモーダル -->
+<div id="customDeleteModal" class="custom-modal">
+  <div class="custom-modal-content">
+    <p>本当に削除しますか？</p>
+    <div class="modal-buttons">
+      <button type="button" onclick="closeDeleteModal()">キャンセル</button>
+      <button type="button" onclick="submitDeleteForm()">削除</button>
+    </div>
+  </div>
+</div>
+
 <div class="book">
  <div class="page left-page"> 
   <%= render 'shared/book_style_layout' %>
@@ -9,7 +28,8 @@
     <%= submit_tag "表示", class: "btn" %>
   <% end %>
   
-<% calendar = SimpleCalendar::MonthCalendar.new(self, events: @work_times, start_date: @date) %>
+<% calendar = SimpleCalendar::MonthCalendar.new(self, events: @work_times, start_date: @date, start_day: :sunday) %>
+
 
 <%= render partial: "shared/custom_month_calendar",
            locals: {
@@ -23,11 +43,41 @@
              end
            } %>
 
+
+
+<div class="worktime-table-scroll">
+  <h4>今月のカテゴリ別労働時間</h4>
+  <% if @worktime_summary.present? %>
+    <% sorted = @worktime_summary.sort_by { |_, minutes| -minutes } %>
+    <% total_hours = sorted.sum { |_, min| min } / 60.0 %>
+
+    <% sorted.each_with_index do |(category, minutes), index| %>
+      <% hours = (minutes.to_f / 60).round(1) %>
+      <% rank_class = case index
+        when 0 then "worktime-rank-1"
+        when 1 then "worktime-rank-2"
+        when 2 then "worktime-rank-3"
+        else "worktime-rank-default"
+      end %>
+
+      <div class="category-box <%= rank_class %>">
+        <span class="rank-number">No.<%= index + 1 %></span>
+        <span class="category-name"><%= category %></span>
+        <span class="category-amount"><%= "#{hours}h" %></span>
+      </div>
+    <% end %>
+
+    <div class="worktime-total-line">合計：<%= total_hours.round(1) %>h</div>
+  <% else %>
+    <p>データがありません</p>
+  <% end %>
+</div>
   </div>
+  
  </div>
   <!-- 右ページ -->
   <div class="page">
-
+<br><br>
 
 <!-- 労働時間テーブル -->
 <div class="worktime-table-scroll">
@@ -37,6 +87,7 @@
         <th>日付</th>
         <th>カテゴリ</th>
         <th>労働時間</th>
+        <th>編集・削除</th>
       </tr>
     </thead>
     <tbody>
@@ -45,12 +96,28 @@
           <td><%= wt.date.strftime("%Y/%m/%d") %></td>
           <td><%= wt.category_work_time&.name || "未分類" %></td>
           <td><%= (wt.minutes.to_f / 60).round(1) %>h</td>
+          <td>
+<%= link_to edit_work_time_path(wt, from: "work_reports"), class: "edit-link-button" do %>
+  <span class="mirrored-icon">✎</span>
+  <span class="tooltip-text">編集</span>
+<% end %>
+
+<%= form_with url: work_time_path(wt), method: :delete,
+              html: { style: "display: inline;" } do %>
+  <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+    ×<span class="tooltip-text">削除</span>
+  </button>
+<% end %>
+
+</td>
+
         </tr>
       <% end %>
     </tbody>
   </table>
 </div>
 
+<br>
 
 <!-- 日報表示 -->
 <div id="daily-report-list-container" class="scroll-box">

@@ -22,5 +22,22 @@ class WorkReportsController < ApplicationController
       format.html
       format.turbo_stream
     end
+
+    @worktime_summary = current_user.work_times
+  .where(date: @date.beginning_of_month..@date.end_of_month)
+  .joins(:category_work_time)
+  .group('category_work_times.name')
+  .sum(:minutes)
+
+   # 表示対象年月（指定がなければ今月）
+    @date = params[:year] && params[:month] ? Date.new(params[:year].to_i, params[:month].to_i, 1) : Date.today.beginning_of_month
+    @month_start = @date.beginning_of_month
+    @month_end = @date.end_of_month
+    @holidays = HolidayJp.between(@date.beginning_of_month, @date.end_of_month).index_by(&:date)
   end
+
+
+
+
+  
 end

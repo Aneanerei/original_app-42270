@@ -1,4 +1,7 @@
-<div class="calendar-day">
+<% wday_class = "wday-#{date.wday}" %>
+<% is_holiday = @holidays[date] %> <!-- 祝日判定（@holidaysは事前に渡しておく） -->
+
+<div class="calendar-day <%= [wday_class, ("holiday" if is_holiday)].compact.join(" ") %>">
   <div class="date-label"><%= date.day %></div>
 
   <% if work_times.any? %>

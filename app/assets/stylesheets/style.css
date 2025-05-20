@@ -80,6 +80,11 @@ a {
   padding-left: 20px;
   color: #fff;
 }
+.calendar-hint {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 4px;
+}
 
 
 /* フッター */
@@ -251,6 +256,7 @@ a {
 }
 
 /* 入力画面 */
+
 .income-main {
   display: flex;
   justify-content: center; 
@@ -265,7 +271,7 @@ a {
 
 .balance-box {
   width: 270px;
-  max-height: 300px;
+  max-height: 250px;
   overflow-y: auto;
   border: 2px solid #ccc;
   padding: 10px;
@@ -603,6 +609,17 @@ textarea.form-control {
   width: 100%;
   display: block;
   margin-bottom: 20px;
+}
+
+.calendar-day[data-date] {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.calendar-day[data-date]:hover {
+  background: #f0f8ff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
 /* 本文設定 */
@@ -1743,6 +1760,9 @@ li.category-box.expense-rank-default {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: 200px;
+  height: 30px;
+  align-items: center;
 }
 
 .goal-setting-button:hover {
@@ -2001,8 +2021,27 @@ li.category-box.expense-rank-default {
   border-radius: 8px;
   background-color: #ffffff;
   box-sizing: border-box;
-  max-height: 150px;
-  overflow-y: auto; 
+  max-height: 100px;
+  overflow-y: auto;
+
+  /* スクロールバー全体の背景 */
+  scrollbar-color: rgba(206, 202, 230, 0.4) #fdfdfd;  /* Firefox用 */
+  scrollbar-width: thin;  /* Firefox用 */
+}
+
+/* WebKit系ブラウザ（Chrome, Safari） */
+.worktime-list-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.worktime-list-box::-webkit-scrollbar-track {
+  background: #fdfdfd;
+  border-radius: 4px;
+}
+
+.worktime-list-box::-webkit-scrollbar-thumb {
+  background: rgba(206, 202, 230, 0.4);
+  border-radius: 4px;
 }
 
 .right-box {
@@ -2306,7 +2345,7 @@ td.highlight {
 }
 
 .scroll-box {
-  height: 400px;
+  height: 480px;
   overflow-y: auto;
   border: 1px solid #ccc;
   padding: 10px;
@@ -2408,4 +2447,215 @@ td.highlight {
   background: #4e9af1;
   color: white;
   border-color: #4e9af1;
+}
+
+/* アルバム用モーダル */
+
+.album-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.album-modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+}
+
+.album-modal-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.album-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.album-modal-content p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+/* ホーム用モーダル */
+.day-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.day-modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90%;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.day-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+.day-modal-content h3 {
+  margin-top: 0;
+  font-size: 1.4em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+.day-section {
+  margin: 20px 0;
+}
+
+.day-section h4 {
+  margin-bottom: 8px;
+  font-size: 1.1em;
+  color: #444;
+}
+
+#day-income-list,
+#day-expense-list,
+#day-worktime-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#day-income-list li,
+#day-expense-list li,
+#day-worktime-list li {
+  padding: 4px 0;
+  border-bottom: 1px dotted #ccc;
+}
+
+.day-image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.day-image-item {
+  width: 120px;
+  text-align: center;
+  font-size: 0.85em;
+}
+
+.day-thumb {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.day-memo-line {
+  font-size: 0.9em;
+  color: #555;
+  margin-left: 8px;
+}
+
+/* アラートモーダル */
+.comparison-alert-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.comparison-alert-modal-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.comparison-alert-modal-content {
+  background: #fffef8;
+  padding: 24px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.comparison-alert-modal-overlay.show .comparison-alert-modal-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.comparison-alert-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.comparison-alert-message-text p {
+  margin: 10px 0;
+  font-size: 0.95em;
+}
+/* 労働カレンダー */
+/* 土曜（wday-6） → 青 */
+.calendar-day.wday-6 .date-label {
+  color: blue;
+}
+
+/* 日曜（wday-0） → 赤 */
+.calendar-day.wday-0 .date-label {
+  color: red;
+}
+
+/* 祝日 → 赤（上書き） */
+.calendar-day.holiday .date-label {
+  color: red;
+  font-weight: bold;
+}
+
+/* 比較モーダル */
+.positive-diff {
+  color: #0074D9; /* 青系 */
+  font-weight: bold;
+}
+
+.negative-diff {
+  color: #FF4136; /* 赤系 */
+  font-weight: bold;
 }
