@@ -77,3 +77,4 @@ gem 'image_processing', '~> 1.2'
 gem 'acts-as-taggable-on'
 gem "kaminari", "~> 1.2"
 gem 'holiday_jp'
+gem 'chartkick'

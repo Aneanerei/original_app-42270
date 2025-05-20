@@ -80,6 +80,11 @@ a {
   padding-left: 20px;
   color: #fff;
 }
+.calendar-hint {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 4px;
+}
 
 
 /* フッター */
@@ -251,6 +256,7 @@ a {
 }
 
 /* 入力画面 */
+
 .income-main {
   display: flex;
   justify-content: center; 
@@ -265,7 +271,7 @@ a {
 
 .balance-box {
   width: 270px;
-  max-height: 300px;
+  max-height: 250px;
   overflow-y: auto;
   border: 2px solid #ccc;
   padding: 10px;
@@ -603,6 +609,17 @@ textarea.form-control {
   width: 100%;
   display: block;
   margin-bottom: 20px;
+}
+
+.calendar-day[data-date] {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.calendar-day[data-date]:hover {
+  background: #f0f8ff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
 /* 本文設定 */
@@ -1047,7 +1064,10 @@ label, input, select, textarea {
   border-radius: 4px !important;
 }
 
-
+.file-small {
+  font-size: 12px;
+  padding: 5px 8px;
+}
 
 /* ===== 左ページ全体（検索＋画像4枚） ===== */
 .album-left {
@@ -1740,6 +1760,9 @@ li.category-box.expense-rank-default {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: 200px;
+  height: 30px;
+  align-items: center;
 }
 
 .goal-setting-button:hover {
@@ -1998,8 +2021,27 @@ li.category-box.expense-rank-default {
   border-radius: 8px;
   background-color: #ffffff;
   box-sizing: border-box;
-  max-height: 150px;
-  overflow-y: auto; 
+  max-height: 100px;
+  overflow-y: auto;
+
+  /* スクロールバー全体の背景 */
+  scrollbar-color: rgba(206, 202, 230, 0.4) #fdfdfd;  /* Firefox用 */
+  scrollbar-width: thin;  /* Firefox用 */
+}
+
+/* WebKit系ブラウザ（Chrome, Safari） */
+.worktime-list-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.worktime-list-box::-webkit-scrollbar-track {
+  background: #fdfdfd;
+  border-radius: 4px;
+}
+
+.worktime-list-box::-webkit-scrollbar-thumb {
+  background: rgba(206, 202, 230, 0.4);
+  border-radius: 4px;
 }
 
 .right-box {
@@ -2008,4 +2050,612 @@ li.category-box.expense-rank-default {
   margin-left: 20px;
 }
 
+/* 分析ページ */
 
+.analysis-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1em;
+}
+
+.analysis-button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f0f4ff;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.analysis-button.active {
+  background-color: #cce5ff;
+  font-weight: bold;
+}
+
+/* 年間収入 */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.summary-table thead {
+  background-color: #f0f4f8;
+}
+
+
+.summary-table th,
+.summary-table td {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  line-height: 1.2;
+  text-align: right;
+  border: 1px solid #ddd;
+}
+
+.summary-table th:first-child,
+.summary-table td:first-child {
+  text-align: left;
+}
+
+.summary-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.summary-table tr:hover {
+  background-color: #f5faff;
+}
+
+
+.income-summary-table th {
+  background-color: #f0f0f0;
+  text-align: center;
+}
+
+/* 年間支出 */
+
+.summary-table.expense {
+  background-color: #fff5f5;
+}
+
+.summary-table.expense thead {
+  background-color: #ffe5e5;
+}
+
+.summary-table.expense tr:hover {
+  background-color: #ffecec;
+}
+
+/* 労働時間 */
+.chart-unit-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+.chart-unit-title {
+  font-size: 15px;
+  color: #000000;
+  margin-left: 20px;
+  font-weight: bold;
+}
+.summary-table.worktime-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+
+.summary-table.worktime-table th,
+.summary-table.worktime-table td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.summary-table.worktime-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.summary-table.worktime-table td:first-child {
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+
+
+/* 0時間：グレー・細字・イタリック */
+td.dimmed {
+  color: #bbb;
+  font-style: italic;
+  font-weight: normal;
+}
+
+/* 1時間以上：黒・太字 */
+td.highlight {
+  font-weight: bold;
+  color: #000;
+}
+
+
+.total-row {
+  font-weight: bold;
+}
+/* 分析ページ */
+.analysis-sidebar {
+  background: #f7f9fc;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.05);
+}
+
+.menu-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.year-select-wrapper {
+  margin-bottom: 24px;
+}
+
+.year-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #34495e;
+}
+
+.year-select, .year-submit {
+  padding: 6px 10px;
+  font-size: 14px;
+  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.menu-group {
+  margin-bottom: 28px;
+}
+
+.group-title {
+  font-weight: bold;
+  font-size: 15px;
+  color: #4a5568;
+  margin-bottom: 12px;
+  padding-left: 4px;
+  border-left: 4px solid #a0aec0;
+}
+
+.analysis-button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  background-color: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  text-align: left;
+}
+
+.analysis-button:hover {
+  background-color: #cbd5e0;
+  cursor: pointer;
+}
+
+.analysis-button.active {
+  background-color: #a0aec0;
+  color: white;
+}
+.left-page-with-description {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.left-menu {
+  width: 45%;
+}
+
+.analysis-description {
+  width: 50%;
+  background-color: #ffffff;
+  padding: 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.desc-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+
+/* 労働日数 */
+.worktime-total {
+  font-size: 0.9em;
+  color: #4e73df;
+  font-weight: bold;
+}
+
+.worktime-categories {
+  font-size: 0.7em;
+  color: #888;
+}
+
+.daily-report-box {
+  margin-bottom: 2em;
+  padding: 1em;
+  border-left: 4px solid #4e73df;
+  background: #f9f9fb;
+  border-radius: 8px;
+}
+
+.daily-title {
+  margin-bottom: 0.5em;
+  color: #333;
+  font-weight: bold;
+}
+
+
+.category-label {
+  font-size: 0.9em;
+  color: #666;
+  font-weight: bold;
+}
+
+.report-content {
+  background: #fff;
+  padding: 0.5em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+.report-entry {
+  border: 1px solid #ccc;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: #fdfdfd;
+}
+
+.report-meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.read-more-btn {
+  margin-top: 0.3rem;
+  background: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.scroll-box {
+  height: 480px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+
+  /* スクロールバーの色（Firefox用） */
+  scrollbar-color: #d2d5d6 #ffffff;
+  scrollbar-width: thin;
+}
+
+/* Webkit系ブラウザ用（Chrome, Safari, Edge） */
+.scroll-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+  background-color: #d2d5d6;
+  border-radius: 4px;
+}
+
+.scroll-box::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+.worktime-table-scroll {
+  max-height: 300px; /* 好きな高さに調整可 */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+.daily-report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.daily-report-table th,
+.daily-report-table td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.daily-report-table th:nth-child(1), /* 日付 */
+.daily-report-table td:nth-child(1) {
+  width: 120px;
+}
+
+.daily-report-table th:nth-child(2), /* カテゴリ */
+.daily-report-table td:nth-child(2) {
+  width: 150px;
+}
+
+.daily-report-table th:nth-child(3), /* 労働時間 */
+.daily-report-table td:nth-child(3) {
+  width: 100px;
+  text-align: right;
+}
+
+.worktime-table-scroll {
+  max-height: 240px;
+  overflow-y: auto;
+  background: #fdfdfd;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+
+  /* スクロールバーの色 */
+  scrollbar-color: #d2d5d6 #ffffff; /* Firefox用: スクロールつまみ / トラック背景 */
+  scrollbar-width: thin;      /* Firefox用: 細くする */
+}
+
+/* Webkit系（Chrome, Safari, Edge） */
+.worktime-table-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.worktime-table-scroll::-webkit-scrollbar-thumb {
+  background-color: #d2d5d6;  /* スクロールつまみの色 */
+  border-radius: 4px;
+}
+
+.worktime-table-scroll::-webkit-scrollbar-track {
+  background-color: #ffffff;  /* スクロールバー背景 */
+}
+
+.category-filter {
+  margin-bottom: 1rem;
+}
+
+.category-badge {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  margin: 0 5px 5px 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.category-badge.active {
+  background: #4e9af1;
+  color: white;
+  border-color: #4e9af1;
+}
+
+/* アルバム用モーダル */
+
+.album-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.album-modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+}
+
+.album-modal-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.album-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.album-modal-content p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+/* ホーム用モーダル */
+.day-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.day-modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90%;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.day-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+.day-modal-content h3 {
+  margin-top: 0;
+  font-size: 1.4em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+.day-section {
+  margin: 20px 0;
+}
+
+.day-section h4 {
+  margin-bottom: 8px;
+  font-size: 1.1em;
+  color: #444;
+}
+
+#day-income-list,
+#day-expense-list,
+#day-worktime-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#day-income-list li,
+#day-expense-list li,
+#day-worktime-list li {
+  padding: 4px 0;
+  border-bottom: 1px dotted #ccc;
+}
+
+.day-image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.day-image-item {
+  width: 120px;
+  text-align: center;
+  font-size: 0.85em;
+}
+
+.day-thumb {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.day-memo-line {
+  font-size: 0.9em;
+  color: #555;
+  margin-left: 8px;
+}
+
+/* アラートモーダル */
+.comparison-alert-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.comparison-alert-modal-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.comparison-alert-modal-content {
+  background: #fffef8;
+  padding: 24px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.comparison-alert-modal-overlay.show .comparison-alert-modal-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.comparison-alert-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.comparison-alert-message-text p {
+  margin: 10px 0;
+  font-size: 0.95em;
+}
+/* 労働カレンダー */
+/* 土曜（wday-6） → 青 */
+.calendar-day.wday-6 .date-label {
+  color: blue;
+}
+
+/* 日曜（wday-0） → 赤 */
+.calendar-day.wday-0 .date-label {
+  color: red;
+}
+
+/* 祝日 → 赤（上書き） */
+.calendar-day.holiday .date-label {
+  color: red;
+  font-weight: bold;
+}
+
+/* 比較モーダル */
+.positive-diff {
+  color: #0074D9; /* 青系 */
+  font-weight: bold;
+}
+
+.negative-diff {
+  color: #FF4136; /* 赤系 */
+  font-weight: bold;
+}

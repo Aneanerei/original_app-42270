@@ -2,7 +2,13 @@ Rails.application.routes.draw do
   # ルートページ（カレンダーなど）
   root to: 'homes#index'
   devise_for :users
-  resources :homes, only: [:index]
+resources :homes, only: [:index] do
+  collection do
+    get :day_summary
+    get :category_variation_alert
+  end
+end
+
 
   # 収入関連
   resources :incomes
@@ -43,8 +49,13 @@ Rails.application.routes.draw do
 
   # 労働時間入力・編集
   resources :work_times, only: [:new, :create, :edit, :update, :destroy]
-
+  
+  # 労働日報
+  resources :work_reports, only: [:index, :edit, :update, :destroy]
+  
   # 目標メーター設定
   resources :monthly_goals, only: [:create]
+
+  resources :analyses, only: [:index]
 
 end
