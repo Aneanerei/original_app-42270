@@ -91,31 +91,30 @@
       </tr>
     </thead>
     <tbody>
-      <% @work_times.each do |wt| %>
+      <% @work_times.sort_by { |wt| [wt.date, wt.created_at] }.reverse.each do |wt| %>
         <tr>
           <td><%= wt.date.strftime("%Y/%m/%d") %></td>
           <td><%= wt.category_work_time&.name || "未分類" %></td>
           <td><%= (wt.minutes.to_f / 60).round(1) %>h</td>
           <td>
-<%= link_to edit_work_time_path(wt, from: "work_reports"), class: "edit-link-button" do %>
-  <span class="mirrored-icon">✎</span>
-  <span class="tooltip-text">編集</span>
-<% end %>
+            <%= link_to edit_work_time_path(wt, from: "work_reports"), class: "edit-link-button" do %>
+              <span class="mirrored-icon">✎</span>
+              <span class="tooltip-text">編集</span>
+            <% end %>
 
-<%= form_with url: work_time_path(wt), method: :delete,
-              html: { style: "display: inline;" } do %>
-  <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
-    ×<span class="tooltip-text">削除</span>
-  </button>
-<% end %>
-
-</td>
-
+            <%= form_with url: work_time_path(wt), method: :delete,
+                          html: { style: "display: inline;" } do %>
+              <button type="button" class="delete-link-button" onclick="confirmDelete(this)">
+                ×<span class="tooltip-text">削除</span>
+              </button>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 </div>
+
 
 <br>
 

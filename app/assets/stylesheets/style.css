@@ -738,6 +738,8 @@ label, input, select, textarea {
   margin-top: 4px;
 }
 
+
+
 /* 労働時間一覧 */
 .work-box {
   width: 270px;
@@ -762,6 +764,8 @@ label, input, select, textarea {
   background: rgba(206, 202, 230, 0.4);
   border-radius: 4px;
 }
+
+
 
 /* 削除ボタン */
 .delete-link-button {
