@@ -6,13 +6,15 @@ class CategoryIncome < ApplicationRecord
   has_many :work_times  # 労働時間がこのカテゴリを参照する場合に必要
 
   before_destroy :prevent_deletion_of_default_categories
+
   validates :name,
     presence: { message: "を入力してください" },
     uniqueness: { scope: :user_id, message: "はすでに存在しています" },
     length: { maximum: 20 }
-  validate :category_limit, on: :create
 
-  
+  validate :category_limit, on: :create
+  validate :name_must_be_unique_across_common_and_user, on: :create
+
   private
 
   def prevent_deletion_of_default_categories
@@ -29,4 +31,16 @@ class CategoryIncome < ApplicationRecord
     end
   end
 
+  def name_must_be_unique_across_common_and_user
+    return if name.blank?
+
+    conflict = CategoryIncome.where(name: name)
+                             .where("user_id IS NULL OR user_id = ?", user_id)
+                             .where.not(id: id)
+                             .exists?
+
+    if conflict
+      errors.add(:name, "は共通カテゴリまたは既存カテゴリと重複しています")
+    end
+  end
 end

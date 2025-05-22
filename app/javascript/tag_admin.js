@@ -17,7 +17,7 @@ document.addEventListener("turbo:load", () => {
   return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) =>
     String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
   );
-}
+ }
 
   // タグ検索フィルター
   const input = document.getElementById("tag-admin-search");

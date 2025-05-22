@@ -9,8 +9,8 @@ document.addEventListener("turbo:load", () => {
     "analysis-savings": "収入から支出を差し引いた貯金額の推移を表示します。",
     "analysis-worktime": "毎月の労働時間の推移を確認できます。",
     "analysis-total-summary": "総労働時間・日数など全体の労働実績を表示します。",
-    "analysis-category-stats": "カテゴリごとの月別労働時間を詳しく分析します。",
-    "analysis-ratio": "年間労働時間の割合を円グラフで確認できます。"
+    "analysis-category-stats": "カテゴリごとの月別労働時間を詳しく分析します。グラフ名をクリックすると、グラフを非表示にできます。",
+    "analysis-ratio": "年間労働時間の割合を円グラフで確認できます。グラフ名をクリックすると、グラフを非表示にできます。"
   };
 
   buttons.forEach(button => {

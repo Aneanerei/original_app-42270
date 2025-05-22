@@ -6,9 +6,9 @@ class HomesController < ApplicationController
     month_start = @date.beginning_of_month
     month_end = @date.end_of_month
 
-    @incomes = current_user.incomes.includes(:category_income).where(date: month_start..month_end).order(date: :desc)
-@expenses = current_user.expenses.includes(:category_expense).where(date: month_start..month_end).order(date: :desc)
-@work_times = current_user.work_times.where(date: month_start..month_end).order(date: :desc)
+@incomes = current_user.incomes.includes(:category_income).where(date: month_start..month_end).order(date: :desc, created_at: :desc)
+@expenses = current_user.expenses.includes(:category_expense).where(date: month_start..month_end).order(date: :desc, created_at: :desc)
+@work_times = current_user.work_times.where(date: month_start..month_end).order(date: :desc, created_at: :desc)
 
 @grouped_incomes = @incomes.to_a.group_by(&:date)
 @grouped_expenses = @expenses.to_a.group_by(&:date)

@@ -11,15 +11,17 @@ class WorkReportsController < ApplicationController
       .where(date: range)
       .where.not(report: [nil, ""])
       .includes(:category_work_time)
-
-    @grouped_worktimes = work_memo_records.group_by(&:date)
+      .order(created_at: :desc)
+    
+      @grouped_worktimes = work_memo_records.group_by(&:date)
 
     # 収入メモ（日報用）
     income_memo_records = current_user.incomes
       .where(date: range)
       .where.not(memo: [nil, ""])
       .includes(:category_income)
-
+      .order(created_at: :desc)
+    
     @grouped_incomes = income_memo_records.group_by(&:date)
 
     # バッジ用カテゴリ（労働）

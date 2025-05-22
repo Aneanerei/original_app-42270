@@ -3,7 +3,12 @@ class Expense < ApplicationRecord
   belongs_to :category_expense
 
   has_many :tagged_images, inverse_of: :expense, dependent: :destroy
-  accepts_nested_attributes_for :tagged_images, allow_destroy: true
+
+  accepts_nested_attributes_for :tagged_images,
+    allow_destroy: true,
+    reject_if: ->(attrs) {
+      attrs['image'].blank? && attrs['tag_list'].blank?
+    }
 
   validates :date, presence: { message: "を入力してください" }
 

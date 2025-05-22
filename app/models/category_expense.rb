@@ -15,6 +15,7 @@ class CategoryExpense < ApplicationRecord
     length: { maximum: 20 }
 
   validate :user_category_limit, on: :create
+  validate :name_must_be_unique_across_common_and_user, on: :create
 
   before_destroy :prevent_deletion_of_default_categories
 
@@ -32,6 +33,19 @@ class CategoryExpense < ApplicationRecord
 
     if user.category_expenses.where.not(name: DEFAULT_CATEGORY_NAMES).count >= MAX_CATEGORIES_PER_USER
       errors.add(:base, "カテゴリの追加は最大#{MAX_CATEGORIES_PER_USER}件までです")
+    end
+  end
+
+  def name_must_be_unique_across_common_and_user
+    return if name.blank?
+
+    conflict = CategoryExpense.where(name: name)
+                              .where("user_id IS NULL OR user_id = ?", user_id)
+                              .where.not(id: id)
+                              .exists?
+
+    if conflict
+      errors.add(:name, "は共通カテゴリまたは既存カテゴリと重複しています")
     end
   end
 end

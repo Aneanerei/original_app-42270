@@ -77,7 +77,7 @@ document.addEventListener("turbo:load", () => {
     if (!isNew || !hasFile) return;
 
     const date = dateInput?.value ? new Date(dateInput.value) : new Date();
-    const monthTag = `${date.getMonth() + 1}月`;
+    const monthTag = `${date.getFullYear()}年${date.getMonth() + 1}月`;
 
     const categoryOption = categorySelect?.selectedOptions[0];
     const categoryTag = categoryOption?.value ? categoryOption.textContent : "";

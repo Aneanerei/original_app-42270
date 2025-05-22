@@ -2675,14 +2675,7 @@ td.highlight {
   color: #FF4136; /* 赤系 */
   font-weight: bold;
 }
-/* ページめくりアニメーション（退場） */
-.page-turn-out {
-  transform: rotateY(-90deg) scale(0.95);
-  opacity: 0;
-}
-
-/* ページめくりアニメーション（入場） */
-.page-turn-in {
-  transform: rotateY(0deg) scale(1);
-  opacity: 1;
+.day-memo-text {
+  white-space: pre-wrap; /* ← 折り返しあり */
+  word-break: break-word; /* 長い単語も折り返す */
 }
