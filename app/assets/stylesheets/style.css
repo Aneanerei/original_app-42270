@@ -86,6 +86,18 @@ a {
   margin-top: 4px;
 }
 
+.header-user {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 2rem;
+}
+
+.nickname-label {
+  font-weight: bold;
+  color: #444;
+}
 
 /* フッター */
 .footer {
@@ -2662,4 +2674,15 @@ td.highlight {
 .negative-diff {
   color: #FF4136; /* 赤系 */
   font-weight: bold;
+}
+/* ページめくりアニメーション（退場） */
+.page-turn-out {
+  transform: rotateY(-90deg) scale(0.95);
+  opacity: 0;
+}
+
+/* ページめくりアニメーション（入場） */
+.page-turn-in {
+  transform: rotateY(0deg) scale(1);
+  opacity: 1;
 }

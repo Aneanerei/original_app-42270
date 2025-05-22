@@ -6,65 +6,65 @@ class HomesController < ApplicationController
     month_start = @date.beginning_of_month
     month_end = @date.end_of_month
 
-    @incomes = current_user.incomes.includes(:category_income).where(date: month_start..month_end)
-    @expenses = current_user.expenses.includes(:category_expense).where(date: month_start..month_end)
-    @work_times = current_user.work_times.where(date: month_start..month_end)
+    @incomes = current_user.incomes.includes(:category_income).where(date: month_start..month_end).order(date: :desc)
+@expenses = current_user.expenses.includes(:category_expense).where(date: month_start..month_end).order(date: :desc)
+@work_times = current_user.work_times.where(date: month_start..month_end).order(date: :desc)
 
-    @grouped_incomes = @incomes.group_by(&:date)
-    @grouped_expenses = @expenses.group_by(&:date)
-    @grouped_work_times = @work_times.group_by(&:date)
+@grouped_incomes = @incomes.to_a.group_by(&:date)
+@grouped_expenses = @expenses.to_a.group_by(&:date)
+@grouped_work_times = @work_times.to_a.group_by(&:date)
 
-    @holidays = HolidayJp.between(month_start, month_end).index_by(&:date)
+@holidays = HolidayJp.between(month_start, month_end).index_by(&:date)
 
-    @total_income = @incomes.sum(:amount)
-    @total_expense = @expenses.sum(:amount)
-    @balance = @total_income - @total_expense
+@total_income = @incomes.sum(:amount)
+@total_expense = @expenses.sum(:amount)
+@balance = @total_income - @total_expense
 
-    @income_summary = summarize_by_category(@incomes, :category_income_id, CategoryIncome)
-    @expense_summary = summarize_by_category(@expenses, :category_expense_id, CategoryExpense)
+@income_summary = summarize_by_category(@incomes.reorder(nil), :category_income_id, CategoryIncome)
+@expense_summary = summarize_by_category(@expenses.reorder(nil), :category_expense_id, CategoryExpense)
 
-    @top_incomes = @income_summary.to_a.first(3)
-    @top_expenses = @expense_summary.to_a.first(3)
+@top_incomes = @income_summary.to_a.first(3)
+@top_expenses = @expense_summary.to_a.first(3)
 
-    @selected_year = params[:year]&.to_i || Date.today.year
-    @selected_month = params[:month]&.to_i || Date.today.month
-    start_date = Date.new(@selected_year, @selected_month, 1)
-    end_date = start_date.end_of_month
+@selected_year = params[:year]&.to_i || Date.today.year
+@selected_month = params[:month]&.to_i || Date.today.month
+start_date = Date.new(@selected_year, @selected_month, 1)
+end_date = start_date.end_of_month
 
-    @monthly_goal = current_user.monthly_goals.find_by(year: @selected_year, month: @selected_month)
-    @income_goal = @monthly_goal&.income_goal
-    @savings_goal = @monthly_goal&.savings_goal
+@monthly_goal = current_user.monthly_goals.find_by(year: @selected_year, month: @selected_month)
+@income_goal = @monthly_goal&.income_goal
+@savings_goal = @monthly_goal&.savings_goal
 
-    @income_total = current_user.incomes.where(date: start_date..end_date).sum(:amount)
-    @expense_total = current_user.expenses.where(date: start_date..end_date).sum(:amount)
-    @actual_saving = @income_total - @expense_total
+@income_total = current_user.incomes.where(date: start_date..end_date).sum(:amount)
+@expense_total = current_user.expenses.where(date: start_date..end_date).sum(:amount)
+@actual_saving = @income_total - @expense_total
 
-    @income_progress = calculate_progress(@income_total, @income_goal)
-    @savings_progress = calculate_progress(@actual_saving, @savings_goal)
+@income_progress = calculate_progress(@income_total, @income_goal)
+@savings_progress = calculate_progress(@actual_saving, @savings_goal)
 
-    @income_meter_max = case @income_progress
-                        when 0..100 then 100
-                        when 101..200 then 200
-                        else 300
-                        end
-    @savings_meter_max = case @savings_progress
-                         when 0..100 then 100
-                         when 101..200 then 200
-                         else 300
-                         end
+@income_meter_max = case @income_progress
+                    when 0..100 then 100
+                    when 101..200 then 200
+                    else 300
+                    end
+@savings_meter_max = case @savings_progress
+                     when 0..100 then 100
+                     when 101..200 then 200
+                     else 300
+                     end
 
-    @income_remaining = [@income_goal.to_f - @income_total, 0].max
-    @savings_remaining = [@savings_goal.to_f - @actual_saving, 0].max
-    today = Date.today
-    @days_left = [(end_date - today).to_i + 1, 1].max
-    @income_daily_target = @income_remaining.positive? ? (@income_remaining / @days_left.to_f).ceil : 0
-    @savings_daily_target = @savings_remaining.positive? ? (@savings_remaining / @days_left.to_f).ceil : 0
+@income_remaining = [@income_goal.to_f - @income_total, 0].max
+@savings_remaining = [@savings_goal.to_f - @actual_saving, 0].max
+today = Date.today
+@days_left = [(end_date - today).to_i + 1, 1].max
+@income_daily_target = @income_remaining.positive? ? (@income_remaining / @days_left.to_f).ceil : 0
+@savings_daily_target = @savings_remaining.positive? ? (@savings_remaining / @days_left.to_f).ceil : 0
 
-    @worktime_summary = current_user.work_times
-      .where(date: month_start..month_end)
-      .joins(:category_work_time)
-      .group("category_work_times.name")
-      .sum(:minutes)
+@worktime_summary = current_user.work_times
+  .where(date: month_start..month_end)
+  .joins(:category_work_time)
+  .group("category_work_times.name")
+  .sum(:minutes)
   end
 def category_variation_alert
   user = current_user

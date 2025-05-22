@@ -13,9 +13,10 @@
 
   <body>
     <header class="header">
-      <div class="title"><a href="/">household account book</a></div>
+      <div class="title"><a href="/">Work × Kakei</a></div>
      <% if user_signed_in? %>
       <div class="button-area"> 
+        <span class="nickname-label">ようこそ、<%= current_user.nickname %> さん</span>
         <%= link_to "ログアウト", destroy_user_session_path,class: "login-button", data: { turbo_method: :delete } %>
       </div>
      <% elsif %>
@@ -28,7 +29,7 @@
 
     <%= yield %>
     <footer class="footer">
-      <p class="copyright">Copyright ©  All rights reserved.</p>
+      <p class="copyright">© 2025 T.M. This project is for personal use and portfolio purposes.</p>
     </footer>
   </body>
 </html>
