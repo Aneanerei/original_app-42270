@@ -12,9 +12,8 @@ document.addEventListener("turbo:load", () => {
   const maxTagLength = 20;
   const maxTagCount = 10;
 
- const normalizeTag = (tag) =>
-  tag.trim()
-    .replace(/[Ａ-Ｚａ-ｚ０-９]/g, s =>
+  const normalizeTag = (tag) =>
+    tag.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g, s =>
       String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
     );
 
@@ -126,43 +125,47 @@ document.addEventListener("turbo:load", () => {
       }
     });
   }
-function initImagePreview(input, previewId, group) {
-  const preview = document.getElementById(previewId);
-  const wrapper = group.querySelector(".tag-input-wrapper");
-  const filenameEl = group.querySelector(`[data-filename-target="${previewId}"]`);
 
-  if (!input || !preview || !wrapper) return;
+  function initImagePreview(input, previewId, group) {
+    const preview = document.getElementById(previewId);
+    const wrapper = group.querySelector(".tag-input-wrapper");
+    const filenameEl = group.querySelector(`[data-filename-target="${previewId}"]`);
 
-  input.addEventListener("change", () => {
-    const file = input.files[0];
-    if (file) {
-      // プレビュー画像
-      preview.innerHTML = "";
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      img.className = "preview-image";
-      preview.appendChild(img);
+    if (!input || !preview || !wrapper) return;
 
-      // ファイル名表示
-      if (filenameEl) {
-        filenameEl.textContent = file.name;
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      if (file) {
+        preview.innerHTML = "";
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.className = "preview-image";
+        preview.appendChild(img);
+
+        if (filenameEl) filenameEl.textContent = file.name;
+
+        group.setAttribute("data-has-image", "true");
+        initTagInput(wrapper);
+        applyAutoTags(group);
+      } else {
+        group.removeAttribute("data-has-image");
+        preview.innerHTML = "";
+        if (filenameEl) filenameEl.textContent = "";
+
+        const tagsContainer = wrapper.querySelector(".tags");
+        const hiddenInput = wrapper.querySelector(".hidden-tag-input");
+        const removedInput = wrapper.querySelector(".removed-auto-tags-input");
+        const tagInput = wrapper.querySelector(".tag-input");
+
+        if (tagsContainer) tagsContainer.innerHTML = "";
+        if (hiddenInput) hiddenInput.value = "";
+        if (removedInput) removedInput.value = "";
+        if (tagInput) tagInput.value = "";
+
+        wrapper.dataset.removedAutoTags = "";
       }
-
-      group.setAttribute("data-has-image", "true");
-      initTagInput(wrapper);
-      applyAutoTags(group);
-    } else {
-      group.removeAttribute("data-has-image");
-      preview.innerHTML = "";
-      if (filenameEl) {
-        filenameEl.textContent = "";
-      }
-      wrapper.querySelector(".tags").innerHTML = "";
-      wrapper.querySelector(".hidden-tag-input").value = "";
-    }
-  });
-}
-
+    });
+  }
 
   function handleDelete(e) {
     const group = e.target.closest(".tagged-image-group");
@@ -206,7 +209,10 @@ function initImagePreview(input, previewId, group) {
   }
 
   function addNewField() {
-    if (index >= max) return;
+    const visibleGroups = container.querySelectorAll(".tagged-image-group:not([style*='display: none'])");
+    if (visibleGroups.length >= max) return;
+
+    index = container.querySelectorAll(".tagged-image-group").length;
 
     const html = template.innerHTML.replace(/NEW_INDEX/g, index);
     const temp = document.createElement("div");
@@ -222,10 +228,7 @@ function initImagePreview(input, previewId, group) {
 
     if (input && previewId) {
       initImagePreview(input, previewId, group);
-
-      if (input.files.length > 0) {
-        input.dispatchEvent(new Event("change"));
-      }
+      if (input.files.length > 0) input.dispatchEvent(new Event("change"));
     }
 
     const wrapper = group.querySelector(".tag-input-wrapper");

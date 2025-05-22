@@ -68,12 +68,21 @@ end
     @expense.tagged_images.build if @expense.tagged_images.empty?
   end
 
-  def expense_params
-    params.require(:expense).permit(
-      :date, :amount, :memo, :category_expense_id,
-      tagged_images_attributes: [:id, :image, :tag_list, :removed_auto_tags, :_destroy]
-    )
+def expense_params
+  permitted = params.require(:expense).permit(
+    :date, :amount, :category_expense_id, :note,
+    tagged_images_attributes: [:id, :image, :tag_list, :_destroy]
+  )
+
+  if permitted[:tagged_images_attributes].is_a?(Hash)
+    permitted[:tagged_images_attributes] = permitted[:tagged_images_attributes].reject do |_, img_attr|
+      img_attr[:image].blank? && img_attr[:tag_list].blank?
+    end
   end
+
+  permitted
+end
+
 
   def apply_auto_tags(expense)
     return unless expense.tagged_images.present?
