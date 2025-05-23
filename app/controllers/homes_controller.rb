@@ -161,47 +161,48 @@ def category_variation_alert
 end
 
 
-  def day_summary
-    date = Date.parse(params[:date])
-    user = current_user
+def day_summary
+  date = Date.parse(params[:date])
+  user = current_user
 
-    income_entries = user.incomes.where(date: date).includes(:category_income)
-    expense_entries = user.expenses.where(date: date).includes(:category_expense)
-    tagged_images = TaggedImage.joins(:expense).where(expenses: { user_id: user.id, date: date }).includes(:expense)
-    work_time_entries = user.work_times.where(date: date).includes(:category_work_time)
+  income_entries = user.incomes.where(date: date).includes(:category_income)
+  expense_entries = user.expenses.where(date: date).includes(:category_expense)
+  tagged_images = TaggedImage.joins(:expense).where(expenses: { user_id: user.id, date: date }).includes(:expense)
+  work_time_entries = user.work_times.where(date: date).includes(:category_work_time)
 
-    render json: {
-      date: date.strftime("%Y/%m/%d"),
-      incomes: income_entries.map { |i|
-        {
-          category: i.category_income&.name || "不明",
-          amount: i.amount,
-          memo: i.memo.presence || "（メモなし）"
-        }
-      },
-      expenses: expense_entries.map { |e|
-        {
-          category: e.category_expense&.name || "不明",
-          amount: e.amount,
-          memo: e.memo.presence || "（メモなし）"
-        }
-      },
-      images: tagged_images.map { |img|
-        {
-          url: url_for(img.image),
-          memo: img.memo,
-          tags: img.tag_list
-        }
-      },
-      work_times: work_time_entries.map { |wt|
-        {
-          category: wt.category_work_time&.name || "不明",
-          duration: wt.minutes.to_i,
-          memo: wt.report
-        }
+  render json: {
+    date: date.strftime("%Y/%m/%d"),
+    incomes: income_entries.map { |i|
+      {
+        category: i.category_income&.name || "不明",
+        amount: i.amount,
+        memo: (i.memo.nil? || i.memo.strip == "") ? "（メモなし）" : i.memo
+      }
+    },
+    expenses: expense_entries.map { |e|
+      {
+        category: e.category_expense&.name || "不明",
+        amount: e.amount,
+        memo: (e.memo.nil? || e.memo.strip == "") ? "（メモなし）" : e.memo
+      }
+    },
+    images: tagged_images.map { |img|
+      {
+        url: url_for(img.image),
+        memo: img.memo,
+        tags: img.tag_list
+      }
+    },
+    work_times: work_time_entries.map { |wt|
+      {
+        category: wt.category_work_time&.name || "不明",
+        duration: wt.minutes.to_i,
+        memo: wt.report
       }
     }
-  end
+  }
+end
+
 
   private
 

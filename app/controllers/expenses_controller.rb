@@ -70,7 +70,7 @@ end
 
 def expense_params
   permitted = params.require(:expense).permit(
-    :date, :amount, :category_expense_id, :note,
+    :date, :amount, :category_expense_id, :memo,
     tagged_images_attributes: [:id, :image, :tag_list, :_destroy]
   )
 
