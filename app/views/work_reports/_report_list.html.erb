@@ -2,55 +2,76 @@
 <div class="category-filter">
   <button class="category-badge active" data-category="all">すべて</button>
   <button class="category-badge" data-category="収入">収入</button>
+  <button class="category-badge" data-category="支出">支出</button>
   <button class="category-badge" data-category="労働">労働</button>
+
   <% @labor_categories.each do |cat| %>
     <button class="category-badge" data-category="<%= cat %>"><%= cat %></button>
   <% end %>
 </div>
-<h2>労働・収入メモ</h2>
-<!-- 日報リスト（収入・労働） -->
+
+<h2>労働・収入・支出メモ</h2>
 
 <div id="daily-report-list">
   <% @combined_dates.each do |date| %>
-    <% labor_entries = @grouped_worktimes[date] || [] %>
-    <% income_entries = @grouped_incomes[date] || [] %>
+    <% labor_entries   = @grouped_worktimes[date]   || [] %>
+    <% income_entries  = @grouped_incomes[date]     || [] %>
+    <% expense_entries = @grouped_expenses[date]    || [] %>
 
-    <% if labor_entries.any? || income_entries.any? %>
+    <% if labor_entries.any? || income_entries.any? || expense_entries.any? %>
       <div class="daily-date-block">
         <h4 class="date-title"><%= date.strftime('%Y/%m/%d') %></h4>
 
         <%# 労働メモ %>
-       <% labor_entries.each_with_index do |wt, i| %>
-  <% is_truncated = wt.report.length > 100 %>
-  <% truncated = wt.report.truncate(100, omission: "") %>
-  <div class="report-entry" data-category="<%= wt.category_work_time&.name || "未分類" %> 労働">
-    <div class="report-meta">
-      <span class="report-category"><%= wt.category_work_time&.name || "未分類" %> ／ <%= (wt.minutes.to_f / 60).round(1) %>h</span>
-    </div>
-    <div class="report-body" id="labor-<%= date %>-<%= i %>">
-      <% if is_truncated %>
-        <div class="report-text short"><%= simple_format(h(truncated)) %></div>
-        <div class="report-text full" style="display: none;"><%= simple_format(h(wt.report)) %></div>
-        <button class="read-more-btn" data-target="labor-<%= date %>-<%= i %>">続きを読む</button>
-      <% else %>
-        <div class="report-text full"><%= simple_format(h(wt.report)) %></div>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-
+        <% labor_entries.each_with_index do |wt, i| %>
+          <% is_truncated = wt.report.length > 100 %>
+          <% truncated = wt.report.truncate(100, omission: "") %>
+          <div class="report-entry" data-category="<%= wt.category_work_time&.name || "未分類" %> 労働">
+            <div class="report-meta">
+              <span class="report-category">
+                <%= wt.category_work_time&.name || "未分類" %> ／ <%= (wt.minutes.to_f / 60).round(1) %>h
+              </span>
+            </div>
+            <div class="report-body" id="labor-<%= date %>-<%= i %>">
+              <% if is_truncated %>
+                <div class="report-text short"><%= simple_format(h(truncated)) %></div>
+                <div class="report-text full" style="display: none;"><%= simple_format(h(wt.report)) %></div>
+                <button class="read-more-btn" data-target="labor-<%= date %>-<%= i %>">続きを読む</button>
+              <% else %>
+                <div class="report-text full"><%= simple_format(h(wt.report)) %></div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
 
         <%# 収入メモ %>
         <% income_entries.each_with_index do |income, i| %>
-          <div class="report-entry" data-category="収入">
+          <div class="report-entry" data-category="<%= income.category_income&.name || "未分類" %> 収入">
             <div class="report-meta">
-              <span class="report-category"><%= income.category_income&.name || "未分類" %> ／ <%= number_to_currency(income.amount) %></span>
+              <span class="report-category">
+                <%= income.category_income&.name || "未分類" %> ／ <%= number_to_currency(income.amount) %>
+              </span>
             </div>
             <div class="report-body">
               <div class="report-text full"><%= simple_format(h(income.memo)) %></div>
             </div>
           </div>
         <% end %>
+
+        <%# 支出メモ %>
+        <% expense_entries.each_with_index do |expense, i| %>
+          <div class="report-entry" data-category="<%= expense.category_expense&.name || "未分類" %> 支出">
+            <div class="report-meta">
+              <span class="report-category">
+                <%= expense.category_expense&.name || "未分類" %> ／ <%= number_to_currency(expense.amount) %>
+              </span>
+            </div>
+            <div class="report-body">
+              <div class="report-text full"><%= simple_format(h(expense.memo)) %></div>
+            </div>
+          </div>
+        <% end %>
+
       </div>
     <% end %>
   <% end %>
