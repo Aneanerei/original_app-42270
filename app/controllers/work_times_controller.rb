@@ -55,7 +55,7 @@ class WorkTimesController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
-4
+
   def destroy
     @work_time.destroy
     redirect_to root_path, notice: "労働時間を削除しました"
